@@ -12,11 +12,7 @@
         <a class="navbar-brand" href="{% url 'characters:home' %}">Character Hub</a>
     </div>
 
-    <nav class="d-flex gap-3">
-        <a class="nav-link text-white" href="{% url 'characters:list' %}">Characters</a>
-        <a class="nav-link text-white" href="{% url 'partners:list' %}">Partners</a>
-        <a class="nav-link text-white me-3" href="{% url 'reviews:recent' %}">Recent reviews</a>
-    </nav>
+    {% include 'nav_bar.html' %}
 
 </header>
 

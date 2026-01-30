@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container text-center my-5 p-4 bg-light rounded shadow-sm">
+    <h1 class="display-4 fw-bold mb-3 text-primary">Welcome to Character Hub!</h1>
+    <p class="lead text-muted">
+        Your ultimate platform for creating unique Characters and their Partners.
+        Leverage the power of AI to generate short descriptions for your creations
+        and share your thoughts by leaving reviews. Explore a world of imagination!
+    </p>
+    <hr class="my-4">
+    <a href="{% url 'characters:create_character' %}" class="btn btn-primary btn-lg mt-3">Start Creating</a>
+</div>
+{% endblock %}
