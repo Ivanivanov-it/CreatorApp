@@ -36,3 +36,6 @@ class CharacterEditForm(CharacterForm):
 
 class CharacterDeleteForm(CharacterForm):
     ...
+
+class CharacterSearchForm(forms.Form):
+    query = forms.CharField(max_length=100,label='',required=False)

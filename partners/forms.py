@@ -21,3 +21,6 @@ class PartnerCreateForm(PartnerForm):
 
 class PartnerEditForm(PartnerForm):
     ...
+
+class PartnerSearchForm(forms.Form):
+    query = forms.CharField(max_length=100,label='',required=False)
