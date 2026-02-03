@@ -9,9 +9,11 @@ urlpatterns = [
     path('',landing_page,name='home'),
     path('characters/',include([
         path('',characters_list,name='characters_list'),
-        path('<int:id>/',character_detail,name='character_detail'),
-        path('create/',create_character,name='create_character'),
-        path('edit/<int:id>/',edit_character,name='edit_character'),
-        path('delete/<int:id>/',delete_character,name='delete_character')
+        path('<int:id>/', include ([
+            path('',character_detail,name='character_detail'),
+        path('edit/',edit_character,name='edit_character'),
+        path('delete/',delete_character,name='delete_character')
+        ])),
+        path('create/',create_character,name='create_character')
     ]))
 ]
