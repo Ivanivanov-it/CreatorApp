@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h1>{{ character.name }}</h1>
+        </div>
+        <div class="card-body">
+            {% if character.image_url %}
+            <img src="{{ character.image_url }}" alt="{{ character.name }}" class="img-fluid mb-3">
+            {% endif %}
+            <h2 class="card-title">{{ character.title }}</h2>
+            <p class="card-text"><strong>Description:</strong> {{ character.description }}</p>
+            <p class="card-text"><strong>Type:</strong> {{ character.type }}</p>
+            <p class="card-text"><strong>Power:</strong> {{ character.power }}</p>
+            <p class="card-text"><strong>Slug:</strong> {{ character.slug }}</p>
+            <p class="card-text"><strong>Created at:</strong> {{ character.created_at }}</p>
+            <a href="{% url 'characters:edit_character' character.pk %}" class="btn btn-warning">Edit Character</a>
+            <a href="{% url 'characters:delete_character' character.pk %}" class="btn btn-danger">Delete Character</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
