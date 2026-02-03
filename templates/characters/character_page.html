@@ -16,7 +16,7 @@
             <p class="card-text"><strong>Power:</strong> {{ character.power }}</p>
              <p class="card-text"><strong>Roles:</strong>
                  {% for role in character.roles.all %}
-                 {{ role.role }} {% if not forloop.last %}, {% endif %}
+                 {{ role.role | lower | capfirst  }} {% if not forloop.last %}, {% endif %}
                  {% endfor %}
              </p>
             <p class="card-text"><strong>Created at:</strong> {{ character.created_at }}</p>

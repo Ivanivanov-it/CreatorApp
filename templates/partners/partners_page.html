@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Partners</h1>
+    <a href="{% url 'partners:create_partner' %}" class="btn btn-primary mb-3">Create New Partner</a>
+    <div class="row">
+        {% for partner in partners %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ partner.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ partner.title }}</h6>
+                    <a href="{% url 'partners:partner_detail' partner.pk %}" class="btn btn-primary">Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h1>{{ partner.name }}</h1>
+        </div>
+        <div class="card-body">
+            {% if partner.image_url %}
+            <img src="{{ partner.image_url }}" alt="{{ partner.name }}" class="img-fluid mb-3">
+            {% endif %}
+            <h2 class="card-title">{{ partner.title }}</h2>
+            <p class="card-text"><strong>Description:</strong> {{ partner.description }}</p>
+            <p class="card-text"><strong>Power:</strong> {{ partner.power }}</p>
+            <p class="card-text"><strong>Partner of:</strong> {{ partner.character }}</p>
+            <p class="card-text"><strong>Roles:</strong>
+                 {% for role in partner.roles.all %}
+                 {{ role.role | lower | capfirst }} {% if not forloop.last %}, {% endif %}
+
+                 {% endfor %}
+             </p>
+            <p class="card-text"><strong>Created at:</strong> {{ partner.created_at }}</p>
+            <a href="{% url 'partners:edit_partner' partner.pk %}" class="btn btn-warning">Edit Partner</a>
+            <a href="{% url 'partners:delete_partner' partner.pk %}" class="btn btn-danger">Delete Partner</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
