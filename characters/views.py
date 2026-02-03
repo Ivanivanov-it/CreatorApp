@@ -1,6 +1,7 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
+from characters.forms import CharacterForm, CharacterCreateForm, CharacterEditForm
 from characters.models import Character
 
 
@@ -35,10 +36,37 @@ def character_detail(request: HttpRequest,id: int) -> HttpResponse:
     return render(request,'characters/character_page.html',context)
 
 def create_character(request: HttpRequest) -> HttpResponse:
-    pass
+    form = CharacterCreateForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+
+        return redirect('characters:characters_list')
+
+    context = {
+        'page_title': "Create Character",
+        'form': form,
+    }
+
+    return render(request,'characters/create_character.html',context)
+
 
 def edit_character(request: HttpRequest,id: int) -> HttpResponse:
-    pass
+    character = get_object_or_404(Character, pk=id)
+    form = CharacterEditForm(request.POST or None,instance=character)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+
+        return redirect('characters:characters_list')
+
+    context = {
+        'page_title': "Edit Character",
+        'form': form,
+    }
+
+    return render(request, 'characters/edit_character.html', context)
+
 
 def delete_character(request: HttpRequest,id: int) -> HttpResponse:
     character = get_object_or_404(Character, pk=id)
