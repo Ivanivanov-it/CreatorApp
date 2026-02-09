@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.text import slugify
@@ -35,6 +36,9 @@ class Character(TimeStampModel):
     def save(self,*args,**kwargs):
         if not self.slug:
             self.slug = slugify(f"{self.name}-{self.title}")
+
+        if not self.image_url:
+            self.image_url = f"{settings.STATIC_URL}images/question.png"
 
         super().save(*args, **kwargs)
 
