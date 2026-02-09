@@ -1,0 +1,18 @@
+.form-errors {
+    background-color: #ffecec;
+    border-left: 4px solid #e63946;
+    color: #9b1c1c;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.form-errors ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.form-errors li {
+    list-style: disc;
+}
