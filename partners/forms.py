@@ -78,7 +78,27 @@ class PartnerForm(forms.ModelForm):
             "image_url",
             "character"
         ]
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
+        placeholders = {
+            "name": "Partner name (e.g. Steward)",
+            "title": "Partner title (e.g. The Rat)",
+            "description": "Describe your Partner...",
+            "image_url": "https://example.com/partner.png",
+            "attack": "Attack Points (1–40)",
+            "defense": "Defense Points (1–40)",
+            "hp": "Hit Points (1–40)",
+        }
+
+
+        for field in self.fields.values():
+            if not isinstance(field.widget, (forms.CheckboxSelectMultiple, forms.RadioSelect)):
+                field.widget.attrs["class"] = "form-control"
+
+        for field,text in placeholders.items():
+            if field in self.fields:
+                self.fields[field].widget.attrs["placeholder"] = text
 
 class PartnerCreateForm(PartnerForm):
     ...

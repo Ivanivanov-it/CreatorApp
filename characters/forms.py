@@ -10,6 +10,7 @@ class CharacterForm(forms.ModelForm):
     attack = forms.IntegerField(min_value=1,max_value=100,error_messages={
         "required": "Please enter a number  between 1 and 100"
     })
+
     defense = forms.IntegerField(min_value=1, max_value=100,error_messages={
         "required": "Please enter a number  between 1 and 100"
     })
@@ -83,6 +84,30 @@ class CharacterForm(forms.ModelForm):
             "description",
             "image_url",
         ]
+
+
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        placeholders = {
+            "name": "Character name (e.g. Gilgamesh)",
+            "title": "Character title (e.g. King of Kings)",
+            "description": "Describe your character...",
+            "image_url": "https://example.com/character.png",
+            "attack" : "Attack Points (1–100)",
+            "defense": "Defense Points (1–100)",
+            "hp": "Hit Points (1–100)",
+        }
+
+        for field in self.fields.values():
+            if not isinstance(field.widget, (forms.CheckboxSelectMultiple, forms.RadioSelect)):
+                field.widget.attrs["class"] = "form-control"
+
+        for field,text in placeholders.items():
+            if field in self.fields:
+                self.fields[field].widget.attrs["placeholder"] = text
 
 
 

@@ -83,6 +83,27 @@ class EnemyForm(forms.ModelForm):
             "image_url",
         ]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        placeholders = {
+            "name": "Enemy name (e.g. Thaemine)",
+            "title": "Enemy title (e.g. Conqueror of Stars)",
+            "description": "Describe your Enemy...",
+            "image_url": "https://example.com/partner.png",
+            "attack": "Attack Points (1–250)",
+            "defense": "Defense Points (1–250)",
+            "hp": "Hit Points (1–250)",
+        }
+
+
+        for field in self.fields.values():
+            if not isinstance(field.widget, (forms.CheckboxSelectMultiple, forms.RadioSelect)):
+                field.widget.attrs["class"] = "form-control"
+
+        for field,text in placeholders.items():
+            if field in self.fields:
+                self.fields[field].widget.attrs["placeholder"] = text
 
 
 class EnemyCreateForm(EnemyForm):
