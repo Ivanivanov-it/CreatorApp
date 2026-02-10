@@ -6,7 +6,6 @@ from django.utils.text import slugify
 from common.models import TimeStampModel, Role, CombatStatModel
 
 
-# Create your models here.
 
 class Character(TimeStampModel,CombatStatModel):
     class HeroType(models.TextChoices):

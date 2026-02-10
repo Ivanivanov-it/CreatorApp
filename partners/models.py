@@ -1,18 +1,18 @@
+from django.conf import settings
 from django.db import models
 from django.utils.text import slugify
 
 # Create your models here.
 
-from common.models import TimeStampModel, Role
+from common.models import TimeStampModel, Role, CombatStatModel
 
 from characters.models import Character
 
 
-class Partner(TimeStampModel):
+class Partner(TimeStampModel,CombatStatModel):
     name = models.CharField(max_length=100,unique=True)
     title = models.CharField(max_length=100,unique=True)
     roles = models.ManyToManyField(Role,related_name='partners')
-    power = models.IntegerField(default=0)
     description = models.TextField()
     image_url = models.URLField(blank=True,null=True)
     slug = models.SlugField(unique=True,blank=True,max_length=100)
@@ -25,6 +25,9 @@ class Partner(TimeStampModel):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(f"{self.name}-{self.title}")
+
+        if not self.image_url:
+            self.image_url = f"{settings.STATIC_URL}images/question.png"
 
         super().save(*args, **kwargs)
 

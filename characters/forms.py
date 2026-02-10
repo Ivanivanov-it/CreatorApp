@@ -32,13 +32,18 @@ class CharacterForm(forms.ModelForm):
         defense = cleaned_data.get("defense") or 1
         hp = cleaned_data.get("hp") or 1
 
+        print(cleaned_data)
+
+        name = cleaned_data.get("name","")
+        title = cleaned_data.get("title","")
+
 
         if attack + defense + hp > 100:
             raise forms.ValidationError(
                 "The total number of stats must not exceed 100"
             )
 
-        if cleaned_data['name'] == cleaned_data['title']:
+        if name and title and name == title:
             raise forms.ValidationError('Character name and title cannot be the same')
 
 
@@ -48,6 +53,9 @@ class CharacterForm(forms.ModelForm):
     class Meta:
         exclude = ['slug']
         model = Character
+        labels = {
+            'image_url': "Character Image URL"
+        }
         help_texts = {
             'image_url': 'There will be default image if left empty',
         }
