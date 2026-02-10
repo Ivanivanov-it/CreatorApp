@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h1 class="display-4">Our Enemies</h1>
+            <p class="lead">Meet the foes of our story.</p>
+        </div>
+        <div class="col-md-6 d-flex align-items-center">
+            <form class="d-flex w-100" method="get" action=".">
+                {{ search_form.as_p }}
+                <button class="btn btn-outline-primary ms-2" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+    <a href="{% url 'enemies:create_enemy' %}" class="btn btn-primary mb-4">Create New Enemy</a>
+
+    <div class="row">
+        {% for enemy in enemies %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm border-0 rounded-3" style="transition: transform .2s;">
+                {% if enemy.image_url %}
+                    <img src="{{ enemy.image_url }}" class="card-img-top" alt="{{ enemy.name }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <span class="text-white">No Image</span>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ enemy.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ enemy.title }}</h6>
+                    <p class="card-text">{{ enemy.description|truncatewords:20 }}</p>
+                </div>
+                <div class="card-footer bg-transparent border-0 text-center">
+                    <a href="{% url 'enemies:enemy_detail' enemy.pk %}" class="btn btn-outline-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+            <div class="col">
+                <p>No enemies found.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+</style>
+{% endblock %}

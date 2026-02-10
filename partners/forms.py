@@ -6,13 +6,13 @@ from common.models import Role
 
 class PartnerForm(forms.ModelForm):
     attack = forms.IntegerField(min_value=1, max_value=40, error_messages={
-        "required": "Please enter an integer between 1 and 40"
+        "required": "Please enter a number between 1 and 40"
     })
     defense = forms.IntegerField(min_value=1, max_value=40, error_messages={
-        "required": "Please enter an integer between 1 and 40"
+        "required": "Please enter a number  between 1 and 40"
     })
     hp = forms.IntegerField(min_value=1, max_value=40, error_messages={
-        "required": "Please enter an integer between 1 and 40"
+        "required": "Please enter a number  between 1 and 40"
     })
 
     roles = forms.ModelMultipleChoiceField(

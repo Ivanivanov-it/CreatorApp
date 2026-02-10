@@ -3,26 +3,16 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.text import slugify
 
+from common.choices import CharacterType
 from common.models import TimeStampModel, Role, CombatStatModel
 
 
 
 class Character(TimeStampModel,CombatStatModel):
-    class HeroType(models.TextChoices):
-        ALIEN = 'ALIEN', 'ALIEN'
-        HERO = 'HERO', 'HERO'
-        GOD = 'GOD','GOD',
-        DEMON = 'DEMON','DEMON'
-        TIME_TRAVELER = 'TIME TRAVELER', 'TIME TRAVELER'
-        VILLAIN = 'VILLAIN', 'VILLAIN'
-        ANGEL = 'ANGEL', 'ANGEL'
-        OTHER = 'OTHER', 'OTHER'
-
-
 
     name = models.CharField(max_length=100,unique=True)
     title = models.CharField(max_length=100,unique=True)
-    type = models.CharField(choices=HeroType.choices,default=HeroType.OTHER)
+    type = models.CharField(choices=CharacterType.choices,default=CharacterType.OTHER)
     roles = models.ManyToManyField(Role, related_name='characters')
     description = models.TextField()
     slug = models.SlugField(max_length=100,unique=True,blank=True)
@@ -34,7 +24,7 @@ class Character(TimeStampModel,CombatStatModel):
             self.slug = slugify(f"{self.name}-{self.title}")
 
         if not self.image_url:
-            self.image_url = f"{settings.STATIC_URL}images/question.png"
+            self.image_url = f"{settings.STATIC_URL}images/hero.png"
 
         super().save(*args, **kwargs)
 

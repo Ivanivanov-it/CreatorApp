@@ -27,7 +27,7 @@ class Partner(TimeStampModel,CombatStatModel):
             self.slug = slugify(f"{self.name}-{self.title}")
 
         if not self.image_url:
-            self.image_url = f"{settings.STATIC_URL}images/question.png"
+            self.image_url = f"{settings.STATIC_URL}images/partner.png"
 
         super().save(*args, **kwargs)
 
