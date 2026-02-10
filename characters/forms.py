@@ -38,6 +38,9 @@ class CharacterForm(forms.ModelForm):
                 "The total number of stats must not exceed 100"
             )
 
+        if cleaned_data['name'] == cleaned_data['title']:
+            raise forms.ValidationError('Character name and title cannot be the same')
+
 
         return cleaned_data
 
@@ -61,6 +64,18 @@ class CharacterForm(forms.ModelForm):
                 'required': "Please enter a description of your character."
             }
         }
+        fields = [
+            "name",
+            "title",
+            "type",
+            "attack",
+            "defense",
+            "hp",
+            "roles",
+            "description",
+            "image_url",
+        ]
+
 
 
 class CharacterCreateForm(CharacterForm):
