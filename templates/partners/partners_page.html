@@ -2,19 +2,38 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="row mb-4">
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'characters:characters_list' %}">Characters</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'partners:partners_list' %}">Partners</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'enemies:enemies_list' %}">Enemies</a>
+        </li>
+    </ul>
+
+    <div class="row align-items-center mb-4">
         <div class="col-md-6">
-            <h1 class="display-4">Our Partners</h1>
-            <p class="lead">Collaborators in our creative journey.</p>
+            <h1 class="display-4 mb-0">Our Partners</h1>
+            <p class="lead text-muted">Collaborators in our creative journey.</p>
         </div>
-        <div class="col-md-6 d-flex align-items-center">
-            <form class="d-flex w-100" method="get" action=".">
-                {{ search_form.as_p }}
-                <button class="btn btn-outline-primary ms-2" type="submit">Search</button>
+        <div class="col-md-6 d-flex justify-content-end align-items-center">
+            <form class="d-flex" method="get" action=".">
+                <div class="input-group">
+                    {{ search_form.as_p }}
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                </div>
             </form>
         </div>
     </div>
-    <a href="{% url 'partners:create_partner' %}" class="btn btn-primary mb-4">Forge New Alliance</a>
+
+    <div class="row mb-3">
+        <div class="col text-end">
+            <a href="{% url 'partners:create_partner' %}" class="btn btn-primary">Forge New Alliance</a>
+        </div>
+    </div>
 
     <div class="row">
         {% for partner in partners %}
@@ -45,10 +64,5 @@
     </div>
 </div>
 
-<style>
-    .card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    }
-</style>
+
 {% endblock %}

@@ -95,4 +95,4 @@ class EnemyDeleteForm(EnemyForm):
     ...
 
 class EnemySearchForm(forms.Form):
-    query = forms.CharField(max_length=100,label='',required=False)
+    query = forms.CharField(max_length=100,label='',required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
