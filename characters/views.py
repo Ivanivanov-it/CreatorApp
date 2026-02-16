@@ -1,6 +1,10 @@
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic import DeleteView
+from django.views.generic import TemplateView
 
 from characters.forms import CharacterForm, CharacterCreateForm, CharacterEditForm, CharacterSearchForm
 from characters.models import Character
@@ -9,13 +13,22 @@ from characters.models import Character
 # Create your views here.
 
 
-def landing_page(request: HttpRequest) -> HttpResponse:
+# def landing_page(request: HttpRequest) -> HttpResponse:
+#
+#     context = {
+#         'page_title': "Home"
+#     }
+#
+#     return render(request,'characters/landing_page.html', context)
 
-    context = {
+class LandingPageView(TemplateView):
+    template_name = 'characters/landing_page.html'
+
+    extra_context = {
         'page_title': "Home"
     }
 
-    return render(request,'characters/landing_page.html', context)
+
 
 def characters_list(request: HttpRequest) -> HttpResponse:
     search_form = CharacterSearchForm(request.GET or None)
@@ -34,8 +47,10 @@ def characters_list(request: HttpRequest) -> HttpResponse:
 
     return render(request,'characters/characters_page.html',context)
 
-def character_detail(request: HttpRequest,id: int) -> HttpResponse:
-    character = get_object_or_404(Character, pk=id)
+
+
+def character_detail(request: HttpRequest,pk: int) -> HttpResponse:
+    character = get_object_or_404(Character, pk=pk)
     context = {
         'page_title': f"{character.name} Details",
         'character': character,
@@ -59,8 +74,8 @@ def create_character(request: HttpRequest) -> HttpResponse:
     return render(request,'characters/create_character.html',context)
 
 
-def edit_character(request: HttpRequest,id: int) -> HttpResponse:
-    character = get_object_or_404(Character, pk=id)
+def edit_character(request: HttpRequest,pk: int) -> HttpResponse:
+    character = get_object_or_404(Character, pk=pk)
     form = CharacterEditForm(request.POST or None,instance=character)
 
     if request.method == "POST" and form.is_valid():
@@ -76,10 +91,15 @@ def edit_character(request: HttpRequest,id: int) -> HttpResponse:
     return render(request, 'characters/edit_character.html', context)
 
 
-def delete_character(request: HttpRequest,id: int) -> HttpResponse:
-    character = get_object_or_404(Character, pk=id)
+# def delete_character(request: HttpRequest,id: int) -> HttpResponse:
+#     character = get_object_or_404(Character, pk=id)
+#
+#     if character:
+#         character.delete()
+#
+#     return redirect('characters:characters_list')
 
-    if character:
-        character.delete()
-
-    return redirect('characters:characters_list')
+class CharacterDeleteView(DeleteView):
+    model = Character
+    template_name = 'delete_confirm.html'
+    success_url = reverse_lazy('characters:characters_list')
