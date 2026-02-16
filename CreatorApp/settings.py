@@ -33,10 +33,12 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 PROJECT_APPS = [
+    "common",
     "characters",
     "partners",
     "enemies",
-    "common",
+    "contacts"
+
 ]
 
 # Application definition

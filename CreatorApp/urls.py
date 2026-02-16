@@ -22,4 +22,5 @@ urlpatterns = [
     path('',include('characters.urls')),
     path('enemies/',include('enemies.urls')),
     path('partners/',include('partners.urls')),
+    path('contact-us/',include('contacts.urls')),
 ]
