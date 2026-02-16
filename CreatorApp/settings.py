@@ -37,7 +37,8 @@ PROJECT_APPS = [
     "characters",
     "partners",
     "enemies",
-    "contacts"
+    "contacts",
+    "combat"
 
 ]
 
