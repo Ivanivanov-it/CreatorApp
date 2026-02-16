@@ -1,6 +1,8 @@
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.views.generic import DeleteView
 
 from enemies.forms import EnemySearchForm, EnemyEditForm, EnemyCreateForm
 from enemies.models import Enemy
@@ -27,8 +29,8 @@ def enemies_list(request: HttpRequest) -> HttpResponse:
 
     return render(request, 'enemies/enemies_page.html', context)
 
-def enemy_detail(request: HttpRequest, id: int) -> HttpResponse:
-    enemy = get_object_or_404(Enemy, pk=id)
+def enemy_detail(request: HttpRequest, pk: int) -> HttpResponse:
+    enemy = get_object_or_404(Enemy, pk=pk)
     context = {
         'page_title': f"{enemy.name} Details",
         'enemy': enemy,
@@ -51,8 +53,8 @@ def create_enemy(request: HttpRequest) -> HttpResponse:
 
     return render(request, 'enemies/create_enemy.html', context)
 
-def edit_enemy(request: HttpRequest, id: int) -> HttpResponse:
-    enemy = get_object_or_404(Enemy, pk=id)
+def edit_enemy(request: HttpRequest, pk: int) -> HttpResponse:
+    enemy = get_object_or_404(Enemy, pk=pk)
     form = EnemyEditForm(request.POST or None, instance=enemy)
 
     if request.method == "POST" and form.is_valid():
@@ -67,11 +69,15 @@ def edit_enemy(request: HttpRequest, id: int) -> HttpResponse:
 
     return render(request, 'enemies/edit_enemy.html', context)
 
-def delete_enemy(request: HttpRequest, id: int) -> HttpResponse:
-    enemy = get_object_or_404(Enemy, pk=id)
+def delete_enemy(request: HttpRequest, pk: int) -> HttpResponse:
+    enemy = get_object_or_404(Enemy, pk=pk)
 
     if enemy:
         enemy.delete()
 
     return redirect('enemies:enemies_list')
 
+class EnemyDeleteView(DeleteView):
+    model = Enemy
+    template_name = 'delete_confirm.html'
+    success_url = reverse_lazy('enemies:enemies_list')

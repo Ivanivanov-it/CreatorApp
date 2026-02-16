@@ -3,7 +3,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import DeleteView
+from django.views.generic import DeleteView, ListView
 from django.views.generic import TemplateView
 
 from characters.forms import CharacterForm, CharacterCreateForm, CharacterEditForm, CharacterSearchForm
@@ -13,13 +13,7 @@ from characters.models import Character
 # Create your views here.
 
 
-# def landing_page(request: HttpRequest) -> HttpResponse:
-#
-#     context = {
-#         'page_title': "Home"
-#     }
-#
-#     return render(request,'characters/landing_page.html', context)
+
 
 class LandingPageView(TemplateView):
     template_name = 'characters/landing_page.html'
@@ -58,6 +52,13 @@ def character_detail(request: HttpRequest,pk: int) -> HttpResponse:
 
     return render(request,'characters/character_page.html',context)
 
+# class CharacterListView(ListView):
+#     model = Character
+#     template_name = 'characters/character_page.html'
+#     extra_context = {
+#         'page_title': "Character details",
+#     }
+
 def create_character(request: HttpRequest) -> HttpResponse:
     form = CharacterCreateForm(request.POST or None)
 
@@ -90,14 +91,6 @@ def edit_character(request: HttpRequest,pk: int) -> HttpResponse:
 
     return render(request, 'characters/edit_character.html', context)
 
-
-# def delete_character(request: HttpRequest,id: int) -> HttpResponse:
-#     character = get_object_or_404(Character, pk=id)
-#
-#     if character:
-#         character.delete()
-#
-#     return redirect('characters:characters_list')
 
 class CharacterDeleteView(DeleteView):
     model = Character
