@@ -29,9 +29,9 @@ class Role(models.Model):
         return self.role
 
 class CombatStatModel(models.Model):
-    attack = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(100)])
-    defense = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(100)])
-    hp = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(100)])
+    attack = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(250)])
+    defense = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(250)])
+    hp = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(250)])
 
     class Meta:
         abstract = True
