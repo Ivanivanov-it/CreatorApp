@@ -1,5 +1,6 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
+from django.views.generic import TemplateView
 
 from contacts.forms import ContactForm
 
@@ -20,3 +21,7 @@ def create_mail(request: HttpRequest) -> HttpResponse:
     }
 
     return render(request,'contacts/contact.html',context)
+
+
+class WipPage(TemplateView):
+    template_name = 'wip.html'
