@@ -6,10 +6,10 @@ from contacts.models import Contact
 class ContactForm(forms.ModelForm):
 
     class Meta:
-        include = ["__all__"]
+        fields = "__all__"
         model = Contact
-        labels = {
-        }
+        # labels = {
+        # }
         help_texts = {
             'email': 'Email so we can get back to you as soon as possible',
             'phone_number': "Optional phone number",
@@ -27,16 +27,14 @@ class ContactForm(forms.ModelForm):
                 'max_length': "Please enter a valid phone number.",
             },
             "email": {
-                'required': "Please enter your email address."
+                'required': "Please enter your email address.",
+                'invalid': "Please enter a valid email address."
+            },
+            "content": {
+                'required': "Please enter your message."
             }
         }
-        fields = [
-            "first_name",
-            "last_name",
-            "email",
-            "phone_number",
-            "content"
-        ]
+
 
 
     def __init__(self, *args, **kwargs):

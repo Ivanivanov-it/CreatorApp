@@ -18,6 +18,9 @@ class PartnerForm(forms.ModelForm):
     roles = forms.ModelMultipleChoiceField(
         queryset=Role.objects.all(),
         widget=forms.CheckboxSelectMultiple,
+        error_messages={
+            "required": "Please select one or more roles"
+        }
     )
 
     def clean(self):

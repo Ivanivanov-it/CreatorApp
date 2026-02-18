@@ -21,10 +21,16 @@ class CharacterForm(forms.ModelForm):
     roles = forms.ModelMultipleChoiceField(
         queryset=Role.objects.all(),
         widget=forms.CheckboxSelectMultiple,
+        error_messages={
+            "required": "Please select one or more roles"
+        }
     )
     type = forms.ChoiceField(
         choices=CharacterType.choices,
         widget=forms.RadioSelect,
+        error_messages={
+            "required": "Selecting character type is required"
+        }
     )
 
     def clean(self):

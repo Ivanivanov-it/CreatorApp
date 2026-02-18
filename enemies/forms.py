@@ -18,11 +18,17 @@ class EnemyForm(forms.ModelForm):
     weakness = forms.ModelMultipleChoiceField(
         queryset=Role.objects.all(),
         widget=forms.CheckboxSelectMultiple,
+        error_messages={
+            "required": "Selecting 1 or more enemy weaknesses is required"
+        }
     )
 
     type = forms.ChoiceField(
         choices=CharacterType.choices,
         widget=forms.RadioSelect,
+        error_messages={
+            "required": "Selecting enemy type is required"
+        }
     )
 
     def clean(self):
