@@ -22,12 +22,6 @@ class LandingPageView(TemplateView):
         'page_title': "Home"
     }
 
-class AboutPageView(TemplateView):
-    template_name = 'characters/about.html'
-    extra_context = {
-        'page_title': "About"
-    }
-
 
 def characters_list(request: HttpRequest) -> HttpResponse:
     search_form = CharacterSearchForm(request.GET or None)
