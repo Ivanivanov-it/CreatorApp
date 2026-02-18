@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <div class="container mt-5">
@@ -42,9 +43,7 @@
                 {% if enemy.image_url %}
                     <img src="{{ enemy.image_url }}" class="card-img-top" alt="{{ enemy.name }}" style="height: 200px; object-fit: cover;">
                 {% else %}
-                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
-                        <span class="text-white">No Image</span>
-                    </div>
+                    <img src="{% static 'images/enemy.png' %}" class="card-img-top" alt="{{ enemy.name }}" style="height: 200px; object-fit: cover;">
                 {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">{{ enemy.name }}</h5>
