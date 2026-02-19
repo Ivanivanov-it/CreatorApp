@@ -126,7 +126,22 @@ def create_battle(request: HttpRequest) -> HttpResponse:
         debuff_def=calc_debuff_def(enemy,character)
     )
 
+    return redirect("battle:battle_view",pk=battle.id)
 
+def battle_view(request: HttpRequest,pk:int) -> HttpResponse:
+    battle = Battle.objects.get(pk=pk)
+
+    character = battle.battlecharacter_set.first()
+    enemy = battle.battleenemy_set.first()
+
+
+    context = {
+        "battle": battle,
+        "character": character,
+        "enemy": enemy
+    }
+
+    return render(request,"battle/battle.html",context=context)
 
 
 
