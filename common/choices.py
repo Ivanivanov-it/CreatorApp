@@ -9,3 +9,8 @@ class CharacterType(models.TextChoices):
     VILLAIN = 'VILLAIN', 'VILLAIN'
     ANGEL = 'ANGEL', 'ANGEL'
     OTHER = 'OTHER', 'OTHER'
+
+class BattleStatus(models.TextChoices):
+    active = 'Active', 'Active'
+    inactive = 'Inactive', 'Inactive'
+    finished = 'Finished', 'Finished'
