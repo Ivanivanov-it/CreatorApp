@@ -1,12 +1,14 @@
-
+from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from battle.models import Battle, BattleCharacter, BattleEnemy
 from battle.stat_calc_functions import calc_buff_atk, calc_buff_def, calc_buff_hp, calc_debuff_atk, calc_debuff_hp, \
     calc_debuff_def
+from characters.forms import CharacterSearchForm
 from characters.models import Character
 from common.choices import BattleStatus
+from enemies.forms import EnemySearchForm
 from enemies.models import Enemy
 from partners.models import Partner
 
@@ -15,6 +17,16 @@ from partners.models import Partner
 
 
 def character_selection(request: HttpRequest) -> HttpResponse:
+    search_form = CharacterSearchForm(request.GET or None)
+
+    characters = Character.objects.all()
+
+    if 'query' in request.GET:
+        if search_form.is_valid():
+            characters = characters.filter(Q(name__icontains=search_form.cleaned_data['query']) | Q(
+                title__icontains=search_form.cleaned_data['query']))
+
+
     if request.method == "POST":
         character_id = request.POST.get("character_id")
 
@@ -25,11 +37,12 @@ def character_selection(request: HttpRequest) -> HttpResponse:
 
         return redirect("battle:partner_selection")
 
-    characters = Character.objects.all()
+
 
     context = {
         'characters': characters,
-         'page_title': "Character Selection"
+         'page_title': "Character Selection",
+        'search_form': search_form
     }
 
     return render(request,"battle/select_character.html",context=context)
@@ -40,6 +53,8 @@ def partner_selection(request: HttpRequest) -> HttpResponse:
 
     if not character_id:
         return redirect("battle:character_selection")
+
+
 
     partners = Partner.objects.filter(character_id=character_id)
 
@@ -67,6 +82,14 @@ def enemy_selection(request: HttpRequest) -> HttpResponse:
     if not character_id:
         return redirect("battle:character_selection")
 
+    search_form = EnemySearchForm(request.GET or None)
+
+    enemies = Enemy.objects.all()
+
+    if 'query' in request.GET:
+        if search_form.is_valid():
+            enemies = enemies.filter(Q(name__icontains=search_form.cleaned_data['query']) | Q(
+                title__icontains=search_form.cleaned_data['query']))
 
 
     if request.method == "POST":
@@ -77,11 +100,11 @@ def enemy_selection(request: HttpRequest) -> HttpResponse:
 
         return redirect("battle:create_battle")
 
-    enemies = Enemy.objects.all()
 
     context = {
         'enemies': enemies,
-         'page_title': "Enemy Selection"
+         'page_title': "Enemy Selection",
+        'search_form': search_form
     }
 
     return render(request,"battle/select_enemy.html",context=context)
@@ -155,7 +178,8 @@ def battle_view(request: HttpRequest,pk:int) -> HttpResponse:
         if not enemy.is_alive or not character.is_alive:
             battle.status = BattleStatus.finished
 
-        turn += 1
+        if not battle.status == BattleStatus.finished:
+            turn += 1
 
         battle.turns = turn
         battle.save()
