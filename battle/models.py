@@ -15,32 +15,69 @@ class Battle(TimeStampModel):
 
 
 class BattleParticipant(TimeStampModel):
+
+    @property
+    def hp_modifier(self):
+        return self.buff_hp - self.debuff_hp
+
+    @property
+    def atk_modifier(self):
+        return self.buff_atk - self.debuff_atk
+
+    @property
+    def def_modifier(self):
+        return self.buff_def - self.debuff_def
+
+    @property
+    def max_hp(self):
+        return self.base_hp + self.hp_modifier
+
+    @property
+    def total_atk(self):
+        return self.base_atk + self.atk_modifier
+
+    @property
+    def total_def(self):
+        return self.base_def + self.def_modifier
+
+    @property
+    def is_alive(self):
+        return self.current_hp > 0
+
+
     battle = models.ForeignKey(Battle, on_delete=models.CASCADE)
 
     base_hp = models.IntegerField()
     base_atk = models.IntegerField()
     base_def = models.IntegerField()
 
-    buff_hp = models.IntegerField(blank=True,default=0)
-    buff_atk = models.IntegerField(blank=True,default=0)
-    buff_def = models.IntegerField(blank=True,default=0)
+    buff_hp = models.IntegerField(default=0)
+    buff_atk = models.IntegerField(default=0)
+    buff_def = models.IntegerField(default=0)
 
-    debuff_hp = models.IntegerField(blank=True,default=0)
-    debuff_atk = models.IntegerField(blank=True,default=0)
-    debuff_def = models.IntegerField(blank=True,default=0)
+    debuff_hp = models.IntegerField(default=0)
+    debuff_atk = models.IntegerField(default=0)
+    debuff_def = models.IntegerField(default=0)
 
-    current_hp = models.IntegerField(blank=True)
-    current_atk = models.IntegerField(blank=True)
-    current_def = models.IntegerField(blank=True)
-    is_alive = models.BooleanField(default=True)
+    current_hp = models.IntegerField()
+
+    def take_damage(self, damage):
+        self.current_hp -= damage
+        self.save()
+
+    def heal(self,amount):
+        self.current_hp += amount
+        self.save()
+
+    def buff(self):
+        pass
+
 
     def save(self,*args,**kwargs):
-        self.current_hp = self.base_hp + self.buff_hp - self.debuff_hp
-        self.current_atk = self.base_atk + self.buff_atk - self.debuff_atk
-        self.current_def = self.base_def + self.buff_def - self.debuff_def
+        if self.pk is None:
+            self.current_hp = self.max_hp
 
-        super().save(*args, **kwargs)
-
+        super().save(*args,**kwargs)
 
     class Meta:
         abstract = True

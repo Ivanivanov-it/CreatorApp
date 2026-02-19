@@ -7,9 +7,9 @@ from battle.models import BattleCharacter, BattleEnemy
 
 @admin.register(BattleCharacter)
 class BattleCharacterAdmin(admin.ModelAdmin):
-    list_display = ["character_id","battle_id","base_hp","base_atk","base_def","buff_hp","buff_atk","buff_def","debuff_hp","debuff_atk","debuff_def","current_hp","current_atk","current_def"]
+    list_display = ["character_id","battle_id","base_hp","base_atk","base_def","buff_hp","buff_atk","buff_def","debuff_hp","debuff_atk","debuff_def","current_hp"]
 
 @admin.register(BattleEnemy)
 class BattleEnemyAdmin(admin.ModelAdmin):
     list_display = ["enemy_id", "battle_id", "base_hp", "base_atk", "base_def", "buff_hp", "buff_atk", "buff_def",
-                    "debuff_hp", "debuff_atk", "debuff_def", "current_hp", "current_atk", "current_def"]
+                    "debuff_hp", "debuff_atk", "debuff_def", "current_hp"]
