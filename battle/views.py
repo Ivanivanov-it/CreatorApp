@@ -2,8 +2,9 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 
-from battle.models import Battle, BattleCharacter
-from battle.stat_calc_functions import calc_buff_atk, calc_buff_def, calc_buff_hp
+from battle.models import Battle, BattleCharacter, BattleEnemy
+from battle.stat_calc_functions import calc_buff_atk, calc_buff_def, calc_buff_hp, calc_debuff_atk, calc_debuff_hp, \
+    calc_debuff_def
 from characters.models import Character
 from enemies.models import Enemy
 from partners.models import Partner
@@ -95,6 +96,7 @@ def create_battle(request: HttpRequest) -> HttpResponse:
     battle = Battle.objects.create()
 
     character = Character.objects.get(id=character_id)
+    enemy = Enemy.objects.get(id=enemy_id)
 
     if partner_id:
         partner = Partner.objects.get(id=partner_id)
@@ -105,11 +107,25 @@ def create_battle(request: HttpRequest) -> HttpResponse:
         base_hp=character.hp,
         base_atk=character.attack,
         base_def=character.defense,
-        buff_hp=calc_buff_hp(character) + partner.hp if partner_id else 0,
-        buff_atk=calc_buff_atk(character) + partner.attack if partner_id else 0,
-        buff_def=calc_buff_def(character) + partner.defense if partner_id else 0,
-
+        buff_hp=calc_buff_hp(character) + (partner.hp if partner_id else 0),
+        buff_atk=calc_buff_atk(character) + (partner.attack if partner_id else 0),
+        buff_def=calc_buff_def(character) + (partner.defense if partner_id else 0),
     )
+
+    BattleEnemy.objects.create(
+        battle=battle,
+        enemy=enemy,
+        base_hp=enemy.hp,
+        base_atk=enemy.attack,
+        base_def=enemy.defense,
+        buff_hp=calc_buff_hp(enemy),
+        buff_atk=calc_buff_atk(enemy),
+        buff_def=calc_buff_def(enemy),
+        debuff_hp=calc_debuff_hp(enemy,character),
+        debuff_atk=calc_debuff_atk(enemy,character),
+        debuff_def=calc_debuff_def(enemy,character)
+    )
+
 
 
 
