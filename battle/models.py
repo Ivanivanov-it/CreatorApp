@@ -21,11 +21,26 @@ class BattleParticipant(TimeStampModel):
     base_atk = models.IntegerField()
     base_def = models.IntegerField()
 
-    current_hp = models.IntegerField()
-    current_atk = models.IntegerField()
-    current_def = models.IntegerField()
+    buff_hp = models.IntegerField(blank=True,default=0)
+    buff_atk = models.IntegerField(blank=True,default=0)
+    buff_def = models.IntegerField(blank=True,default=0)
 
+    debuff_hp = models.IntegerField(blank=True,default=0)
+    debuff_atk = models.IntegerField(blank=True,default=0)
+    debuff_def = models.IntegerField(blank=True,default=0)
+
+    current_hp = models.IntegerField(blank=True)
+    current_atk = models.IntegerField(blank=True)
+    current_def = models.IntegerField(blank=True)
     is_alive = models.BooleanField(default=True)
+
+    def save(self,*args,**kwargs):
+        self.current_hp = self.base_hp + self.buff_hp - self.debuff_hp
+        self.current_atk = self.base_atk + self.buff_atk - self.debuff_atk
+        self.current_def = self.base_def + self.buff_def - self.debuff_def
+
+        super().save(*args, **kwargs)
+
 
     class Meta:
         abstract = True
@@ -38,4 +53,8 @@ class BattleCharacter(BattleParticipant):
 
 class BattleEnemy(BattleParticipant):
     enemy = models.ForeignKey(Enemy, on_delete=models.CASCADE)
+
+
+
+
 
