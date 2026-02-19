@@ -47,28 +47,28 @@
 </style>
 
 <div class="container mt-5">
-    <h2 class="section-title text-center mb-5">Select Your Character</h2>
+    <h2 class="section-title text-center mb-5">Select Your Enemy</h2>
 
     <form method="post" class="text-center">
         {% csrf_token %}
         <div class="row justify-content-center">
-            {% for c in characters %}
+            {% for e in enemies %}
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <div class="card-game">
-                    {% if c.image_url %}
-                        <img src="{{ c.image_url }}" class="card-img-top mx-auto d-block mb-3" alt="{{ c.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                    {% if e.image_url %}
+                        <img src="{{ e.image_url }}" class="card-img-top mx-auto d-block mb-3" alt="{{ e.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
                     {% else %}
-                        <img src="{% static 'images/hero.png' %}" class="card-img-top mx-auto d-block mb-3" alt="{{ c.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                        <img src="{% static 'images/enemy.png' %}" class="card-img-top mx-auto d-block mb-3" alt="{{ e.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title mb-3">
-                            <a href="{% url 'characters:character_detail' c.id %}" target="_blank" class="text-info text-decoration-none">
-                                {{ c.name }}
+                            <a href="{% url 'enemies:enemy_detail' e.id %}" target="_blank" class="text-info text-decoration-none">
+                                {{ e.name }}
                             </a>
                         </h5>
                         <div class="form-check d-flex justify-content-center align-items-center">
-                            <input class="form-check-input" type="radio" name="character_id" id="character_{{ c.id }}" value="{{ c.id }}" {% if forloop.first %}checked{% endif %}>
-                            <label class="form-check-label ms-2" for="character_{{ c.id }}">
+                            <input class="form-check-input" type="radio" name="enemy_id" id="enemy_{{ e.id }}" value="{{ e.id }}" {% if forloop.first %}checked{% endif %}>
+                            <label class="form-check-label ms-2" for="enemy_{{ e.id }}">
                                 Select
                             </label>
                         </div>
@@ -77,12 +77,13 @@
             </div>
             {% empty %}
                 <div class="col">
-                    <p class="lead text-center">No characters available to select.</p>
+                    <p class="lead text-center">There are no enemies.</p>
                 </div>
             {% endfor %}
         </div>
         <div class="mt-5">
-            <button type="submit" class="btn btn-game-primary btn-lg">Select Partner</button>
+            <a href="{% url 'battle:partner_selection' %}" class="btn btn-game-primary btn-lg">Go back</a>
+            <button type="submit" class="btn btn-game-primary btn-lg">Start</button>
         </div>
     </form>
 </div>

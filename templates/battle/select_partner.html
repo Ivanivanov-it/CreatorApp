@@ -47,28 +47,28 @@
 </style>
 
 <div class="container mt-5">
-    <h2 class="section-title text-center mb-5">Select Your Character</h2>
+    <h2 class="section-title text-center mb-5">Select Your Partner</h2>
 
     <form method="post" class="text-center">
         {% csrf_token %}
         <div class="row justify-content-center">
-            {% for c in characters %}
+            {% for p in partners %}
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <div class="card-game">
-                    {% if c.image_url %}
-                        <img src="{{ c.image_url }}" class="card-img-top mx-auto d-block mb-3" alt="{{ c.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                    {% if p.image_url %}
+                        <img src="{{ p.image_url }}" class="card-img-top mx-auto d-block mb-3" alt="{{ p.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
                     {% else %}
-                        <img src="{% static 'images/hero.png' %}" class="card-img-top mx-auto d-block mb-3" alt="{{ c.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                        <img src="{% static 'images/partner.png' %}" class="card-img-top mx-auto d-block mb-3" alt="{{ p.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title mb-3">
-                            <a href="{% url 'characters:character_detail' c.id %}" target="_blank" class="text-info text-decoration-none">
-                                {{ c.name }}
+                            <a href="{% url 'partners:partner_detail' p.id %}" target="_blank" class="text-info text-decoration-none">
+                                {{ p.name }}
                             </a>
                         </h5>
                         <div class="form-check d-flex justify-content-center align-items-center">
-                            <input class="form-check-input" type="radio" name="character_id" id="character_{{ c.id }}" value="{{ c.id }}" {% if forloop.first %}checked{% endif %}>
-                            <label class="form-check-label ms-2" for="character_{{ c.id }}">
+                            <input class="form-check-input" type="radio" name="partner_id" id="partner_{{ p.id }}" value="{{ p.id }}" {% if forloop.first %}checked{% endif %}>
+                            <label class="form-check-label ms-2" for="partner_{{ p.id }}">
                                 Select
                             </label>
                         </div>
@@ -77,12 +77,13 @@
             </div>
             {% empty %}
                 <div class="col">
-                    <p class="lead text-center">No characters available to select.</p>
+                    <p class="lead text-center">There are no partners for the selected character.</p>
                 </div>
             {% endfor %}
         </div>
         <div class="mt-5">
-            <button type="submit" class="btn btn-game-primary btn-lg">Select Partner</button>
+            <a href="{% url 'battle:character_selection' %}" class="btn btn-game-primary btn-lg">Go back</a>
+            <button type="submit" class="btn btn-game-primary btn-lg">Select Enemy</button>
         </div>
     </form>
 </div>
