@@ -18,6 +18,7 @@ class CharacterForm(forms.ModelForm):
         "required": "Please enter a number  between 1 and 100"
     })
 
+
     roles = forms.ModelMultipleChoiceField(
         queryset=Role.objects.all(),
         widget=forms.CheckboxSelectMultiple,
@@ -58,7 +59,6 @@ class CharacterForm(forms.ModelForm):
 
 
     class Meta:
-        exclude = ['slug']
         model = Character
         labels = {
             'image_url': "Character Image URL"
@@ -121,7 +121,23 @@ class CharacterCreateForm(CharacterForm):
     ...
 
 class CharacterEditForm(CharacterForm):
-    ...
+    slug = forms.CharField(disabled=True)
+
+    class Meta(CharacterForm.Meta):
+        fields = [
+            "name",
+            "title",
+            "type",
+            "attack",
+            "defense",
+            "hp",
+            "roles",
+            "slug",
+            "description",
+            "image_url",
+        ]
+
+
 
 class CharacterDeleteForm(CharacterForm):
     ...

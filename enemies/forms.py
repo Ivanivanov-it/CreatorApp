@@ -55,7 +55,6 @@ class EnemyForm(forms.ModelForm):
 
 
     class Meta:
-        exclude = ['slug']
         model = Enemy
         labels = {
             'image_url': "Enemy Image URL"
@@ -116,7 +115,21 @@ class EnemyCreateForm(EnemyForm):
     ...
 
 class EnemyEditForm(EnemyForm):
-    ...
+    slug = forms.CharField(disabled=True)
+
+    class Meta(EnemyForm.Meta):
+        fields = [
+            "name",
+            "title",
+            "type",
+            "attack",
+            "defense",
+            "hp",
+            "weakness",
+            "slug",
+            "description",
+            "image_url",
+        ]
 
 class EnemyDeleteForm(EnemyForm):
     ...

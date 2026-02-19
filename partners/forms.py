@@ -44,7 +44,6 @@ class PartnerForm(forms.ModelForm):
         return cleaned_data
 
     class Meta:
-        exclude = ['slug']
         model = Partner
         labels = {
             'character': "Select an existing character",
@@ -108,7 +107,21 @@ class PartnerCreateForm(PartnerForm):
 
 
 class PartnerEditForm(PartnerForm):
-    ...
+    slug = forms.CharField(disabled=True)
+
+    class Meta(PartnerForm.Meta):
+        fields = [
+            "name",
+            "title",
+            "attack",
+            "defense",
+            "hp",
+            "roles",
+            "slug",
+            "description",
+            "image_url",
+            "character"
+        ]
 
 class PartnerSearchForm(forms.Form):
     query = forms.CharField(max_length=100,label='',required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
