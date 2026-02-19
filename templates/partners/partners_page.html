@@ -81,7 +81,7 @@
             <div class="card-game text-center">
                 {% if partner.image_url %}
                     <a href="{% url 'partners:partner_detail' partner.pk %}">
-                        <img src="{{ partner.image_url }}" class="rounded-circle mx-auto d-block mb-3" alt="{{ partner.name }}" style="width: 200px; height: 200px; object-fit: cover; border: 3px solid #3a3a5a;">
+                        <img src="{{ partner.image_url }}" class="rounded-circle mx-auto d-block mb-3" alt="{{ partner.name  }}" style="width: 200px; height: 200px; object-fit: cover; border: 3px solid #3a3a5a;">
                     </a>
                 {% else %}
                     <a href="{% url 'partners:partner_detail' partner.pk %}">
@@ -90,10 +90,10 @@
                 <div class="card-body">
                     <h5 class="card-title mb-2">
                         <a href="{% url 'partners:partner_detail' partner.pk %}" class="card-title-link">
-                            {{ partner.name }}
+                            {{ partner.name | capfirst }}
                         </a>
                     </h5>
-                    <h6 class="card-subtitle mb-3 text-muted">{{ partner.title }}</h6>
+                    <h6 class="card-subtitle mb-3 text-muted">{{ partner.title | capfirst }}</h6>
                     <p class="card-text small">{{ partner.description|truncatewords:20 }}</p>
                 </div>
             </div>

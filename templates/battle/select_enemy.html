@@ -74,7 +74,7 @@
                     <div class="card-body">
                         <h5 class="card-title mb-3">
                             <a href="{% url 'enemies:enemy_detail' e.id %}" target="_blank" class="text-info text-decoration-none">
-                                {{ e.name }}
+                                {{ e.name | capfirst }}
                             </a>
                         </h5>
                         <div class="form-check d-flex justify-content-center align-items-center">

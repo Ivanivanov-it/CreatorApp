@@ -91,10 +91,10 @@
                 <div class="card-body">
                     <h5 class="card-title mb-2">
                         <a href="{% url 'characters:character_detail' character.pk %}" class="card-title-link">
-                            {{ character.name }}
+                            {{ character.name | capfirst }}
                         </a>
                     </h5>
-                    <h6 class="card-subtitle mb-3 text-muted">{{ character.title }}</h6>
+                    <h6 class="card-subtitle mb-3 text-muted">{{ character.title | capfirst }}</h6>
                     <p class="card-text small">{{ character.description|truncatewords:20 }}</p>
                 </div>
             </div>

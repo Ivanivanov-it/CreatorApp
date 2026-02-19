@@ -98,7 +98,7 @@
         <!-- Character Card -->
         <div class="col-lg-4 col-md-5 mb-4">
             <div class="card-game text-center">
-                <h4 class="mb-3 text-info">{{ character.character.name }}</h4>
+                <h4 class="mb-3 text-info">{{ character.character.name | capfirst }}</h4>
                 {% if character.character.image_url %}
                     <img src="{{ character.character.image_url }}" class="img-fluid rounded-circle mb-3" alt="{{ character.character.name }}" style="width: 180px; height: 180px; object-fit: cover; border: 3px solid #8be9fd;">
                 {% else %}
@@ -131,7 +131,7 @@
         <!-- Enemy Card -->
         <div class="col-lg-4 col-md-5 mb-4">
             <div class="card-game text-center">
-                <h4 class="mb-3 text-warning">{{ enemy.enemy.name }}</h4>
+                <h4 class="mb-3 text-warning">{{ enemy.enemy.name | capfirst }}</h4>
                 {% if enemy.enemy.image_url %}
                     <img src="{{ enemy.enemy.image_url }}" class="img-fluid rounded-circle mb-3" alt="{{ enemy.enemy.name }}" style="width: 180px; height: 180px; object-fit: cover; border: 3px solid #ff5555;">
                 {% else %}
