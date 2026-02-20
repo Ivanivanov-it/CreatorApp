@@ -80,8 +80,14 @@ python -c "from django.core.management.utils import get_random_secret_key; print
 
 python manage.py migrate
 ```
+5. Populate the database
 
-6. Start server
+```bash
+
+python populate_db.py
+```
+
+7. Start server
 
 ```bash
 
