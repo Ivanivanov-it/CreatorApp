@@ -1,5 +1,14 @@
 # A Django app for a turn-based battle game where users create their own characters and enemies.
 
+# Why This Project Exists
+
+```
+This project was built to demostrate my experience with Django and PostgreSQL , 
+speciffically database design and relationships,implementing simple CRUD oprations, 
+implementing forms , data validation , Django class and function based views , 
+templates with dynamic data rendering.
+```
+
 # Features
 
 - Really simple (for now) turn based battle system
