@@ -1,9 +1,10 @@
 from django.db import models
 
 from characters.models import Character
-from common.choices import BattleStatus
+from common.choices import BattleStatus, LogType
 from common.models import TimeStampModel
 from enemies.models import Enemy
+from abc import abstractmethod
 
 
 # Create your models here.
@@ -61,9 +62,10 @@ class BattleParticipant(TimeStampModel):
 
     current_hp = models.IntegerField()
 
+    @abstractmethod
     def take_damage(self, damage):
-        self.current_hp -= damage
-        self.save()
+        pass
+
 
     def heal(self,amount):
         self.current_hp += amount
@@ -86,12 +88,43 @@ class BattleParticipant(TimeStampModel):
 class BattleCharacter(BattleParticipant):
     character = models.ForeignKey(Character, on_delete=models.CASCADE)
 
+    def take_damage(self, damage, battle=None):
+        self.current_hp -= damage
+        self.save()
+
+        if battle:
+
+            content = f"Turn {battle.turns}: {self.character.name} took {damage} damage!"
+
+            BattleLog.objects.create(
+                battle=battle,
+                log_type=LogType.INFO,
+                content=content
+            )
+
 
 
 class BattleEnemy(BattleParticipant):
     enemy = models.ForeignKey(Enemy, on_delete=models.CASCADE)
 
+    def take_damage(self, damage, battle=None):
+        self.current_hp -= damage
+        self.save()
 
+        if battle:
+            content = f"Turn {battle.turns}: {self.enemy.name} took {damage} damage!"
+
+            BattleLog.objects.create(
+                battle=battle,
+                log_type=LogType.INFO,
+                content=content
+            )
+
+
+class BattleLog(TimeStampModel):
+    battle = models.ForeignKey(Battle, on_delete=models.CASCADE, related_name="battlelogs")
+    log_type = models.CharField(choices=LogType.choices,default=LogType.INFO)
+    content = models.TextField()
 
 
 

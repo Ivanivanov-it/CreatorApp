@@ -58,12 +58,12 @@
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <div class="card-game">
                     {% if c.image_url %}
-                        <a href="{% url 'characters:character_detail' c.id %}">
+                        <a href="{% url 'characters:character_detail' c.id %}" target="_blank">
                             <img src="{{ c.image_url }}" class="card-img-top mx-auto d-block mb-3" alt="{{ c.name }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%;">
                         </a>
                     {% else %}
-                        <a href="{% url 'characters:character_detail' c.id %}">
-                            <img src="{% static 'images/hero.png' %}" class="card-img-top mx-auto d-block mb-3" alt="{{ c.name }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%;">
+                        <a href="{% url 'characters:character_detail' c.id %}" target="_blank">
+                            <img src="{% static 'images/hero.png' %}"  class="card-img-top mx-auto d-block mb-3" alt="{{ c.name }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%;">
                         </a>
                     {% endif %}
                     <div class="card-body">

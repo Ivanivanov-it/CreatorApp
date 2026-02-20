@@ -58,9 +58,13 @@
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <div class="card-game">
                     {% if p.image_url %}
+                        <a href="{% url 'partners:partner_detail' p.pk %}" target="_blank">
                         <img src="{{ p.image_url }}" class="card-img-top mx-auto d-block mb-3" alt="{{ p.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                        </a>
                     {% else %}
+                         <a href="{% url 'partners:partner_detail' p.pk %}" target="_blank">
                         <img src="{% static 'images/partner.png' %}" class="card-img-top mx-auto d-block mb-3" alt="{{ p.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                         </a>
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title mb-3">

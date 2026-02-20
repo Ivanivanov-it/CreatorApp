@@ -14,3 +14,10 @@ class BattleStatus(models.TextChoices):
     active = 'Active', 'Active'
     inactive = 'Inactive', 'Inactive'
     finished = 'Finished', 'Finished'
+
+class LogType(models.TextChoices):
+    INFO = 'INFO', 'INFO'
+    ATTACK = 'ATTACK', 'ATTACK'
+    DEFEND = 'DEFEND', 'DEFEND'
+    HEAL = 'HEAL', 'HEAL'
+    SEARCH = 'SEARCH', 'SEARCH'

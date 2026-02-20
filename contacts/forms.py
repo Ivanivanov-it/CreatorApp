@@ -8,8 +8,7 @@ class ContactForm(forms.ModelForm):
     class Meta:
         fields = "__all__"
         model = Contact
-        # labels = {
-        # }
+
         help_texts = {
             'email': 'Email so we can get back to you as soon as possible',
             'phone_number': "Optional phone number",

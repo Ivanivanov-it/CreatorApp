@@ -2,12 +2,12 @@ from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from battle.models import Battle, BattleCharacter, BattleEnemy
+from battle.models import Battle, BattleCharacter, BattleEnemy, BattleLog
 from battle.stat_calc_functions import calc_buff_atk, calc_buff_def, calc_buff_hp, calc_debuff_atk, calc_debuff_hp, \
     calc_debuff_def
 from characters.forms import CharacterSearchForm
 from characters.models import Character
-from common.choices import BattleStatus
+from common.choices import BattleStatus, LogType
 from enemies.forms import EnemySearchForm
 from enemies.models import Enemy
 from partners.models import Partner
@@ -150,6 +150,7 @@ def create_battle(request: HttpRequest) -> HttpResponse:
         debuff_def=calc_debuff_def(enemy,character)
     )
 
+
     return redirect("battle:battle_view",pk=battle.id)
 
 def battle_view(request: HttpRequest,pk:int) -> HttpResponse:
@@ -158,8 +159,11 @@ def battle_view(request: HttpRequest,pk:int) -> HttpResponse:
     if not battle:
         return redirect("battle:character_selection")
 
+
+
     character = battle.battlecharacter_set.first()
     enemy = battle.battleenemy_set.first()
+
 
     if request.method == "POST":
         battle = get_object_or_404(Battle,pk=pk)
@@ -171,9 +175,10 @@ def battle_view(request: HttpRequest,pk:int) -> HttpResponse:
 
 
         if turn % 2 == 1:
-            enemy.take_damage(character.total_atk)
+            enemy.take_damage(character.total_atk,battle=battle)
+
         else:
-            character.take_damage(enemy.total_atk)
+            character.take_damage(enemy.total_atk,battle=battle)
 
         if not enemy.is_alive or not character.is_alive:
             battle.status = BattleStatus.finished
@@ -184,11 +189,13 @@ def battle_view(request: HttpRequest,pk:int) -> HttpResponse:
         battle.turns = turn
         battle.save()
 
+        logs = BattleLog.objects.filter(battle=battle).all()
 
         context = {
             "battle": battle,
             "character": character,
-            "enemy": enemy
+            "enemy": enemy,
+            "logs": logs
         }
 
 
