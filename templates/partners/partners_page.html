@@ -60,16 +60,7 @@
     <h2 class="section-title text-center mb-4">Our Partners</h2>
     <p class="text-center text-white-50 mb-5">Collaborators in our creative journey.</p>
 
-    <div class="row mb-4 justify-content-center">
-        <div class="col-md-6">
-            <form class="d-flex" method="get" action=".">
-                <div class="input-group">
-                    <input type="text" name="query" class="form-control bg-dark text-light border-secondary" placeholder="Search partners..." aria-label="Search" value="{{ request.GET.query|default_if_none:'' }}">
-                    <button class="btn btn-game-primary px-4" type="submit" style="font-size: 1rem; padding: 0.5rem 1.5rem;">Search</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    {% include 'search.html' %}
 
     <div class="text-center mb-5">
         <a href="{% url 'partners:create_partner' %}" class="btn-game-primary">Forge New Alliance</a>
