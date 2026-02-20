@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load custom_tags %}
 {% load static %}
 
 {% block content %}
@@ -78,20 +79,7 @@
                     <span class="stat-badge stat-badge-type">{{ enemy.type }}</span>
                 </div>
 
-                <div class="d-flex flex-wrap mb-4">
-                    <div class="me-4 mb-2">
-                        <span class="fw-bold me-2">Attack:</span>
-                        <span class="stat-badge stat-badge-atk">{{ enemy.attack }}</span>
-                    </div>
-                    <div class="me-4 mb-2">
-                        <span class="fw-bold me-2">Defense:</span>
-                        <span class="stat-badge stat-badge-def">{{ enemy.defense }}</span>
-                    </div>
-                    <div class="me-4 mb-2">
-                        <span class="fw-bold me-2">HP:</span>
-                        <span class="stat-badge stat-badge-hp">{{ enemy.hp }}</span>
-                    </div>
-                </div>
+                {% show_stats enemy %}
 
                 <div class="mb-4">
                     <span class="fw-bold me-2">Weakness:</span>

@@ -81,20 +81,7 @@
 
                 <p class="lead">{{ partner.description }}</p>
 
-                <div class="d-flex flex-wrap mb-4">
-                    <div class="me-4 mb-2">
-                        <span class="fw-bold me-2">Attack:</span>
-                        <span class="stat-badge stat-badge-atk">{{ partner.attack }}</span>
-                    </div>
-                    <div class="me-4 mb-2">
-                        <span class="fw-bold me-2">Defense:</span>
-                        <span class="stat-badge stat-badge-def">{{ partner.defense }}</span>
-                    </div>
-                    <div class="me-4 mb-2">
-                        <span class="fw-bold me-2">HP:</span>
-                        <span class="stat-badge stat-badge-hp">{{ partner.hp }}</span>
-                    </div>
-                </div>
+                {% show_stats partner %}
 
                 <div class="mb-3">
                     <span class="fw-bold me-2">Partner of:</span>
