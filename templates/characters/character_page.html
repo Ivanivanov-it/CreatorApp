@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_tags %}
 
 {% block content %}
 <style>
@@ -93,12 +94,8 @@
                     </div>
                 </div>
 
-                <div class="mb-4">
-                    <span class="fw-bold me-2">Roles:</span>
-                    {% for role in character.roles.all %}
-                    <span class="stat-badge stat-badge-role me-1">{{ role.role | lower | capfirst }}</span>
-                    {% endfor %}
-                </div>
+
+                {% show_roles character %}
 
                 <p class="card-text"><small class="text-white-50">Created at: {{ character.created_at }}</small></p>
 
