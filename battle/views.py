@@ -23,8 +23,7 @@ def character_selection(request: HttpRequest) -> HttpResponse:
 
     if 'query' in request.GET:
         if search_form.is_valid():
-            characters = characters.filter(Q(name__icontains=search_form.cleaned_data['query']) | Q(
-                title__icontains=search_form.cleaned_data['query']))
+            characters = characters.filter(name__icontains=search_form.cleaned_data['query'])
 
 
     if request.method == "POST":
@@ -88,8 +87,7 @@ def enemy_selection(request: HttpRequest) -> HttpResponse:
 
     if 'query' in request.GET:
         if search_form.is_valid():
-            enemies = enemies.filter(Q(name__icontains=search_form.cleaned_data['query']) | Q(
-                title__icontains=search_form.cleaned_data['query']))
+            enemies = enemies.filter(name__icontains=search_form.cleaned_data['query'])
 
 
     if request.method == "POST":
@@ -163,6 +161,7 @@ def battle_view(request: HttpRequest,pk:int) -> HttpResponse:
 
     character = battle.battlecharacter_set.first()
     enemy = battle.battleenemy_set.first()
+    logs = BattleLog.objects.filter(battle=battle).all()
 
 
     if request.method == "POST":
@@ -206,6 +205,7 @@ def battle_view(request: HttpRequest,pk:int) -> HttpResponse:
         "battle": battle,
         "character": character,
         "enemy": enemy,
+        'logs': logs
     }
 
     return render(request,"battle/battle.html",context=context)

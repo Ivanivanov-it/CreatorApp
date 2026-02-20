@@ -51,12 +51,6 @@ def character_detail(request: HttpRequest,pk: int) -> HttpResponse:
 
     return render(request,'characters/character_page.html',context)
 
-# class CharacterListView(ListView):
-#     model = Character
-#     template_name = 'characters/character_page.html'
-#     extra_context = {
-#         'page_title': "Character details",
-#     }
 
 def create_character(request: HttpRequest) -> HttpResponse:
     form = CharacterCreateForm(request.POST or None)

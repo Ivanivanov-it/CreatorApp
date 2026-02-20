@@ -26,6 +26,10 @@ def create_mail(request: HttpRequest) -> HttpResponse:
 class WipPage(TemplateView):
     template_name = 'contacts/wip.html'
 
+    extra_context = {
+        "page_title": "WIP"
+    }
+
 class AboutPageView(TemplateView):
     template_name = 'characters/about.html'
     extra_context = {
