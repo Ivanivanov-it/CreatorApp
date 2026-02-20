@@ -20,6 +20,16 @@ templates with dynamic data rendering.
 - Contact form, about page , WIP page, 404 page
 - AI generated frontend design with the help of Gemini CLI
 ![Detail Screenshot](static/images/Detail.PNG)
+
+# Project Notes
+
+- Currently during battle you can only attack. I plan to add option to defend,heal,buff and shield in the future. Also I plan to give more moves to the enemy and make it's turns automatic.
+- The defense stat currently does nothing.
+- Different Types and Roles buff your character stats when entering combat which allows them to reach higher than the set amount on creation.
+- Enemy weakness reduces the enemy stats depending on the character they fight.
+- Partners only function currently is to add their stats to their character partner on game start.
+
+
 # Tech Stack
 
 - Python
