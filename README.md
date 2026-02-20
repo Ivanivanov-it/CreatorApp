@@ -21,6 +21,18 @@ templates with dynamic data rendering.
 - AI generated frontend design with the help of Gemini CLI
 ![Detail Screenshot](static/images/Detail.PNG)
 
+
+# App responsibilities
+
+- common - stores in one place models,choice fields and custom tags that are used in all other apps
+- characters - handles everything about character creation,edit and deletion and contains the landing page.
+- partners - handles everything about partner creation,edit and deletion.
+- enemies - handles everything about enemy creation,edit and deletion.
+- contacts - handles the display of wip.html and about.html and contains a contact form. Currently after submiting the form you can only view the content inside the admin panel.
+- battle - handles the process of selecting characters,partners and enemies to fight each other. Then handles the creation of the battle and stores the character and enemy adjusted stats into a temporary model only for the current fight.Handles the fight logic.
+
+
+
 # Project Notes
 
 - Currently during battle you can only attack. I plan to add option to defend,heal,buff and shield in the future. Also I plan to give more moves to the enemy and make it's turns automatic.
