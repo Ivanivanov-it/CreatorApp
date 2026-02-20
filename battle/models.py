@@ -31,15 +31,15 @@ class BattleParticipant(TimeStampModel):
 
     @property
     def max_hp(self):
-        return self.base_hp + self.hp_modifier
+        return max(1,self.base_hp + self.hp_modifier)
 
     @property
     def total_atk(self):
-        return self.base_atk + self.atk_modifier
+        return max(0,self.base_atk + self.atk_modifier)
 
     @property
     def total_def(self):
-        return self.base_def + self.def_modifier
+        return max(0,self.base_def + self.def_modifier)
 
     @property
     def is_alive(self):
