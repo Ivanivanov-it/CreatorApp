@@ -4,7 +4,7 @@
 
 ```
 This project was built to demostrate my experience with Django and PostgreSQL , 
-speciffically database design and relationships,implementing simple CRUD oprations, 
+speciffically database design and relationships,implementing simple CRUD operations, 
 implementing forms , data validation , Django class and function based views , 
 templates with dynamic data rendering.
 ```
@@ -57,7 +57,7 @@ pip install -r requirements.txt
 Create .env file in the project root:
 
 ```
-SECRET_KEY=your_secret_key
+SECRET_KEY=generate_your_own_key
 DEBUG=False
 
 DB_PORT=5432
@@ -65,6 +65,13 @@ DB_NAME=your_db
 DB_USER=your_user
 DB_PASSWORD=your_password
 DB_HOST=127.0.0.1
+```
+
+Use this command to generate your own secret key:
+
+```bash
+
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 ```
 
 5. Run migrations
