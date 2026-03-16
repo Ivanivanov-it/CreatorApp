@@ -1,12 +1,8 @@
 from django.db.models import Q
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views import View
-from django.views.generic import DeleteView, ListView
+from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
 from django.views.generic import TemplateView
-
-from characters.forms import CharacterForm, CharacterCreateForm, CharacterEditForm, CharacterSearchForm
+from characters.forms import CharacterCreateForm, CharacterEditForm, CharacterSearchForm
 from characters.models import Character
 
 
@@ -22,67 +18,56 @@ class LandingPageView(TemplateView):
         'page_title': "Home"
     }
 
+class CharactersListView(ListView):
+    model = Character
+    template_name = 'characters/characters_page.html'
+    context_object_name = 'characters'
 
-def characters_list(request: HttpRequest) -> HttpResponse:
-    search_form = CharacterSearchForm(request.GET or None)
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.search_form = CharacterSearchForm(self.request.GET or None)
 
-    characters = Character.objects.all()
+        if 'query' in self.request.GET and self.search_form.is_valid():
+            query = self.search_form.cleaned_data['query']
+            queryset = queryset.filter(Q(name__icontains=query) | Q(title__icontains=query))
 
-    if 'query' in request.GET:
-        if search_form.is_valid():
-            characters = characters.filter(Q(name__icontains=search_form.cleaned_data['query']) | Q(title__icontains=search_form.cleaned_data['query']))
+        return queryset
 
-    context = {
-        'page_title': "Characters",
-        'characters': characters,
-        'search_form': search_form
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_form'] = self.search_form
+        context['page_title'] = "Characters"
+        return context
+
+
+class CharacterDetailView(DetailView):
+    template_name = 'characters/character_page.html'
+    model = Character
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = f"{self.object.name} Details"
+
+        return context
+
+
+class CreateCharacterView(CreateView):
+    template_name = 'characters/create_character.html'
+    form_class = CharacterCreateForm
+    success_url = reverse_lazy('characters:characters_list')
+    extra_context = {
+        'page_title': "Create Character"
     }
 
-    return render(request,'characters/characters_page.html',context)
-
-
-
-def character_detail(request: HttpRequest,pk: int) -> HttpResponse:
-    character = get_object_or_404(Character, pk=pk)
-    context = {
-        'page_title': f"{character.name} Details",
-        'character': character,
+class EditCharacterView(UpdateView):
+    model = Character
+    form_class = CharacterEditForm
+    success_url = reverse_lazy('characters:characters_list')
+    template_name = 'characters/edit_character.html'
+    extra_context = {
+        'page_title': "Edit Character"
     }
-
-    return render(request,'characters/character_page.html',context)
-
-
-def create_character(request: HttpRequest) -> HttpResponse:
-    form = CharacterCreateForm(request.POST or None)
-
-    if request.method == "POST" and form.is_valid():
-        form.save()
-
-        return redirect('characters:characters_list')
-
-    context = {
-        'page_title': "Create Character",
-        'form': form,
-    }
-
-    return render(request,'characters/create_character.html',context)
-
-
-def edit_character(request: HttpRequest,pk: int) -> HttpResponse:
-    character = get_object_or_404(Character, pk=pk)
-    form = CharacterEditForm(request.POST or None,instance=character)
-
-    if request.method == "POST" and form.is_valid():
-        form.save()
-
-        return redirect('characters:characters_list')
-
-    context = {
-        'page_title': "Edit Character",
-        'form': form,
-    }
-
-    return render(request, 'characters/edit_character.html', context)
 
 
 class CharacterDeleteView(DeleteView):
