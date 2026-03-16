@@ -2,84 +2,62 @@ from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import DeleteView
+from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
 
 from partners.forms import PartnerCreateForm, PartnerEditForm, PartnerSearchForm
 from partners.models import Partner
 
 
-def partners_list(request: HttpRequest) -> HttpResponse:
-    search_form = PartnerSearchForm(request.GET or None)
 
-    partners = Partner.objects.all()
+class PartnersListView(ListView):
+    model = Partner
+    template_name = 'partners/partners_page.html'
+    context_object_name = 'partners'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.search_form = PartnerSearchForm(self.request.GET or None)
 
-    if 'query' in request.GET:
-        if search_form.is_valid():
-            partners = partners.filter(Q(name__icontains=search_form.cleaned_data['query']) | Q(title__icontains=search_form.cleaned_data['query']))
+        if 'query' in self.request.GET and self.search_form.is_valid():
+            query = self.search_form.cleaned_data['query']
+            queryset = queryset.filter(Q(name__icontains=query) | Q(title__icontains=query))
 
+        return queryset
 
-    context = {
-        'page_title': "Partners",
-        'partners': partners,
-        'search_form': search_form,
-    }
-
-    return render(request, 'partners/partners_page.html', context)
-
-
-def partner_detail(request: HttpRequest, pk: int) -> HttpResponse:
-    partner = get_object_or_404(Partner, pk=pk)
-    context = {
-        'page_title': f"{partner.name} Details",
-        'partner': partner,
-    }
-
-    return render(request, 'partners/partner_page.html', context)
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_form'] = self.search_form
+        context['page_title'] = "Partners"
+        return context
 
 
-def create_partner(request: HttpRequest) -> HttpResponse:
-    form = PartnerCreateForm(request.POST or None)
+class PartnerDetailView(DetailView):
+    model = Partner
+    template_name = 'partners/partner_page.html'
 
-    if request.method == "POST" and form.is_valid():
-        form.save()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = f"{self.object.name} Details"
 
-        return redirect('partners:partners_list')
+        return context
 
-    context = {
+
+class PartnerCreateView(CreateView):
+    form_class = PartnerCreateForm
+    template_name = 'partners/create_partner.html'
+    success_url = reverse_lazy('partners:partners_list')
+    extra_context = {
         'page_title': "Create Partner",
-        'form': form,
     }
 
-    return render(request, 'partners/create_partner.html', context)
-
-
-def edit_partner(request: HttpRequest, pk: int) -> HttpResponse:
-    partner = get_object_or_404(Partner, pk=pk)
-    form = PartnerEditForm(request.POST or None, instance=partner)
-
-    if request.method == "POST" and form.is_valid():
-        form.save()
-
-        return redirect('partners:partners_list')
-
-    context = {
+class EditPartnerView(UpdateView):
+    model = Partner
+    form_class = PartnerEditForm
+    template_name = 'partners/edit_partner.html'
+    success_url = reverse_lazy('partners:partners_list')
+    extra_context = {
         'page_title': "Edit Partner",
-        'form': form,
-        'partner': partner,
     }
-
-    return render(request, 'partners/edit_partner.html', context)
-
-
-# def delete_partner(request: HttpRequest, pk: int) -> HttpResponse:
-#     partner = get_object_or_404(Partner, pk=pk)
-#
-#     if partner:
-#         partner.delete()
-#
-#     return redirect('partners:partners_list')
-
 
 class PartnerDeleteView(DeleteView):
     model = Partner
