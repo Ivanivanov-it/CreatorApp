@@ -17,6 +17,8 @@ class EnemiesListView(ListView):
     model = Enemy
     template_name = 'enemies/enemies_page.html'
     context_object_name = 'enemies'
+    paginate_by = 9
+    ordering = ['name']
 
     def get_queryset(self):
         queryset = super().get_queryset()

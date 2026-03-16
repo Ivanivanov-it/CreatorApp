@@ -13,6 +13,8 @@ class PartnersListView(ListView):
     model = Partner
     template_name = 'partners/partners_page.html'
     context_object_name = 'partners'
+    paginate_by = 9
+    ordering = ['name']
 
     def get_queryset(self):
         queryset = super().get_queryset()

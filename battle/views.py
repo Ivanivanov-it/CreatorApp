@@ -1,15 +1,13 @@
-from django.db.models import Q
-from django.http import HttpRequest, HttpResponse, request
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views import View
-from django.views.generic import ListView, TemplateView, DetailView
 
+from django.shortcuts import render, redirect
+from django.views import View
+from django.views.generic import ListView, DetailView
 from battle.models import Battle, BattleCharacter, BattleEnemy, BattleLog
 from battle.stat_calc_functions import calc_buff_atk, calc_buff_def, calc_buff_hp, calc_debuff_atk, calc_debuff_hp, \
     calc_debuff_def
 from characters.forms import CharacterSearchForm
 from characters.models import Character
-from common.choices import BattleStatus, LogType
+from common.choices import BattleStatus
 from enemies.forms import EnemySearchForm
 from enemies.models import Enemy
 from partners.models import Partner
@@ -19,6 +17,8 @@ class CharacterSelectionView(ListView):
     model = Character
     template_name = "battle/select_character.html"
     context_object_name = 'characters'
+    paginate_by = 9
+    ordering = ['name']
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -48,6 +48,8 @@ class CharacterSelectionView(ListView):
 class PartnerSelectionView(ListView):
     template_name = "battle/select_partner.html"
     context_object_name = 'partners'
+    paginate_by = 9
+    ordering = ['name']
 
     def dispatch(self,request,*args,**kwargs):
         if not request.session.get("character_id"):
@@ -71,6 +73,8 @@ class EnemySelectionView(ListView):
     model = Enemy
     template_name = "battle/select_enemy.html"
     context_object_name = 'enemies'
+    paginate_by = 9
+    ordering = ['name']
 
     def dispatch(self,request,*args,**kwargs):
         if not request.session.get("character_id"):

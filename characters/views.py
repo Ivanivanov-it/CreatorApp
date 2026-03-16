@@ -22,6 +22,8 @@ class CharactersListView(ListView):
     model = Character
     template_name = 'characters/characters_page.html'
     context_object_name = 'characters'
+    paginate_by = 9
+    ordering = ['name']
 
     def get_queryset(self):
         queryset = super().get_queryset()
