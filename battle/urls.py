@@ -1,14 +1,14 @@
 from django.urls import path
 
-from battle.views import character_selection, enemy_selection, partner_selection, create_battle, battle_view
+from battle.views import CharacterSelectionView, PartnerSelectionView, EnemySelectionView, CreateBattleView, BattleView
 
 app_name = 'battle'
 
 
 urlpatterns = [
-    path('character-selection/',character_selection, name='character_selection'),
-    path('partner-selection/',partner_selection, name='partner_selection'),
-    path('enemy-selection/',enemy_selection,name="enemy_selection"),
-    path('create-battle/',create_battle, name='create_battle'),
-    path('<int:pk>/',battle_view,name="battle_view")
+    path('character-selection/',CharacterSelectionView.as_view(), name='character_selection'),
+    path('partner-selection/',PartnerSelectionView.as_view(), name='partner_selection'),
+    path('enemy-selection/',EnemySelectionView.as_view(),name="enemy_selection"),
+    path('create-battle/',CreateBattleView.as_view(), name='create_battle'),
+    path('<int:pk>/',BattleView.as_view(),name="battle_view")
 ]
