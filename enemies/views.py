@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import DeleteView
+from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
 
 from enemies.forms import EnemySearchForm, EnemyEditForm, EnemyCreateForm
 from enemies.models import Enemy
@@ -11,23 +11,30 @@ from enemies.models import Enemy
 # Create your views here.
 
 
-def enemies_list(request: HttpRequest) -> HttpResponse:
-    search_form = EnemySearchForm(request.GET or None)
 
-    enemies = Enemy.objects.all()
 
-    if 'query' in request.GET:
-        if search_form.is_valid():
-            enemies = enemies.filter(Q(name__icontains=search_form.cleaned_data['query']) | Q(
-                title__icontains=search_form.cleaned_data['query']))
+class EnemiesListView(ListView):
+    model = Enemy
+    template_name = 'enemies/enemies_page.html'
+    context_object_name = 'enemies'
 
-    context = {
-        'page_title': "Enemies",
-        'enemies': enemies,
-        'search_form': search_form
-    }
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.search_form = EnemySearchForm(self.request.GET or None)
 
-    return render(request, 'enemies/enemies_page.html', context)
+        if 'query' in self.request.GET and self.search_form.is_valid():
+            query = self.search_form.cleaned_data['query']
+            queryset = queryset.filter(Q(name__icontains=query) | Q(title__icontains=query))
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_form'] = self.search_form
+        context['page_title'] = "Enemies"
+
+        return context
+
 
 def enemy_detail(request: HttpRequest, pk: int) -> HttpResponse:
     enemy = get_object_or_404(Enemy, pk=pk)
@@ -38,44 +45,35 @@ def enemy_detail(request: HttpRequest, pk: int) -> HttpResponse:
 
     return render(request, 'enemies/enemy_page.html', context)
 
-def create_enemy(request: HttpRequest) -> HttpResponse:
-    form = EnemyCreateForm(request.POST or None)
+class EnemyDetailView(DetailView):
+    model = Enemy
+    template_name = 'enemies/enemy_page.html'
 
-    if request.method == "POST" and form.is_valid():
-        form.save()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = f"{self.object.name} Details"
+        return context
 
-        return redirect('enemies:enemies_list')
 
-    context = {
-        'page_title': "Create Enemy",
-        'form': form,
+class CreateEnemyView(CreateView):
+    form_class = EnemyCreateForm
+    success_url = reverse_lazy('enemies:enemies_list')
+    template_name = 'enemies/create_enemy.html'
+    extra_context = {
+        'page_title': "Create Enemy"
     }
 
-    return render(request, 'enemies/create_enemy.html', context)
 
-def edit_enemy(request: HttpRequest, pk: int) -> HttpResponse:
-    enemy = get_object_or_404(Enemy, pk=pk)
-    form = EnemyEditForm(request.POST or None, instance=enemy)
 
-    if request.method == "POST" and form.is_valid():
-        form.save()
-
-        return redirect('enemies:enemies_list')
-
-    context = {
-        'page_title': "Edit Enemy",
-        'form': form,
+class EditEnemyView(UpdateView):
+    model = Enemy
+    form_class = EnemyEditForm
+    success_url = reverse_lazy('enemies:enemies_list')
+    template_name = 'enemies/edit_enemy.html'
+    extra_context = {
+        'page_title': "Edit Enemy"
     }
 
-    return render(request, 'enemies/edit_enemy.html', context)
-
-def delete_enemy(request: HttpRequest, pk: int) -> HttpResponse:
-    enemy = get_object_or_404(Enemy, pk=pk)
-
-    if enemy:
-        enemy.delete()
-
-    return redirect('enemies:enemies_list')
 
 class EnemyDeleteView(DeleteView):
     model = Enemy
