@@ -15,6 +15,18 @@
                 <li class="nav-item">
                     <a class="nav-link text-info" href="{% url 'enemies:enemies_list' %}">Enemies</a>
                 </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'account:logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-link btn btn-link text-danger border-0" style="vertical-align: middle;">Logout</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-warning" href="{% url 'account:login' %}">Login</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
