@@ -14,7 +14,6 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
-
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -38,7 +37,8 @@ PROJECT_APPS = [
     "partners",
     "enemies",
     "contacts",
-    "battle"
+    "battle",
+    "accounts",
 
 ]
 
@@ -138,3 +138,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
