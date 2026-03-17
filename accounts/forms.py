@@ -5,7 +5,7 @@ from accounts.models import CustomUser
 
 
 class RegisterForm(UserCreationForm):
-    email = forms.EmailField(required=True)
+    email = forms.EmailField(required=True, help_text="Required. Enter a valid email address.")
 
     class Meta:
         model = CustomUser

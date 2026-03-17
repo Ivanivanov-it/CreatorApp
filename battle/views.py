@@ -1,4 +1,4 @@
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView
@@ -13,7 +13,7 @@ from enemies.models import Enemy
 from partners.models import Partner
 
 
-class CharacterSelectionView(ListView):
+class CharacterSelectionView(LoginRequiredMixin,ListView):
     model = Character
     template_name = "battle/select_character.html"
     context_object_name = 'characters'
@@ -45,7 +45,7 @@ class CharacterSelectionView(ListView):
         return redirect("battle:partner_selection")
 
 
-class PartnerSelectionView(ListView):
+class PartnerSelectionView(LoginRequiredMixin,ListView):
     template_name = "battle/select_partner.html"
     context_object_name = 'partners'
     paginate_by = 9
@@ -69,7 +69,7 @@ class PartnerSelectionView(ListView):
         request.session["partner_id"] = partner_id
         return redirect("battle:enemy_selection")
 
-class EnemySelectionView(ListView):
+class EnemySelectionView(LoginRequiredMixin,ListView):
     model = Enemy
     template_name = "battle/select_enemy.html"
     context_object_name = 'enemies'
@@ -103,7 +103,7 @@ class EnemySelectionView(ListView):
         return redirect("battle:create_battle")
 
 
-class CreateBattleView(View):
+class CreateBattleView(LoginRequiredMixin,View):
 
     def dispatch(self, request, *args, **kwargs):
         character_id = request.session.get("character_id")
@@ -153,7 +153,7 @@ class CreateBattleView(View):
         return redirect("battle:battle_view", pk=battle.id)
 
 
-class BattleView(DetailView):
+class BattleView(LoginRequiredMixin,DetailView):
     template_name = "battle/battle.html"
     model = Battle
 

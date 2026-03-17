@@ -143,3 +143,4 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 LOGIN_REDIRECT_URL = 'characters:home'
 LOGOUT_REDIRECT_URL = 'characters:home'
+LOGIN_URL = 'account:login'
