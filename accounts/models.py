@@ -5,7 +5,7 @@ from django.db import models
 
 
 class CustomUser(AbstractUser):
-    # image_url = models.URLField(blank=True,null=True)
-    pass
+    image_url = models.ImageField(blank=True,null=True)
+
 
 

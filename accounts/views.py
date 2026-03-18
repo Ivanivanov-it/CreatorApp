@@ -1,6 +1,6 @@
 from django.contrib.auth import login, get_user_model
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView
 
 from django.shortcuts import render, redirect
@@ -26,11 +26,15 @@ class RegisterView(CreateView):
         login(self.request,self.object)
         return response
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('characters:home')
+
+        return super().dispatch(request, *args, **kwargs)
+
     extra_context = {
         'page_title': 'Register',
     }
-
-
 
 
 class UserProfileView(LoginRequiredMixin,TemplateView):
