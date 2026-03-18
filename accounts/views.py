@@ -1,46 +1,42 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView
 
 from accounts.forms import RegisterForm
 
 
 # Create your views here.
 
-class RegisterView(View):
+UserModel = get_user_model()
 
-    def get(self, request):
-        form = RegisterForm()
+class RegisterView(CreateView):
+    form_class = RegisterForm
+    model = UserModel
+    template_name = 'accounts/register.html'
+    success_url = reverse_lazy('characters:home')
 
-        context = {
-            'form': form,
-            'page_title': 'Register',
-        }
+    def form_valid(self,form):
+        response = super().form_valid(form)
+        login(self.request,self.object)
+        return response
 
-        return render(request, 'accounts/register.html', context=context)
+    extra_context = {
+        'page_title': 'Register',
+    }
 
-    def post(self, request):
-        form = RegisterForm(request.POST or None)
-        if form.is_valid():
-            user = form.save()
-            login(request,user)
-            return redirect('characters:home')
-
-        context = {
-            'form': form,
-            'page_title': 'Register',
-        }
-
-        return render(request, 'accounts/register.html', context=context)
 
 
 
 class UserProfileView(LoginRequiredMixin,TemplateView):
     template_name = 'accounts/user_profile.html'
+    extra_context = {
+        'page_title': 'User Profile',
+    }
 
 

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ request.user.username | capfirst }}'s Profile | CreatorApp{% endblock %}
+
 
 {% block content %}
 <style>
@@ -196,7 +196,7 @@
             <div class="col-md-6">
                 <span class="info-label">Full Name</span>
                 <div class="d-flex justify-content-between align-items-center info-value">
-                    <span>{{ request.user.get_full_name|default:"Mystery Creator" }}</span>
+                    <span>{{ request.user.get_full_name }}</span>
                     <a href="#" class="btn-action">Edit</a>
                 </div>
             </div>
