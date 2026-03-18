@@ -1,9 +1,11 @@
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 
 from django.shortcuts import render, redirect
 from django.views import View
+from django.views.generic import TemplateView
 
 from accounts.forms import RegisterForm
 
@@ -38,5 +40,7 @@ class RegisterView(View):
 
 
 
+class UserProfileView(LoginRequiredMixin,TemplateView):
+    template_name = 'accounts/user_profile.html'
 
 
