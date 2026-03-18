@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -41,6 +41,10 @@ class PartnerDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page_title'] = f"{self.object.name} Details"
+        context['can_modify'] = (
+                self.request.user == self.object.creator or
+                self.request.user.groups.filter(name="Moderators").exists()
+        )
 
         return context
 
@@ -57,7 +61,7 @@ class PartnerCreateView(LoginRequiredMixin,CreateView):
         form.instance.creator = self.request.user
         return super().form_valid(form)
 
-class EditPartnerView(LoginRequiredMixin,UpdateView):
+class EditPartnerView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Partner
     form_class = PartnerEditForm
     template_name = 'partners/edit_partner.html'
@@ -66,7 +70,29 @@ class EditPartnerView(LoginRequiredMixin,UpdateView):
         'page_title': "Edit Partner",
     }
 
-class PartnerDeleteView(LoginRequiredMixin,DeleteView):
+    def test_func(self):
+        partner = self.get_object()
+        return (
+            self.request.user == partner.creator or
+            self.request.user.groups.filter(name="Moderators").exists()
+        )
+
+    def handle_no_permission(self):
+
+        return redirect('contacts:no_permission')
+
+class PartnerDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Partner
     template_name = 'delete_confirm.html'
     success_url = reverse_lazy('partners:partners_list')
+
+    def test_func(self):
+        partner = self.get_object()
+        return (
+            self.request.user == partner.creator or
+            self.request.user.groups.filter(name="Moderators").exists()
+        )
+
+    def handle_no_permission(self):
+
+        return redirect('contacts:no_permission')

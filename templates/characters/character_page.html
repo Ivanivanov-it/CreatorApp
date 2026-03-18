@@ -86,10 +86,12 @@
 
                 <p class="card-text"><small class="text-white-50">Created at: {{ character.created_at }}</small></p>
 
+                {% if can_modify %}
                 <div class="mt-4">
                     <a href="{% url 'characters:edit_character' character.pk %}" class="btn-game-primary me-2">Edit</a>
                     <a href="{% url 'characters:delete_character' character.pk %}" class="btn-game-danger">Delete</a>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>

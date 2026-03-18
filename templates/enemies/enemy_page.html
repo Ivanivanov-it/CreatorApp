@@ -90,10 +90,12 @@
 
                 <p class="card-text"><small class="text-white-50">Created at: {{ enemy.created_at }}</small></p>
 
+            {% if can_modify %}
                 <div class="mt-4">
                     <a href="{% url 'enemies:edit_enemy' enemy.pk %}" class="btn-game-primary me-2">Edit</a>
                     <a href="{% url 'enemies:delete_enemy' enemy.pk %}" class="btn-game-danger">Delete</a>
                 </div>
+            {% endif %}
             </div>
         </div>
     </div>

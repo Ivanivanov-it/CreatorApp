@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -55,6 +55,10 @@ class EnemyDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page_title'] = f"{self.object.name} Details"
+        context['can_modify'] = (
+                self.request.user == self.object.creator or
+                self.request.user.groups.filter(name="Moderators").exists()
+        )
         return context
 
 
@@ -72,7 +76,7 @@ class CreateEnemyView(LoginRequiredMixin,CreateView):
 
 
 
-class EditEnemyView(LoginRequiredMixin,UpdateView):
+class EditEnemyView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Enemy
     form_class = EnemyEditForm
     success_url = reverse_lazy('enemies:enemies_list')
@@ -80,9 +84,30 @@ class EditEnemyView(LoginRequiredMixin,UpdateView):
     extra_context = {
         'page_title': "Edit Enemy"
     }
+    def test_func(self):
+        enemy = self.get_object()
+        return (
+            self.request.user == enemy.creator or
+            self.request.user.groups.filter(name="Moderators").exists()
+        )
+
+    def handle_no_permission(self):
+
+        return redirect('contacts:no_permission')
 
 
-class EnemyDeleteView(LoginRequiredMixin,DeleteView):
+class EnemyDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Enemy
     template_name = 'delete_confirm.html'
     success_url = reverse_lazy('enemies:enemies_list')
+
+    def test_func(self):
+        enemy = self.get_object()
+        return (
+            self.request.user == enemy.creator or
+            self.request.user.groups.filter(name="Moderators").exists()
+        )
+
+    def handle_no_permission(self):
+
+        return redirect('contacts:no_permission')

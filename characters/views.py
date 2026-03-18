@@ -1,5 +1,6 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
 from django.views.generic import TemplateView
@@ -51,6 +52,10 @@ class CharacterDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page_title'] = f"{self.object.name} Details"
+        context['can_modify'] = (
+            self.request.user == self.object.creator or
+            self.request.user.groups.filter(name="Moderators").exists()
+        )
 
         return context
 
@@ -66,7 +71,7 @@ class CreateCharacterView(LoginRequiredMixin,CreateView):
         form.instance.creator = self.request.user
         return super().form_valid(form)
 
-class EditCharacterView(LoginRequiredMixin,UpdateView):
+class EditCharacterView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model = Character
     form_class = CharacterEditForm
     success_url = reverse_lazy('characters:characters_list')
@@ -75,8 +80,30 @@ class EditCharacterView(LoginRequiredMixin,UpdateView):
         'page_title': "Edit Character"
     }
 
+    def test_func(self):
+        character = self.get_object()
+        return (
+            self.request.user == character.creator or
+            self.request.user.groups.filter(name="Moderators").exists()
+        )
 
-class CharacterDeleteView(LoginRequiredMixin,DeleteView):
+    def handle_no_permission(self):
+
+        return redirect('contacts:no_permission')
+
+
+class CharacterDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model = Character
     template_name = 'delete_confirm.html'
     success_url = reverse_lazy('characters:characters_list')
+
+    def test_func(self):
+        character = self.get_object()
+        return (
+            self.request.user == character.creator or
+            self.request.user.groups.filter(name="Moderators").exists()
+        )
+
+    def handle_no_permission(self):
+
+        return redirect('contacts:no_permission')
