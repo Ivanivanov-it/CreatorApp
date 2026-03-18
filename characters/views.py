@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
@@ -54,15 +55,18 @@ class CharacterDetailView(DetailView):
         return context
 
 
-class CreateCharacterView(CreateView):
+class CreateCharacterView(LoginRequiredMixin,CreateView):
     template_name = 'characters/create_character.html'
     form_class = CharacterCreateForm
     success_url = reverse_lazy('characters:characters_list')
     extra_context = {
         'page_title': "Create Character"
     }
+    def form_valid(self,form):
+        form.instance.creator = self.request.user
+        return super().form_valid(form)
 
-class EditCharacterView(UpdateView):
+class EditCharacterView(LoginRequiredMixin,UpdateView):
     model = Character
     form_class = CharacterEditForm
     success_url = reverse_lazy('characters:characters_list')
@@ -72,7 +76,7 @@ class EditCharacterView(UpdateView):
     }
 
 
-class CharacterDeleteView(DeleteView):
+class CharacterDeleteView(LoginRequiredMixin,DeleteView):
     model = Character
     template_name = 'delete_confirm.html'
     success_url = reverse_lazy('characters:characters_list')

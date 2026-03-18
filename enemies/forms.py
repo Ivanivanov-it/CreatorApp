@@ -116,6 +116,13 @@ class EnemyCreateForm(EnemyForm):
 
 class EnemyEditForm(EnemyForm):
     slug = forms.CharField(disabled=True)
+    creator_display = forms.CharField(disabled=True, required=False, label="Creator")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.instance and self.instance.pk:
+            self.fields['creator_display'].initial = self.instance.creator.username
 
     class Meta(EnemyForm.Meta):
         fields = [
@@ -129,6 +136,7 @@ class EnemyEditForm(EnemyForm):
             "slug",
             "description",
             "image_url",
+            "creator_display"
         ]
 
 class EnemyDeleteForm(EnemyForm):

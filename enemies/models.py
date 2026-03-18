@@ -15,6 +15,7 @@ class Enemy(TimeStampModel,CombatStatModel):
     description = models.TextField()
     slug = models.SlugField(max_length=100,unique=True,blank=True)
     image_url = models.URLField(blank=True,null=True)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='enemies')
 
 
     def save(self,*args,**kwargs):

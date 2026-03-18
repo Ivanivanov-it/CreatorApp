@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -44,7 +45,7 @@ class PartnerDetailView(DetailView):
         return context
 
 
-class PartnerCreateView(CreateView):
+class PartnerCreateView(LoginRequiredMixin,CreateView):
     form_class = PartnerCreateForm
     template_name = 'partners/create_partner.html'
     success_url = reverse_lazy('partners:partners_list')
@@ -52,7 +53,11 @@ class PartnerCreateView(CreateView):
         'page_title': "Create Partner",
     }
 
-class EditPartnerView(UpdateView):
+    def form_valid(self,form):
+        form.instance.creator = self.request.user
+        return super().form_valid(form)
+
+class EditPartnerView(LoginRequiredMixin,UpdateView):
     model = Partner
     form_class = PartnerEditForm
     template_name = 'partners/edit_partner.html'
@@ -61,7 +66,7 @@ class EditPartnerView(UpdateView):
         'page_title': "Edit Partner",
     }
 
-class PartnerDeleteView(DeleteView):
+class PartnerDeleteView(LoginRequiredMixin,DeleteView):
     model = Partner
     template_name = 'delete_confirm.html'
     success_url = reverse_lazy('partners:partners_list')

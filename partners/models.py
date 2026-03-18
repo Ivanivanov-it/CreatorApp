@@ -21,6 +21,7 @@ class Partner(TimeStampModel,CombatStatModel):
         on_delete=models.CASCADE,
         related_name="partners"
     )
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='partners')
 
     def save(self, *args, **kwargs):
         if not self.slug:

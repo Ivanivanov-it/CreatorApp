@@ -108,6 +108,13 @@ class PartnerCreateForm(PartnerForm):
 
 class PartnerEditForm(PartnerForm):
     slug = forms.CharField(disabled=True)
+    creator_display = forms.CharField(disabled=True, required=False, label="Creator")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.instance and self.instance.pk:
+            self.fields['creator_display'].initial = self.instance.creator.username
 
     class Meta(PartnerForm.Meta):
         fields = [
@@ -120,7 +127,8 @@ class PartnerEditForm(PartnerForm):
             "slug",
             "description",
             "image_url",
-            "character"
+            "character",
+            "creator_display"
         ]
 
 class PartnerSearchForm(forms.Form):

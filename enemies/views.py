@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -57,7 +58,7 @@ class EnemyDetailView(DetailView):
         return context
 
 
-class CreateEnemyView(CreateView):
+class CreateEnemyView(LoginRequiredMixin,CreateView):
     form_class = EnemyCreateForm
     success_url = reverse_lazy('enemies:enemies_list')
     template_name = 'enemies/create_enemy.html'
@@ -65,9 +66,13 @@ class CreateEnemyView(CreateView):
         'page_title': "Create Enemy"
     }
 
+    def form_valid(self,form):
+        form.instance.creator = self.request.user
+        return super().form_valid(form)
 
 
-class EditEnemyView(UpdateView):
+
+class EditEnemyView(LoginRequiredMixin,UpdateView):
     model = Enemy
     form_class = EnemyEditForm
     success_url = reverse_lazy('enemies:enemies_list')
@@ -77,7 +82,7 @@ class EditEnemyView(UpdateView):
     }
 
 
-class EnemyDeleteView(DeleteView):
+class EnemyDeleteView(LoginRequiredMixin,DeleteView):
     model = Enemy
     template_name = 'delete_confirm.html'
     success_url = reverse_lazy('enemies:enemies_list')
