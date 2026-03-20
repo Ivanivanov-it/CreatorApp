@@ -2,6 +2,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView
+
+from accounts.models import UserBattleStats
 from battle.models import Battle, BattleCharacter, BattleEnemy, BattleLog
 from battle.stat_calc_functions import calc_buff_atk, calc_buff_def, calc_buff_hp, calc_debuff_atk, calc_debuff_hp, \
     calc_debuff_def
@@ -181,7 +183,16 @@ class BattleView(LoginRequiredMixin,DetailView):
             character.take_damage(enemy.total_atk, battle=battle)
 
         if not enemy.is_alive or not character.is_alive:
+
+            user_stats, _ = UserBattleStats.objects.get_or_create(user=request.user)
+
+            if character.is_alive:
+                user_stats.add_win()
+            else:
+                user_stats.add_loss()
+
             battle.status = BattleStatus.finished
+            battle.save(update_fields=['status'])
 
         if not battle.status == BattleStatus.finished:
             turn += 1

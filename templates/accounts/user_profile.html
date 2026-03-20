@@ -247,7 +247,31 @@
                     {% endfor %}
                 </div>
             </div>
-        </div>
+
+            <div class="col-12">
+                <h2 class="sub-section-header">Battle Stats</h2>
+                <div class="row">
+                    <div class="col-md-4">
+                        <span class="info-label">Victories</span>
+                        <div class="info-value status-positive">
+                            <i class="bi bi-trophy-fill"></i> {{ user_stats.wins }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <span class="info-label">Defeats</span>
+                        <div class="info-value status-negative">
+                            <i class="bi bi-x-circle-fill"></i> {{ user_stats.losses }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <span class="info-label">Success Rate</span>
+                        <div class="info-value">
+                            <i class="bi bi-graph-up-arrow"></i> {{ user_stats.get_user_winrate }}%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end of row -->
 
         <div class="mt-4 d-grid gap-3">
             <a href="{% url 'account:password_change' %}" class="btn-game-secondary">Update Secret Password</a>

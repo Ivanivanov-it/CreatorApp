@@ -4,10 +4,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
-from django.views.generic import TemplateView, CreateView, FormView
+from django.views.generic import TemplateView, CreateView, FormView, DetailView
 
 from accounts.forms import RegisterForm, UsernameChangeForm, EmailChangeForm, FullNameChangeForm, \
     ProfilePictureChangeForm
+from accounts.models import UserBattleStats
 
 # Create your views here.
 
@@ -40,6 +41,12 @@ class UserProfileView(LoginRequiredMixin,TemplateView):
     extra_context = {
         'page_title': 'User Profile',
     }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_stats, _  = UserBattleStats.objects.get_or_create(user=self.request.user)
+        context['user_stats'] = user_stats
+        return context
 
 
 class UsernameChangeView(LoginRequiredMixin,FormView):
