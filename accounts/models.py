@@ -13,7 +13,7 @@ class CustomUser(AbstractUser):
 
 
 class UserBattleStats(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,primary_key=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,primary_key=True,related_name='stats')
     wins = models.IntegerField(default=0)
     losses = models.IntegerField(default=0)
 
