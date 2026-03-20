@@ -1,15 +1,13 @@
 from django.contrib.auth import login, get_user_model
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.views import LoginView
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views import View
-from django.views.generic import TemplateView, CreateView
 
-from accounts.forms import RegisterForm
+from django.views.generic import TemplateView, CreateView, FormView
 
+from accounts.forms import RegisterForm, UsernameChangeForm, EmailChangeForm, FullNameChangeForm, \
+    ProfilePictureChangeForm
 
 # Create your views here.
 
@@ -42,5 +40,102 @@ class UserProfileView(LoginRequiredMixin,TemplateView):
     extra_context = {
         'page_title': 'User Profile',
     }
+
+
+class UsernameChangeView(LoginRequiredMixin,FormView):
+    form_class = UsernameChangeForm
+    template_name = 'accounts/username_change.html'
+    success_url = reverse_lazy('account:username_change_done')
+
+    extra_context = {
+        'page_title': "Change Username"
+    }
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.request.user
+        return kwargs
+
+    def form_valid(self,form):
+        form.save()
+        return super().form_valid(form)
+
+class EmailChangeView(LoginRequiredMixin,FormView):
+    form_class = EmailChangeForm
+    template_name = 'accounts/email_change.html'
+    success_url = reverse_lazy('account:email_change_done')
+    extra_context = {
+        'page_title': 'Change Email'
+    }
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+class FullNameChangeView(LoginRequiredMixin,FormView):
+    form_class = FullNameChangeForm
+    template_name = 'accounts/full_name_change.html'
+    success_url = reverse_lazy('account:full_name_change_done')
+
+    extra_context = {
+        'page_title': 'Change Full Name'
+    }
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+class PictureChangeView(LoginRequiredMixin,FormView):
+    form_class = ProfilePictureChangeForm
+    template_name = "accounts/profile_picture_change.html"
+    success_url = reverse_lazy('account:profile_picture_change_done')
+    extra_context = {
+        "page_title": "Change Picture"
+    }
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.request.user
+        return kwargs
+
+    def form_valid(self,form):
+        user = self.request.user
+
+        # if user.picture:
+        #     user.picture.delete(save=False)
+
+        form.save()
+        return super().form_valid(form)
+
+
+
+
+@login_required
+def username_change_done(request):
+    return render(request,'accounts/username_change_done.html')
+
+
+@login_required
+def email_change_done(request):
+    return render(request,'accounts/email_change_done.html')
+
+@login_required
+def full_name_change_done(request):
+    return render(request,'accounts/full_name_change_done.html')
+
+@login_required
+def profile_picture_change_done(request):
+    return render(request,'accounts/profile_picture_change_done.html')
+
 
 

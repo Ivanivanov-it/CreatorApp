@@ -5,7 +5,7 @@ from django.db import models
 
 
 class CustomUser(AbstractUser):
-    image_url = models.ImageField(blank=True,null=True)
+    picture = models.ImageField(upload_to="images/profile_pictures",blank=True,null=True)
 
 
 
