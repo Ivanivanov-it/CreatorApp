@@ -37,3 +37,9 @@ class NoPermissionView(TemplateView):
     extra_context = {
         'page_title': "No Permission"
     }
+
+class MaintenanceView(TemplateView):
+    template_name = 'maintenance.html'
+    extra_context = {
+        'page_title': "Maintenance"
+    }

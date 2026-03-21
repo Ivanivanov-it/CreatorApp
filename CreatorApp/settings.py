@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'CreatorApp.middleware.MaintenanceMiddleware',
 ]
 
 ROOT_URLCONF = 'CreatorApp.urls'
@@ -146,3 +147,5 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 LOGIN_REDIRECT_URL = 'characters:home'
 LOGOUT_REDIRECT_URL = 'characters:home'
 LOGIN_URL = 'account:login'
+
+MAINTENANCE = False
