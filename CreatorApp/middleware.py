@@ -1,10 +1,13 @@
 from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.utils.deprecation import MiddlewareMixin
 
 
 class MaintenanceMiddleware:
-    """Maintenance Middleware that I will probably never use but I wanted to add 1 to the project."""
+    """Maintenance Middleware that I will probably never use but I wanted to add 1 to the project.
+        To put the app in maintenance mode  change MAINTENANCE = False to True in settings.py
+    """
 
 
     EXEMPT_URLS = [
@@ -28,3 +31,8 @@ class MaintenanceMiddleware:
                 return redirect('contacts:maintenance')
 
         return self.get_response(request)
+
+class AppVersionMiddleware(MiddlewareMixin):
+    def process_response(self,request,response):
+        response['Version'] = '1.0'
+        return response
