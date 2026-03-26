@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from characters.models import Character
@@ -13,6 +14,9 @@ class Battle(TimeStampModel):
 
     status = models.CharField(max_length=20,choices=BattleStatus.choices,default=BattleStatus.active)
     turns = models.IntegerField(default=1)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE,
+                                related_name='battles')
 
 
 class BattleParticipant(TimeStampModel):

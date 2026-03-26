@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView
@@ -125,7 +125,7 @@ class CreateBattleView(LoginRequiredMixin,View):
         enemy = Enemy.objects.get(id=enemy_id)
         partner = Partner.objects.get(id=partner_id) if partner_id else None
 
-        battle = Battle.objects.create()
+        battle = Battle.objects.create(creator=request.user)
 
         BattleCharacter.objects.create(
             battle=battle,
@@ -155,9 +155,21 @@ class CreateBattleView(LoginRequiredMixin,View):
         return redirect("battle:battle_view", pk=battle.id)
 
 
-class BattleView(LoginRequiredMixin,DetailView):
+class BattleView(LoginRequiredMixin,UserPassesTestMixin,DetailView):
     template_name = "battle/battle.html"
     model = Battle
+
+    def test_func(self):
+        battle = self.get_object()
+        return (
+            self.request.user == battle.creator or
+            self.request.user.groups.filter(name="BattleManager").exists()
+        )
+
+    def handle_no_permission(self):
+
+        return redirect('contacts:no_permission')
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
