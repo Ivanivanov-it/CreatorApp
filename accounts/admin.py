@@ -9,8 +9,8 @@ from accounts.models import CustomUser
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
-        ('Profile', {'fields': ('image_url',)}),
+        ('Profile', {'fields': ('picture',)}),
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
-        ('Profile', {'fields': ('image_url',)}),
+        ('Profile', {'fields': ('picture',)}),
     )

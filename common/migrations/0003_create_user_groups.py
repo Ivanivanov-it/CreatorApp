@@ -7,13 +7,13 @@ def create_groups(apps, schema_editor):
     Group = apps.get_model('auth', 'Group')
     Permission = apps.get_model('auth', 'Permission')
 
-    moderator, _ = Group.objects.get_or_create(name='Moderator')
-    moderator_permissions = Permission.objects.filter(codename__in=[
+    moderators, _ = Group.objects.get_or_create(name='Moderators')
+    moderators_permissions = Permission.objects.filter(codename__in=[
         'add_character','change_character','delete_character','view_character','add_partner','change_partner','delete_partner',
         'view_partner','add_enemy','change_enemy','delete_enemy','view_enemy'
     ])
 
-    moderator.permissions.set(moderator_permissions)
+    moderators.permissions.set(moderators_permissions)
 
     battle_manager, _ = Group.objects.get_or_create(name='BattleManager')
     battle_manager_permissions = Permission.objects.filter(codename__in=[
@@ -25,7 +25,7 @@ def create_groups(apps, schema_editor):
 
 def delete_groups(apps, schema_editor):
     Group = apps.get_model('auth', 'Group')
-    Group.objects.filter(name__in=["Moderator","BattleManager"]).delete()
+    Group.objects.filter(name__in=["Moderators","BattleManager"]).delete()
 
 
 
