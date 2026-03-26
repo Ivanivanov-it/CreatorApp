@@ -4,9 +4,11 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
+from rest_framework.generics import ListAPIView
 
 from enemies.forms import EnemySearchForm, EnemyEditForm, EnemyCreateForm
 from enemies.models import Enemy
+from enemies.serializers import EnemySerializer
 
 
 # Create your views here.
@@ -111,3 +113,8 @@ class EnemyDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     def handle_no_permission(self):
 
         return redirect('contacts:no_permission')
+
+
+class EnemyListApiView(ListAPIView):
+    serializer_class = EnemySerializer
+    queryset = Enemy.objects.select_related('creator').prefetch_related('weakness').all()

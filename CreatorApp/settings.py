@@ -27,9 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG")
+DEBUG = os.getenv("DEBUG") == "True"
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = [host for host in (os.getenv('ALLOWED_HOSTS') or "").split(',') if host]
 
 PROJECT_APPS = [
     "common",
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework'
 ] + PROJECT_APPS
 
 MIDDLEWARE = [
@@ -84,6 +85,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'CreatorApp.wsgi.application'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
+}
 
 
 # Database
@@ -149,7 +156,7 @@ LOGIN_REDIRECT_URL = 'characters:home'
 LOGOUT_REDIRECT_URL = 'characters:home'
 LOGIN_URL = 'account:login'
 
-MAINTENANCE = False
+MAINTENANCE = os.getenv("MAINTENANCE") == "True"
 
 #SECURIRY SETTINGS
 

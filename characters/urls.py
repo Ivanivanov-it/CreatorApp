@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from characters.views import  LandingPageView, CharacterDeleteView, CharacterDetailView, \
+from characters.views import LandingPageView, CharacterDeleteView, CharacterDetailView, \
     CreateCharacterView, EditCharacterView, CharactersListView
 
 app_name = 'characters'
@@ -15,5 +15,6 @@ urlpatterns = [
         path('delete/',CharacterDeleteView.as_view(),name='delete_character')
         ])),
         path('create/',CreateCharacterView.as_view(),name='create_character')
-    ]))
+    ])),
+
 ]

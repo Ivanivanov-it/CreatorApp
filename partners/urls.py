@@ -11,5 +11,5 @@ urlpatterns = [
         path('edit/', EditPartnerView.as_view(), name='edit_partner'),
         path('delete/', PartnerDeleteView.as_view(), name='delete_partner'),
     ])),
-    path('create/', PartnerCreateView.as_view(), name='create_partner')
+    path('create/', PartnerCreateView.as_view(), name='create_partner'),
 ]

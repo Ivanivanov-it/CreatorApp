@@ -26,5 +26,10 @@ urlpatterns = [
     path('partners/',include('partners.urls')),
     path('contact-us/',include('contacts.urls')),
     path('battle/',include('battle.urls')),
-    path('accounts/', include('accounts.urls'))
+    path('accounts/', include('accounts.urls')),
+    path('api/',include('enemies.api_urls')),
+    path('api/',include('characters.api_urls')),
+    path('api/',include('partners.api_urls')),
+    path('api/',include('accounts.api_urls')),
+
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

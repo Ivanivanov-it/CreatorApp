@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from enemies.views import  EnemyDeleteView, EnemiesListView, EnemyDetailView, CreateEnemyView, EditEnemyView
+from enemies.views import EnemyDeleteView, EnemiesListView, EnemyDetailView, CreateEnemyView, EditEnemyView
 
 app_name = 'enemies'
 
@@ -11,5 +11,5 @@ urlpatterns = [
         path('edit/', EditEnemyView.as_view(), name='edit_enemy'),
         path('delete/', EnemyDeleteView.as_view(), name='delete_enemy'),
     ])),
-    path('create/', CreateEnemyView.as_view(), name='create_enemy')
+    path('create/', CreateEnemyView.as_view(), name='create_enemy'),
 ]

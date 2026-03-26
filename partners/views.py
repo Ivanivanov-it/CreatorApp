@@ -4,10 +4,11 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
+from rest_framework.generics import ListAPIView
 
 from partners.forms import PartnerCreateForm, PartnerEditForm, PartnerSearchForm
 from partners.models import Partner
-
+from partners.serializers import PartnerSerializer
 
 
 class PartnersListView(ListView):
@@ -96,3 +97,7 @@ class PartnerDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     def handle_no_permission(self):
 
         return redirect('contacts:no_permission')
+
+class PartnerListApiView(ListAPIView):
+    serializer_class = PartnerSerializer
+    queryset = Partner.objects.select_related('creator','character').prefetch_related('roles').all()

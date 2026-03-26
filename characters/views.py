@@ -4,8 +4,11 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
 from django.views.generic import TemplateView
+from rest_framework.generics import ListAPIView
+
 from characters.forms import CharacterCreateForm, CharacterEditForm, CharacterSearchForm
 from characters.models import Character
+from characters.serializers import CharacterSerializer
 
 
 # Create your views here.
@@ -107,3 +110,9 @@ class CharacterDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     def handle_no_permission(self):
 
         return redirect('contacts:no_permission')
+
+
+
+class CharacterListApiView(ListAPIView):
+    serializer_class = CharacterSerializer
+    queryset = Character.objects.select_related('creator').prefetch_related('roles').all()

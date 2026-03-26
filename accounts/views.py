@@ -5,10 +5,12 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from django.views.generic import TemplateView, CreateView, FormView, DetailView
+from rest_framework.generics import ListAPIView
 
 from accounts.forms import RegisterForm, UsernameChangeForm, EmailChangeForm, FullNameChangeForm, \
     ProfilePictureChangeForm
-from accounts.models import UserBattleStats
+from accounts.models import UserBattleStats, CustomUser
+from accounts.serializers import UserBattleStatsSerializer
 
 # Create your views here.
 
@@ -143,6 +145,10 @@ def full_name_change_done(request):
 @login_required
 def profile_picture_change_done(request):
     return render(request,'accounts/profile_picture_change_done.html')
+
+class UserStatsListApiView(ListAPIView):
+    serializer_class = UserBattleStatsSerializer
+    queryset = CustomUser.objects.select_related('stats').all()
 
 
 
