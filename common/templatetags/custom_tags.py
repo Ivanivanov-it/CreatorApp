@@ -17,3 +17,7 @@ def hp_percent(obj):
     hp = round((obj.current_hp / obj.max_hp) * 100, 1)
 
     return hp if hp > 0 else 0
+
+@register.filter
+def user_in_group(user,group_name):
+    return user.groups.filter(name=group_name).exists()

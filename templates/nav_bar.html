@@ -1,3 +1,5 @@
+
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
     <div class="container">
         <a class="navbar-brand text-light fw-bold" href="{% url 'characters:home' %}">CreatorApp</a>
@@ -22,6 +24,14 @@
                     <li class="nav-item">
                     <a class="nav-link text-success" href="{% url 'account:profile' %}">Profile</a>
                 </li>
+
+                    {% load custom_tags %}
+
+                    {% if request.user|user_in_group:"ContactManagers" %}
+                    <li class="nav-item">
+                    <a class="nav-link text-success" href="{% url 'contacts:user-contacts' %}">Contacts</a>
+                </li>
+                        {% endif %}
 
                     <li class="nav-item">
                         <form method="post" action="{% url 'account:logout' %}" class="d-inline">

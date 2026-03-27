@@ -23,6 +23,12 @@ def create_groups(apps, schema_editor):
 
     battle_manager.permissions.set(battle_manager_permissions)
 
+    contact_manager, _ = Group.objects.get_or_create(name='ContactManagers')
+    contact_manager_permissions = Permission.objects.filter(codename__in=[
+        'add_contact','change_contact','delete_contact','view_contact',
+    ])
+    contact_manager.permissions.set(contact_manager_permissions)
+
 def delete_groups(apps, schema_editor):
     Group = apps.get_model('auth', 'Group')
     Group.objects.filter(name__in=["Moderators","BattleManager"]).delete()

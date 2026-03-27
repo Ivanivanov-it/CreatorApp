@@ -6,7 +6,7 @@ from contacts.models import Contact
 class ContactForm(forms.ModelForm):
 
     class Meta:
-        fields = "__all__"
+        exclude = ["is_finished"]
         model = Contact
 
         help_texts = {

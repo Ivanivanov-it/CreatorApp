@@ -7,7 +7,7 @@ from partners.models import Partner
 
 @admin.register(Partner)
 class PartnerAdmin(admin.ModelAdmin):
-    list_display = ['name','slug','title','attack','defense','hp','display_character','display_roles']
+    list_display = ['name','slug','title','attack','defense','hp','display_character','display_roles','image_url']
 
 
     def display_character(self,obj):

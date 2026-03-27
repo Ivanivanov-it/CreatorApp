@@ -1,6 +1,7 @@
 from django.urls import path
 
-from contacts.views import WipPage, AboutPageView, CreateMailView, NoPermissionView, MaintenanceView
+from contacts.views import WipPage, AboutPageView, CreateMailView, NoPermissionView, MaintenanceView, ContactsListView, \
+    FinishView
 
 app_name = 'contacts'
 
@@ -9,5 +10,7 @@ urlpatterns = [
     path('wip/',WipPage.as_view(),name='wip'),
     path('about/',AboutPageView.as_view(),name='about'),
     path('no-permission/',NoPermissionView.as_view(),name='no_permission'),
-    path('maintenance/', MaintenanceView.as_view(), name='maintenance')
+    path('maintenance/', MaintenanceView.as_view(), name='maintenance'),
+    path('user-contacts/', ContactsListView.as_view(), name='user-contacts'),
+    path('<int:pk>/finish/', FinishView.as_view(), name='finish'),
 ]

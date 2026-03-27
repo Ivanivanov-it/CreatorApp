@@ -11,6 +11,7 @@ class Contact(TimeStampModel):
     phone_number = models.CharField(max_length=11,null=True,blank=True)
     email = models.EmailField(unique=False,null=False)
     content = models.TextField()
+    is_finished = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.email}"
