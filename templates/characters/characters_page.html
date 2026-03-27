@@ -75,7 +75,7 @@
             <div class="card-game text-center">
                 {% if character.image_url %}
                     <a href="{% url 'characters:character_detail' character.pk %}">
-                        <img src="{{ character.image_url }}" class="rounded-circle mx-auto d-block mb-3" alt="{{ character.name }}" style="width: 200px; height: 200px; object-fit: cover; border: 3px solid #3a3a5a;">
+                        <img src="{{ character.image_url.url }}" class="rounded-circle mx-auto d-block mb-3" alt="{{ character.name }}" style="width: 200px; height: 200px; object-fit: cover; border: 3px solid #3a3a5a;">
                     </a>
                 {% else %}
                     <a href="{% url 'characters:character_detail' character.pk %}">

@@ -32,4 +32,4 @@ urlpatterns = [
     path('api/',include('partners.api_urls')),
     path('api/',include('accounts.api_urls')),
 
-]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

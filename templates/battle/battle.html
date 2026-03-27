@@ -102,7 +102,7 @@
                 <h4 class="mb-3 text-info">{{ character.character.name | capfirst }}</h4>
                 <h3>{{ character | hp_percent }}%</h3>
                 {% if character.character.image_url %}
-                    <img src="{{ character.character.image_url }}" class="img-fluid rounded-circle mb-3" alt="{{ character.character.name }}" style="width: 180px; height: 180px; object-fit: cover; border: 3px solid #8be9fd;">
+                    <img src="{{ character.character.image_url.url }}" class="img-fluid rounded-circle mb-3" alt="{{ character.character.name }}" style="width: 180px; height: 180px; object-fit: cover; border: 3px solid #8be9fd;">
                 {% else %}
                     <img src="{% static 'images/hero.png' %}" class="img-fluid rounded-circle mb-3" alt="Hero" style="width: 180px; height: 180px; object-fit: cover; border: 3px solid #8be9fd;">
                 {% endif %}

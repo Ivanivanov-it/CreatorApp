@@ -1,9 +1,10 @@
+import os
+from cloudinary.forms import CloudinaryFileField
 from django import forms
-
 from characters.models import Character
 from common.models import Role
 from common.choices import CharacterType
-
+from common.validators import ValidatedCloudinaryFileField
 
 
 class CharacterForm(forms.ModelForm):
@@ -17,6 +18,8 @@ class CharacterForm(forms.ModelForm):
     hp = forms.IntegerField(min_value=1, max_value=100,error_messages={
         "required": "Please enter a number  between 1 and 100"
     })
+
+    image_url = ValidatedCloudinaryFileField(options={'folder': 'characters'},required=False)
 
 
     roles = forms.ModelMultipleChoiceField(
@@ -56,6 +59,7 @@ class CharacterForm(forms.ModelForm):
 
 
         return cleaned_data
+
 
 
     class Meta:
