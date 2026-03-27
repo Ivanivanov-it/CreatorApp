@@ -59,7 +59,7 @@
                 <div class="card-game">
                     {% if e.image_url %}
                         <a href="{% url 'enemies:enemy_detail' e.pk %}" target="_blank">
-                        <img src="{{ e.image_url }}" class="card-img-top mx-auto d-block mb-3" alt="{{ e.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                        <img src="{{ e.image_url.url }}" class="card-img-top mx-auto d-block mb-3" alt="{{ e.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
                         </a>
                     {% else %}
                         <a href="{% url 'enemies:enemy_detail' e.pk %}" target="_blank">

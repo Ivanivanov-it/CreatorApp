@@ -1,3 +1,4 @@
+from cloudinary.models import CloudinaryField
 from django.conf import settings
 from django.db import models
 from django.utils.text import slugify
@@ -14,7 +15,7 @@ class Enemy(TimeStampModel,CombatStatModel):
     weakness = models.ManyToManyField(Role, related_name='enemies')
     description = models.TextField()
     slug = models.SlugField(max_length=100,unique=True,blank=True)
-    image_url = models.URLField(blank=True,null=True)
+    image_url = CloudinaryField('image',blank=True,null=True)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='enemies')
 
 

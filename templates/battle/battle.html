@@ -135,8 +135,8 @@
             <div class="card-game text-center">
                 <h4 class="mb-3 text-warning">{{ enemy.enemy.name | capfirst }}</h4>
                 <h3>{{ enemy | hp_percent  }}%</h3>
-                {% if enemy.enemy.image_url %}
-                    <img src="{{ enemy.enemy.image_url }}" class="img-fluid rounded-circle mb-3" alt="{{ enemy.enemy.name }}" style="width: 180px; height: 180px; object-fit: cover; border: 3px solid #ff5555;">
+                {% if enemy.enemy.image_url.url  %}
+                    <img src="{{ enemy.enemy.image_url.url }}" class="img-fluid rounded-circle mb-3" alt="{{ enemy.enemy.name }}" style="width: 180px; height: 180px; object-fit: cover; border: 3px solid #ff5555;">
                 {% else %}
                     <img src="{% static 'images/enemy.png' %}" class="img-fluid rounded-circle mb-3" alt="Enemy" style="width: 180px; height: 180px; object-fit: cover; border: 3px solid #ff5555;">
                 {% endif %}

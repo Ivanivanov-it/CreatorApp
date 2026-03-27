@@ -1,6 +1,7 @@
 from django import forms
 
 from common.models import Role
+from common.validators import ValidatedCloudinaryFileField
 from enemies.models import Enemy
 from common.choices import CharacterType
 
@@ -30,6 +31,8 @@ class EnemyForm(forms.ModelForm):
             "required": "Selecting enemy type is required"
         }
     )
+
+    image_url = ValidatedCloudinaryFileField(options={'folder': 'enemies'}, required=False)
 
     def clean(self):
         cleaned_data = super().clean()

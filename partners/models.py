@@ -1,3 +1,4 @@
+from cloudinary.models import CloudinaryField
 from django.conf import settings
 from django.db import models
 from django.utils.text import slugify
@@ -14,7 +15,7 @@ class Partner(TimeStampModel,CombatStatModel):
     title = models.CharField(max_length=100,unique=True)
     roles = models.ManyToManyField(Role,related_name='partners')
     description = models.TextField()
-    image_url = models.URLField(blank=True,null=True)
+    image_url = CloudinaryField('image',null=True,blank=True)
     slug = models.SlugField(unique=True,blank=True,max_length=100)
     character = models.ForeignKey(
         Character,

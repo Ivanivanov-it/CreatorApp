@@ -72,7 +72,7 @@
             <div class="card-game text-center">
                 {% if partner.image_url %}
                     <a href="{% url 'partners:partner_detail' partner.pk %}">
-                        <img src="{{ partner.image_url }}" class="rounded-circle mx-auto d-block mb-3" alt="{{ partner.name  }}" style="width: 200px; height: 200px; object-fit: cover; border: 3px solid #3a3a5a;">
+                        <img src="{{ partner.image_url.url }}" class="rounded-circle mx-auto d-block mb-3" alt="{{ partner.name  }}" style="width: 200px; height: 200px; object-fit: cover; border: 3px solid #3a3a5a;">
                     </a>
                 {% else %}
                     <a href="{% url 'partners:partner_detail' partner.pk %}">

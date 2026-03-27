@@ -1,5 +1,6 @@
 from django import forms
 
+from common.validators import ValidatedCloudinaryFileField
 from partners.models import Partner
 from common.models import Role
 
@@ -22,6 +23,8 @@ class PartnerForm(forms.ModelForm):
             "required": "Please select one or more roles"
         }
     )
+
+    image_url = ValidatedCloudinaryFileField(options={'folder': 'partners'}, required=False)
 
     def clean(self):
         cleaned_data = super().clean()

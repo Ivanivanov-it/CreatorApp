@@ -72,7 +72,7 @@
             <div class="card-game text-center">
                 {% if enemy.image_url %}
                     <a href="{% url 'enemies:enemy_detail' enemy.pk %}">
-                        <img src="{{ enemy.image_url }}" class="rounded-circle mx-auto d-block mb-3" alt="{{ enemy.name }}" style="width: 200px; height: 200px; object-fit: cover; border: 3px solid #3a3a5a;">
+                        <img src="{{ enemy.image_url.url }}" class="rounded-circle mx-auto d-block mb-3" alt="{{ enemy.name }}" style="width: 200px; height: 200px; object-fit: cover; border: 3px solid #3a3a5a;">
                     </a>
                 {% else %}
                     <a href="{% url 'enemies:enemy_detail' enemy.pk %}">
