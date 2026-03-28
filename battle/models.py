@@ -125,6 +125,7 @@ class BattleEnemy(BattleParticipant):
             )
 
 
+
 class BattleLog(TimeStampModel):
     battle = models.ForeignKey(Battle, on_delete=models.CASCADE, related_name="battlelogs")
     log_type = models.CharField(choices=LogType.choices,default=LogType.INFO)

@@ -1,5 +1,6 @@
 from django import forms
 
+from characters.models import Character
 from common.validators import ValidatedCloudinaryFileField
 from partners.models import Partner
 from common.models import Role
@@ -21,6 +22,14 @@ class PartnerForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple,
         error_messages={
             "required": "Please select one or more roles"
+        }
+    )
+
+    character = forms.ModelMultipleChoiceField(
+        queryset=Character.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        error_messages={
+            "required": "Please select one or more characters"
         }
     )
 

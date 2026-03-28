@@ -17,11 +17,7 @@ class Partner(TimeStampModel,CombatStatModel):
     description = models.TextField()
     image_url = CloudinaryField('image',null=True,blank=True)
     slug = models.SlugField(unique=True,blank=True,max_length=100)
-    character = models.ForeignKey(
-        Character,
-        on_delete=models.CASCADE,
-        related_name="partners"
-    )
+    character = models.ManyToManyField(Character,related_name='partners',blank=True)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='partners')
 
     def save(self, *args, **kwargs):

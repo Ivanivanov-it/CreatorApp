@@ -7,14 +7,14 @@ from partners.models import Partner
 
 @admin.register(Partner)
 class PartnerAdmin(admin.ModelAdmin):
-    list_display = ['name','slug','title','attack','defense','hp','display_character','display_roles','image_url']
+    list_display = ['name','slug','title','attack','defense','hp','display_characters','display_roles','image_url']
 
 
-    def display_character(self,obj):
-        return obj.character.name
+    def display_characters(self,obj):
+        return ", ".join(char.name for char in obj.character.all())
 
     def display_roles(self,obj):
         return ", ".join(role.role for role in obj.roles.all())
 
     display_roles.short_description = 'Roles'
-    display_character.short_description = 'Related Character'
+    display_characters.short_description = 'Related Character'

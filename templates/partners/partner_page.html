@@ -85,7 +85,9 @@
 
                 <div class="mb-3">
                     <span class="fw-bold me-2">Partner of:</span>
-                    <a href="{% url 'characters:character_detail' partner.character.pk %}" class="partner-link">{{ partner.character.name }}</a>
+                    {% for char in partner.character.all %}
+                    <a href="{% url 'characters:character_detail' char.pk %}" class="partner-link">{{ char.name }} | </a>
+                    {% endfor %}
                 </div>
 
                 {% show_roles partner %}
