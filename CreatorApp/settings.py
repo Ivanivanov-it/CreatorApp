@@ -39,6 +39,7 @@ PROJECT_APPS = [
     "contacts",
     "battle",
     "accounts",
+    'cards'
 
 ]
 

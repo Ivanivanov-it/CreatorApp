@@ -17,6 +17,11 @@
                 <li class="nav-item">
                     <a class="nav-link text-info" href="{% url 'enemies:enemies_list' %}">Enemies</a>
                 </li>
+            <li class="nav-item">
+                    <a class="nav-link text-info" href="{% url 'cards:cards_list' %}">Cards</a>
+                </li>
+
+
                 {% if user.is_authenticated %}
                     <li class="nav-item">
                     <a class="nav-link text-danger" href="{% url 'battle:character_selection' %}">Battle</a>

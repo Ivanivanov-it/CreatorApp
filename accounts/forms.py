@@ -34,10 +34,32 @@ class EmailChangeForm(forms.ModelForm):
         model = UserModel
         fields = ['email']
 
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        placeholders = {
+            "email": "Email address (e.g. Ivan@gmail.com)",
+        }
+        for field, text in placeholders.items():
+            if field in self.fields:
+                self.fields[field].widget.attrs["placeholder"] = text
+
 class FullNameChangeForm(forms.ModelForm):
     class Meta:
         model = UserModel
         fields = ['first_name', 'last_name']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        placeholders = {
+            "first_name": "First name (e.g. Ivan)",
+            "last_name": "Last name (e.g. Ivanov)",
+        }
+        for field, text in placeholders.items():
+            if field in self.fields:
+                self.fields[field].widget.attrs["placeholder"] = text
 
 class ProfilePictureChangeForm(forms.ModelForm):
     picture = ValidatedCloudinaryFileField(options={'folder': 'characters'}, required=False)

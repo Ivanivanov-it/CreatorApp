@@ -27,6 +27,7 @@ urlpatterns = [
     path('contact-us/',include('contacts.urls')),
     path('battle/',include('battle.urls')),
     path('accounts/', include('accounts.urls')),
+    path('cards/',include('cards.urls')),
     path('api/',include('enemies.api_urls')),
     path('api/',include('characters.api_urls')),
     path('api/',include('partners.api_urls')),

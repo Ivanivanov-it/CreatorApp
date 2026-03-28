@@ -59,7 +59,7 @@ class PartnerSelectionView(LoginRequiredMixin,ListView):
         return super().dispatch(request,*args,**kwargs)
 
     def get_queryset(self):
-        return Partner.objects.filter(character=self.request.session["character_id"])
+        return Partner.objects.filter(character=self.request.session["character_id"]).order_by('name')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
