@@ -70,6 +70,12 @@ class CreateCharacterView(LoginRequiredMixin,CreateView):
     extra_context = {
         'page_title': "Create Character"
     }
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self,form):
         form.instance.creator = self.request.user
         return super().form_valid(form)
@@ -82,6 +88,11 @@ class EditCharacterView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     extra_context = {
         'page_title': "Edit Character"
     }
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def test_func(self):
         character = self.get_object()

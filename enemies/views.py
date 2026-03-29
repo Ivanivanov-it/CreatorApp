@@ -23,6 +23,7 @@ class EnemiesListView(ListView):
     paginate_by = 9
     ordering = ['name']
 
+
     def get_queryset(self):
         queryset = super().get_queryset()
         self.search_form = EnemySearchForm(self.request.GET or None)
@@ -54,6 +55,7 @@ class EnemyDetailView(DetailView):
     model = Enemy
     template_name = 'enemies/enemy_page.html'
 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page_title'] = f"{self.object.name} Details"
@@ -72,6 +74,11 @@ class CreateEnemyView(LoginRequiredMixin,CreateView):
         'page_title': "Create Enemy"
     }
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self,form):
         form.instance.creator = self.request.user
         return super().form_valid(form)
@@ -86,6 +93,12 @@ class EditEnemyView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     extra_context = {
         'page_title': "Edit Enemy"
     }
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def test_func(self):
         enemy = self.get_object()
         return (

@@ -1,5 +1,6 @@
 from django import forms
 
+from cards.models import Card
 from common.models import Role
 from common.validators import ValidatedCloudinaryFileField
 from enemies.models import Enemy
@@ -33,6 +34,14 @@ class EnemyForm(forms.ModelForm):
     )
 
     image_url = ValidatedCloudinaryFileField(options={'folder': 'enemies'}, required=False)
+
+    card_theme = forms.ModelChoiceField(
+        queryset=Card.objects.none(),
+        required=False,
+        empty_label="No Theme Selected",
+        label="Select Card Theme",
+        help_text="Link one of your card themes to this character"
+    )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -89,9 +98,10 @@ class EnemyForm(forms.ModelForm):
             "weakness",
             "description",
             "image_url",
+            "card_theme"
         ]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self,user=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         placeholders = {
@@ -104,6 +114,8 @@ class EnemyForm(forms.ModelForm):
             "hp": "Hit Points (1–250)",
         }
 
+        if user:
+            self.fields['card_theme'].queryset = Card.objects.filter(creator=user)
 
         for field in self.fields.values():
             if not isinstance(field.widget, (forms.CheckboxSelectMultiple, forms.RadioSelect)):
@@ -139,7 +151,8 @@ class EnemyEditForm(EnemyForm):
             "slug",
             "description",
             "image_url",
-            "creator_display"
+            "creator_display",
+            "card_theme"
         ]
 
 class EnemyDeleteForm(EnemyForm):

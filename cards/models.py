@@ -31,15 +31,6 @@ class Card(TimeStampModel):
     is_default = models.BooleanField(default=False)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True,blank=True)
 
-class CharacterCardTheme(TimeStampModel):
-    character = models.ForeignKey(Character,on_delete=models.CASCADE,related_name='card_theme')
-    theme = models.ForeignKey(Card,on_delete=models.SET_NULL,null=True,blank=True)
-
-class PartnerCardTheme(TimeStampModel):
-    partner = models.ForeignKey(Partner,on_delete=models.CASCADE,related_name='card_theme')
-    theme = models.ForeignKey(Card,on_delete=models.SET_NULL,null=True,blank=True)
-
-class EnemyCardTheme(TimeStampModel):
-    enemy = models.ForeignKey(Enemy,on_delete=models.CASCADE,related_name='card_theme')
-    theme = models.ForeignKey(Card,on_delete=models.SET_NULL,null=True,blank=True)
+    def __str__(self):
+        return self.name
 

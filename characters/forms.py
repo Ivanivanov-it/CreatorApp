@@ -1,6 +1,8 @@
 import os
 from cloudinary.forms import CloudinaryFileField
 from django import forms
+
+from cards.models import Card
 from characters.models import Character
 from common.models import Role
 from common.choices import CharacterType
@@ -35,6 +37,14 @@ class CharacterForm(forms.ModelForm):
         error_messages={
             "required": "Selecting character type is required"
         }
+    )
+
+    card_theme = forms.ModelChoiceField(
+        queryset=Card.objects.none(),
+        required=False,
+        empty_label="No Theme Selected",
+        label="Select Card Theme",
+        help_text="Link one of your card themes to this character"
     )
 
     def clean(self):
@@ -93,12 +103,13 @@ class CharacterForm(forms.ModelForm):
             "roles",
             "description",
             "image_url",
+            'card_theme'
         ]
 
 
 
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         placeholders = {
@@ -110,6 +121,9 @@ class CharacterForm(forms.ModelForm):
             "defense": "Defense Points (1–100)",
             "hp": "Hit Points (1–100)",
         }
+
+        if user:
+            self.fields['card_theme'].queryset = Card.objects.filter(creator=user)
 
         for field in self.fields.values():
             if not isinstance(field.widget, (forms.CheckboxSelectMultiple, forms.RadioSelect)):
@@ -127,6 +141,7 @@ class CharacterCreateForm(CharacterForm):
 class CharacterEditForm(CharacterForm):
     slug = forms.CharField(disabled=True)
     creator_display = forms.CharField(disabled=True,required=False,label="Creator")
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -146,7 +161,8 @@ class CharacterEditForm(CharacterForm):
             "slug",
             "description",
             "image_url",
-            "creator_display"
+            "creator_display",
+            'card_theme'
         ]
 
 

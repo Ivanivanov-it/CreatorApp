@@ -58,6 +58,11 @@ class PartnerCreateView(LoginRequiredMixin,CreateView):
         'page_title': "Create Partner",
     }
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self,form):
         form.instance.creator = self.request.user
         return super().form_valid(form)
@@ -70,6 +75,11 @@ class EditPartnerView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     extra_context = {
         'page_title': "Edit Partner",
     }
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def test_func(self):
         partner = self.get_object()

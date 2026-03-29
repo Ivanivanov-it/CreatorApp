@@ -1,5 +1,6 @@
 from django import forms
 
+from cards.models import Card
 from characters.models import Character
 from common.validators import ValidatedCloudinaryFileField
 from partners.models import Partner
@@ -34,6 +35,14 @@ class PartnerForm(forms.ModelForm):
     )
 
     image_url = ValidatedCloudinaryFileField(options={'folder': 'partners'}, required=False)
+
+    card_theme = forms.ModelChoiceField(
+        queryset=Card.objects.none(),
+        required=False,
+        empty_label="No Theme Selected",
+        label="Select Card Theme",
+        help_text="Link one of your card themes to this character"
+    )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -90,9 +99,10 @@ class PartnerForm(forms.ModelForm):
             "roles",
             "description",
             "image_url",
-            "character"
+            "character",
+            "card_theme"
         ]
-    def __init__(self, *args, **kwargs):
+    def __init__(self,user=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         placeholders = {
@@ -104,6 +114,9 @@ class PartnerForm(forms.ModelForm):
             "defense": "Defense Points (1–40)",
             "hp": "Hit Points (1–40)",
         }
+
+        if user:
+            self.fields['card_theme'].queryset = Card.objects.filter(creator=user)
 
 
         for field in self.fields.values():
@@ -140,7 +153,8 @@ class PartnerEditForm(PartnerForm):
             "description",
             "image_url",
             "character",
-            "creator_display"
+            "creator_display",
+            "card_theme"
         ]
 
 class PartnerSearchForm(forms.Form):

@@ -21,6 +21,10 @@ class Character(TimeStampModel,CombatStatModel):
     creator = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE,
                                 related_name='characters')
+    card_theme = models.ForeignKey('cards.Card',
+                                   on_delete=models.SET_NULL,
+                                   null=True,blank=True,
+                                   related_name='characters')
 
 
     def save(self,*args,**kwargs):

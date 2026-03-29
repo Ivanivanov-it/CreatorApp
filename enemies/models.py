@@ -17,6 +17,7 @@ class Enemy(TimeStampModel,CombatStatModel):
     slug = models.SlugField(max_length=100,unique=True,blank=True)
     image_url = CloudinaryField('image',blank=True,null=True)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='enemies')
+    card_theme= models.ForeignKey('cards.Card',on_delete=models.SET_NULL,null=True,blank=True,related_name='enemies')
 
 
     def save(self,*args,**kwargs):

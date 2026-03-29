@@ -19,6 +19,7 @@ class Partner(TimeStampModel,CombatStatModel):
     slug = models.SlugField(unique=True,blank=True,max_length=100)
     character = models.ManyToManyField(Character,related_name='partners',blank=True)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='partners')
+    card_theme = models.ForeignKey('cards.Card',on_delete=models.SET_NULL,null=True,blank=True,related_name='partners')
 
     def save(self, *args, **kwargs):
         if not self.slug:
