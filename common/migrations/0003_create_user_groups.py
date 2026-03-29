@@ -10,7 +10,7 @@ def create_groups(apps, schema_editor):
     moderators, _ = Group.objects.get_or_create(name='Moderators')
     moderators_permissions = Permission.objects.filter(codename__in=[
         'add_character','change_character','delete_character','view_character','add_partner','change_partner','delete_partner',
-        'view_partner','add_enemy','change_enemy','delete_enemy','view_enemy'
+        'view_partner','add_enemy','change_enemy','delete_enemy','view_enemy','add_card','change_card','delete_card','view_card'
     ])
 
     moderators.permissions.set(moderators_permissions)

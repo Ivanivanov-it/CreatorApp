@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
 from rest_framework.generics import ListAPIView
 
+from common.mixins import CreatorOrModeratorMixin
 from enemies.forms import EnemySearchForm, EnemyEditForm, EnemyCreateForm
 from enemies.models import Enemy
 from enemies.serializers import EnemySerializer
@@ -85,7 +86,7 @@ class CreateEnemyView(LoginRequiredMixin,CreateView):
 
 
 
-class EditEnemyView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
+class EditEnemyView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
     model = Enemy
     form_class = EnemyEditForm
     success_url = reverse_lazy('enemies:enemies_list')
@@ -99,34 +100,13 @@ class EditEnemyView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
         kwargs['user'] = self.request.user
         return kwargs
 
-    def test_func(self):
-        enemy = self.get_object()
-        return (
-            self.request.user == enemy.creator or
-            self.request.user.groups.filter(name="Moderators").exists()
-        )
-
-    def handle_no_permission(self):
-
-        return redirect('contacts:no_permission')
 
 
-class EnemyDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
+
+class EnemyDeleteView(LoginRequiredMixin,CreatorOrModeratorMixin,DeleteView):
     model = Enemy
     template_name = 'delete_confirm.html'
     success_url = reverse_lazy('enemies:enemies_list')
-
-    def test_func(self):
-        enemy = self.get_object()
-        return (
-            self.request.user == enemy.creator or
-            self.request.user.groups.filter(name="Moderators").exists()
-        )
-
-    def handle_no_permission(self):
-
-        return redirect('contacts:no_permission')
-
 
 class EnemyListApiView(ListAPIView):
     serializer_class = EnemySerializer

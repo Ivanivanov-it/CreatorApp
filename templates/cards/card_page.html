@@ -126,11 +126,12 @@
                     <div class="color-swatch" style="background-color: {{ card.accent_color }};"></div>
                     <span>{{ card.accent_color }}</span>
                 </div>
-
+                {% if can_modify %}
                 <div class="mt-4">
                     <a href="{% url 'cards:edit_card' card.pk %}" class="btn-game-primary me-2">Edit Theme</a>
                     <a href="{% url 'cards:card_delete' card.pk %}" class="btn-game-danger">Delete Theme</a>
                 </div>
+                 {% endif %}
             </div>
         </div>
     </div>

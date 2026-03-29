@@ -7,7 +7,7 @@ from partners.models import Partner
 
 @admin.register(Partner)
 class PartnerAdmin(admin.ModelAdmin):
-    list_display = ['name','slug','title','attack','defense','hp','display_characters','display_roles','image_url']
+    list_display = ['name','slug','title','attack','defense','hp','display_characters','display_roles','image_url','creator_name']
 
 
     def display_characters(self,obj):
@@ -18,3 +18,8 @@ class PartnerAdmin(admin.ModelAdmin):
 
     display_roles.short_description = 'Roles'
     display_characters.short_description = 'Related Character'
+
+    def creator_name(self,obj):
+        return obj.creator.username if obj.creator else ''
+
+    creator_name.short_description = 'Creator'

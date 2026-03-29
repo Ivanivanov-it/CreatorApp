@@ -1,11 +1,10 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
 from rest_framework.generics import ListAPIView
 
+from common.mixins import CreatorOrModeratorMixin
 from partners.forms import PartnerCreateForm, PartnerEditForm, PartnerSearchForm
 from partners.models import Partner
 from partners.serializers import PartnerSerializer
@@ -67,7 +66,7 @@ class PartnerCreateView(LoginRequiredMixin,CreateView):
         form.instance.creator = self.request.user
         return super().form_valid(form)
 
-class EditPartnerView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
+class EditPartnerView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
     model = Partner
     form_class = PartnerEditForm
     template_name = 'partners/edit_partner.html'
@@ -81,32 +80,11 @@ class EditPartnerView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
         kwargs['user'] = self.request.user
         return kwargs
 
-    def test_func(self):
-        partner = self.get_object()
-        return (
-            self.request.user == partner.creator or
-            self.request.user.groups.filter(name="Moderators").exists()
-        )
-
-    def handle_no_permission(self):
-
-        return redirect('contacts:no_permission')
-
-class PartnerDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
+class PartnerDeleteView(LoginRequiredMixin,CreatorOrModeratorMixin,DeleteView):
     model = Partner
     template_name = 'delete_confirm.html'
     success_url = reverse_lazy('partners:partners_list')
 
-    def test_func(self):
-        partner = self.get_object()
-        return (
-            self.request.user == partner.creator or
-            self.request.user.groups.filter(name="Moderators").exists()
-        )
-
-    def handle_no_permission(self):
-
-        return redirect('contacts:no_permission')
 
 class PartnerListApiView(ListAPIView):
     serializer_class = PartnerSerializer

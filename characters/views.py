@@ -9,6 +9,7 @@ from rest_framework.generics import ListAPIView
 from characters.forms import CharacterCreateForm, CharacterEditForm, CharacterSearchForm
 from characters.models import Character
 from characters.serializers import CharacterSerializer
+from common.mixins import CreatorOrModeratorMixin
 
 
 # Create your views here.
@@ -80,7 +81,7 @@ class CreateCharacterView(LoginRequiredMixin,CreateView):
         form.instance.creator = self.request.user
         return super().form_valid(form)
 
-class EditCharacterView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
+class EditCharacterView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
     model = Character
     form_class = CharacterEditForm
     success_url = reverse_lazy('characters:characters_list')
@@ -94,33 +95,13 @@ class EditCharacterView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
         kwargs['user'] = self.request.user
         return kwargs
 
-    def test_func(self):
-        character = self.get_object()
-        return (
-            self.request.user == character.creator or
-            self.request.user.groups.filter(name="Moderators").exists()
-        )
-
-    def handle_no_permission(self):
-
-        return redirect('contacts:no_permission')
 
 
-class CharacterDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
+
+class CharacterDeleteView(LoginRequiredMixin,CreatorOrModeratorMixin,DeleteView):
     model = Character
     template_name = 'delete_confirm.html'
     success_url = reverse_lazy('characters:characters_list')
-
-    def test_func(self):
-        character = self.get_object()
-        return (
-            self.request.user == character.creator or
-            self.request.user.groups.filter(name="Moderators").exists()
-        )
-
-    def handle_no_permission(self):
-
-        return redirect('contacts:no_permission')
 
 
 
