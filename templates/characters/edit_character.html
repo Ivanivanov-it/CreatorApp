@@ -1,23 +1,100 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-    <div class="card">
-        <div class="card-header">
-            <h1>Edit {{ character.name }}</h1>
-        </div>
-        <div class="card-body">
-            <form method="POST" enctype="multipart/form-data" novalidate>
-                {% csrf_token %}
-                {% if form.non_field_errors %}
-        <div class="form-errors" >
-            {{ form.non_field_errors }}
-        </div>
-    {% endif %}
-                {% include 'characters/_character_form.html' %}
-                <button type="submit" class="btn btn-primary">Update</button>
-            </form>
+<style>
+    body {
+        background-color: #1a1a2e;
+        color: #e0e0e0;
+    }
+    .card {
+        background-color: #2a2a4a;
+        border: 1px solid #3a3a5a;
+        color: #e0e0e0;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+    .card-header {
+        background-color: #3a3a5a;
+        border-bottom: 1px solid #4a4a6a;
+        color: #8be9fd;
+    }
+    .form-label {
+        color: #8be9fd;
+        font-weight: bold;
+    }
+    .form-control, .form-select {
+        background-color: #1a1a2e;
+        border: 1px solid #3a3a5a;
+        color: #e0e0e0;
+    }
+    .form-control:focus, .form-select:focus {
+        background-color: #1a1a2e;
+        border-color: #8be9fd;
+        color: #e0e0e0;
+        box-shadow: 0 0 0 0.25rem rgba(139, 233, 253, 0.25);
+    }
+    .form-control:disabled, .form-control[readonly] {
+        background-color: #1a1a2e;
+        color: #e0e0e0;
+        opacity: 0.5;
+    }
+    .btn-game-primary {
+        background-color: #8be9fd;
+        border-color: #8be9fd;
+        color: #1a1a2e;
+        font-weight: bold;
+        text-transform: uppercase;
+        padding: 0.75rem 2rem;
+        transition: all 0.3s ease;
+    }
+    .btn-game-primary:hover {
+        background-color: #67d0ed;
+        border-color: #67d0ed;
+        box-shadow: 0 0 15px rgba(139, 233, 253, 0.8);
+        transform: translateY(-2px);
+    }
+    .form-text {
+        color: #a0a0a0;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h1 class="h3 mb-0">{{ page_title }}</h1>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        {% include 'characters/_character_form.html' %}
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-game-primary">Update Character</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Add Bootstrap classes to form fields if they don't have them
+    document.querySelectorAll('input:not([type="checkbox"]):not([type="radio"]), select, textarea').forEach(function(el) {
+        if (!el.classList.contains('form-control') && !el.classList.contains('form-select')) {
+            if (el.tagName === 'SELECT') {
+                el.classList.add('form-select');
+            } else {
+                el.classList.add('form-control');
+            }
+        }
+    });
+</script>
 {% endblock %}
