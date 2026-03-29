@@ -56,19 +56,33 @@
         <div class="row justify-content-center">
             {% for e in enemies %}
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card-game">
+                <div class="card-game" {% if e.card_theme %}
+                    style="
+                        background-color: {{ e.card_theme.background_color }};
+                        border: 3px {{ e.card_theme.border_style }} {{ e.card_theme.border_color }};
+                        accent-color: {{ e.card_theme.accent_color }};
+                    "
+                {% endif %}>
                     {% if e.image_url %}
                         <a href="{% url 'enemies:enemy_detail' e.pk %}" target="_blank">
-                        <img src="{{ e.image_url.url }}" class="card-img-top mx-auto d-block mb-3" alt="{{ e.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                        <img src="{{ e.image_url.url }}" class="card-img-top mx-auto d-block mb-3" alt="{{ e.name }}"
+                            style="
+                                width: 150px; height: 150px; object-fit: cover; border-radius: 50%;
+                                border: 3px {{ e.card_theme.image_border_style|default:'solid' }} {{ e.card_theme.image_border_color|default:'#3a3a5a' }};
+                            ">
                         </a>
                     {% else %}
                         <a href="{% url 'enemies:enemy_detail' e.pk %}" target="_blank">
-                        <img src="{% static 'images/enemy.png' %}" class="card-img-top mx-auto d-block mb-3" alt="{{ e.name }}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                        <img src="{% static 'images/enemy.png' %}" class="card-img-top mx-auto d-block mb-3" alt="{{ e.name }}"
+                            style="
+                                width: 150px; height: 150px; object-fit: cover; border-radius: 50%;
+                                border: 3px {{ e.card_theme.image_border_style|default:'solid' }} {{ e.card_theme.image_border_color|default:'#3a3a5a' }};
+                            ">
                         </a>
                     {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title mb-3">
-                            <a href="{% url 'enemies:enemy_detail' e.id %}" target="_blank" class="text-info text-decoration-none">
+                        <h5 class="card-title mb-3" {% if e.card_theme %}style="color: {{ e.card_theme.accent_color }};"{% endif %}>
+                            <a href="{% url 'enemies:enemy_detail' e.id %}" target="_blank" class="text-decoration-none" {% if not e.card_theme %}style="color: #8be9fd;"{% else %}style="color: inherit;"{% endif %}>
                                 {{ e.name | capfirst }}
                             </a>
                         </h5>

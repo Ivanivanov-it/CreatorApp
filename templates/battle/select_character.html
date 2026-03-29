@@ -56,19 +56,33 @@
         <div class="row justify-content-center">
             {% for c in characters %}
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card-game">
+                <div class="card-game" {% if c.card_theme %}
+                    style="
+                        background-color: {{ c.card_theme.background_color }};
+                        border: 3px {{ c.card_theme.border_style }} {{ c.card_theme.border_color }};
+                        accent-color: {{ c.card_theme.accent_color }};
+                    "
+                {% endif %}>
                     {% if c.image_url %}
                         <a href="{% url 'characters:character_detail' c.id %}" target="_blank">
-                            <img src="{{ c.image_url.url }}" class="card-img-top mx-auto d-block mb-3" alt="{{ c.name }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%;">
+                            <img src="{{ c.image_url.url }}" class="card-img-top mx-auto d-block mb-3" alt="{{ c.name }}"
+                                style="
+                                    width: 200px; height: 200px; object-fit: cover; border-radius: 50%;
+                                    border: 3px {{ c.card_theme.image_border_style|default:'solid' }} {{ c.card_theme.image_border_color|default:'#3a3a5a' }};
+                                ">
                         </a>
                     {% else %}
                         <a href="{% url 'characters:character_detail' c.id %}" target="_blank">
-                            <img src="{% static 'images/hero.png' %}"  class="card-img-top mx-auto d-block mb-3" alt="{{ c.name }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 50%;">
+                            <img src="{% static 'images/hero.png' %}"  class="card-img-top mx-auto d-block mb-3" alt="{{ c.name }}"
+                                style="
+                                    width: 200px; height: 200px; object-fit: cover; border-radius: 50%;
+                                    border: 3px {{ c.card_theme.image_border_style|default:'solid' }} {{ c.card_theme.image_border_color|default:'#3a3a5a' }};
+                                ">
                         </a>
                     {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title mb-3">
-                            <a href="{% url 'characters:character_detail' c.id %}" target="_blank" class="text-info text-decoration-none">
+                        <h5 class="card-title mb-3" {% if c.card_theme %}style="color: {{ c.card_theme.accent_color }};"{% endif %}>
+                            <a href="{% url 'characters:character_detail' c.id %}" target="_blank" class="text-decoration-none" {% if not c.card_theme %}style="color: #8be9fd;"{% else %}style="color: inherit;"{% endif %}>
                                 {{ c.name | capfirst }}
                             </a>
                         </h5>

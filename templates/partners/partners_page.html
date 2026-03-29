@@ -69,17 +69,31 @@
     <div class="row">
         {% for partner in partners %}
         <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card-game text-center">
+            <div class="card-game text-center" {% if partner.card_theme %}
+                style="
+                    background-color: {{ partner.card_theme.background_color }};
+                    border: 3px {{ partner.card_theme.border_style }} {{ partner.card_theme.border_color }};
+                    accent-color: {{ partner.card_theme.accent_color }};
+                "
+            {% endif %}>
                 {% if partner.image_url %}
                     <a href="{% url 'partners:partner_detail' partner.pk %}">
-                        <img src="{{ partner.image_url.url }}" class="rounded-circle mx-auto d-block mb-3" alt="{{ partner.name  }}" style="width: 200px; height: 200px; object-fit: cover; border: 3px solid #3a3a5a;">
+                        <img src="{{ partner.image_url.url }}" class="rounded-circle mx-auto d-block mb-3" alt="{{ partner.name  }}"
+                            style="
+                                width: 200px; height: 200px; object-fit: cover;
+                                border: 3px {{ partner.card_theme.image_border_style|default:'solid' }} {{ partner.card_theme.image_border_color|default:'#3a3a5a' }};
+                            ">
                     </a>
                 {% else %}
                     <a href="{% url 'partners:partner_detail' partner.pk %}">
-                        <img src="{% static 'images/partner.png' %}" class="rounded-circle mx-auto d-block mb-3" alt="{{ partner.name }}" style="width: 200px; height: 200px; object-fit: cover; border: 3px solid #3a3a5a;">
+                        <img src="{% static 'images/partner.png' %}" class="rounded-circle mx-auto d-block mb-3" alt="{{ partner.name }}"
+                            style="
+                                width: 200px; height: 200px; object-fit: cover;
+                                border: 3px {{ partner.card_theme.image_border_style|default:'solid' }} {{ partner.card_theme.image_border_color|default:'#3a3a5a' }};
+                            ">
                     </a>                {% endif %}
                 <div class="card-body">
-                    <h5 class="card-title mb-2">
+                    <h5 class="card-title mb-2" {% if partner.card_theme %}style="color: {{ partner.card_theme.accent_color }};"{% endif %}>
                         <a href="{% url 'partners:partner_detail' partner.pk %}" class="card-title-link">
                             {{ partner.name | capfirst }}
                         </a>

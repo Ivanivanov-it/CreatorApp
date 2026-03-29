@@ -98,19 +98,33 @@
     <div class="row justify-content-center align-items-center">
         <!-- Character Card -->
         <div class="col-lg-4 col-md-5 mb-4">
-            <div class="card-game text-center">
-                <h4 class="mb-3 text-info">{{ character.character.name | capfirst }}</h4>
+            <div class="card-game text-center" {% if character.character.card_theme %}
+                style="
+                    background-color: {{ character.character.card_theme.background_color }};
+                    border: 3px {{ character.character.card_theme.border_style }} {{ character.character.card_theme.border_color }};
+                    accent-color: {{ character.character.card_theme.accent_color }};
+                "
+            {% endif %}>
+                <h4 class="mb-3" {% if character.character.card_theme %}style="color: {{ character.character.card_theme.accent_color }};"{% else %}style="color: #0dcaf0;"{% endif %}>{{ character.character.name | capfirst }}</h4>
                 <h3>{{ character | hp_percent }}%</h3>
                 {% if character.character.image_url %}
-                    <img src="{{ character.character.image_url.url }}" class="img-fluid rounded-circle mb-3" alt="{{ character.character.name }}" style="width: 180px; height: 180px; object-fit: cover; border: 3px solid #8be9fd;">
+                    <img src="{{ character.character.image_url.url }}" class="img-fluid rounded-circle mb-3" alt="{{ character.character.name }}"
+                        style="
+                            width: 180px; height: 180px; object-fit: cover;
+                            border: 3px {{ character.character.card_theme.image_border_style|default:'solid' }} {{ character.character.card_theme.image_border_color|default:'#8be9fd' }};
+                        ">
                 {% else %}
-                    <img src="{% static 'images/hero.png' %}" class="img-fluid rounded-circle mb-3" alt="Hero" style="width: 180px; height: 180px; object-fit: cover; border: 3px solid #8be9fd;">
+                    <img src="{% static 'images/hero.png' %}" class="img-fluid rounded-circle mb-3" alt="Hero"
+                        style="
+                            width: 180px; height: 180px; object-fit: cover;
+                            border: 3px {{ character.character.card_theme.image_border_style|default:'solid' }} {{ character.character.card_theme.image_border_color|default:'#8be9fd' }};
+                        ">
                 {% endif %}
                 <div class="card-body p-0">
                     <div class="mt-3">
-                        <p class="mb-1"><span class="stat-label">HP:</span> <span class="stat-value">{{ character.current_hp }}/{{ character.max_hp }}</span> <span class="stat-modifier">({{ character.hp_modifier }})</span></p>
-                        <p class="mb-1"><span class="stat-label">ATK:</span> <span class="stat-value">{{ character.total_atk }}</span> <span class="stat-modifier">({{ character.atk_modifier }})</span></p>
-                        <p class="mb-0"><span class="stat-label">DEF:</span> <span class="stat-value">{{ character.total_def }}</span> <span class="stat-modifier">({{ character.def_modifier }})</span></p>
+                        <p class="mb-1"><span class="stat-label" {% if character.character.card_theme %}style="color: {{ character.character.card_theme.accent_color }};"{% endif %}>HP:</span> <span class="stat-value">{{ character.current_hp }}/{{ character.max_hp }}</span> <span class="stat-modifier">({{ character.hp_modifier }})</span></p>
+                        <p class="mb-1"><span class="stat-label" {% if character.character.card_theme %}style="color: {{ character.character.card_theme.accent_color }};"{% endif %}>ATK:</span> <span class="stat-value">{{ character.total_atk }}</span> <span class="stat-modifier">({{ character.atk_modifier }})</span></p>
+                        <p class="mb-0"><span class="stat-label" {% if character.character.card_theme %}style="color: {{ character.character.card_theme.accent_color }};"{% endif %}>DEF:</span> <span class="stat-value">{{ character.total_def }}</span> <span class="stat-modifier">({{ character.def_modifier }})</span></p>
                     </div>
                 </div>
             </div>
@@ -132,19 +146,33 @@
 
         <!-- Enemy Card -->
         <div class="col-lg-4 col-md-5 mb-4">
-            <div class="card-game text-center">
-                <h4 class="mb-3 text-warning">{{ enemy.enemy.name | capfirst }}</h4>
+            <div class="card-game text-center" {% if enemy.enemy.card_theme %}
+                style="
+                    background-color: {{ enemy.enemy.card_theme.background_color }};
+                    border: 3px {{ enemy.enemy.card_theme.border_style }} {{ enemy.enemy.card_theme.border_color }};
+                    accent-color: {{ enemy.enemy.card_theme.accent_color }};
+                "
+            {% endif %}>
+                <h4 class="mb-3" {% if enemy.enemy.card_theme %}style="color: {{ enemy.enemy.card_theme.accent_color }};"{% else %}style="color: #ffc107;"{% endif %}>{{ enemy.enemy.name | capfirst }}</h4>
                 <h3>{{ enemy | hp_percent  }}%</h3>
                 {% if enemy.enemy.image_url.url  %}
-                    <img src="{{ enemy.enemy.image_url.url }}" class="img-fluid rounded-circle mb-3" alt="{{ enemy.enemy.name }}" style="width: 180px; height: 180px; object-fit: cover; border: 3px solid #ff5555;">
+                    <img src="{{ enemy.enemy.image_url.url }}" class="img-fluid rounded-circle mb-3" alt="{{ enemy.enemy.name }}"
+                        style="
+                            width: 180px; height: 180px; object-fit: cover;
+                            border: 3px {{ enemy.enemy.card_theme.image_border_style|default:'solid' }} {{ enemy.enemy.card_theme.image_border_color|default:'#ff5555' }};
+                        ">
                 {% else %}
-                    <img src="{% static 'images/enemy.png' %}" class="img-fluid rounded-circle mb-3" alt="Enemy" style="width: 180px; height: 180px; object-fit: cover; border: 3px solid #ff5555;">
+                    <img src="{% static 'images/enemy.png' %}" class="img-fluid rounded-circle mb-3" alt="Enemy"
+                        style="
+                            width: 180px; height: 180px; object-fit: cover;
+                            border: 3px {{ enemy.enemy.card_theme.image_border_style|default:'solid' }} {{ enemy.enemy.card_theme.image_border_color|default:'#ff5555' }};
+                        ">
                 {% endif %}
                 <div class="card-body p-0">
                     <div class="mt-3">
-                        <p class="mb-1"><span class="stat-label">HP:</span> <span class="stat-value">{{ enemy.current_hp }}/{{ enemy.max_hp }}</span> <span class="stat-modifier">({{ enemy.hp_modifier }})</span></p>
-                        <p class="mb-1"><span class="stat-label">ATK:</span> <span class="stat-value">{{ enemy.total_atk }}</span> <span class="stat-modifier">({{ enemy.atk_modifier }})</span></p>
-                        <p class="mb-0"><span class="stat-label">DEF:</span> <span class="stat-value">{{ enemy.total_def }}</span> <span class="stat-modifier">({{ enemy.def_modifier }})</span></p>
+                        <p class="mb-1"><span class="stat-label" {% if enemy.enemy.card_theme %}style="color: {{ enemy.enemy.card_theme.accent_color }};"{% endif %}>HP:</span> <span class="stat-value">{{ enemy.current_hp }}/{{ enemy.max_hp }}</span> <span class="stat-modifier">({{ enemy.hp_modifier }})</span></p>
+                        <p class="mb-1"><span class="stat-label" {% if enemy.enemy.card_theme %}style="color: {{ enemy.enemy.card_theme.accent_color }};"{% endif %}>ATK:</span> <span class="stat-value">{{ enemy.total_atk }}</span> <span class="stat-modifier">({{ enemy.atk_modifier }})</span></p>
+                        <p class="mb-0"><span class="stat-label" {% if enemy.enemy.card_theme %}style="color: {{ enemy.enemy.card_theme.accent_color }};"{% endif %}>DEF:</span> <span class="stat-value">{{ enemy.total_def }}</span> <span class="stat-modifier">({{ enemy.def_modifier }})</span></p>
                     </div>
                 </div>
             </div>

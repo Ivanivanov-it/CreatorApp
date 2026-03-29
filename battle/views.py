@@ -59,7 +59,7 @@ class PartnerSelectionView(LoginRequiredMixin,ListView):
         return super().dispatch(request,*args,**kwargs)
 
     def get_queryset(self):
-        return Partner.objects.filter(character=self.request.session["character_id"]).order_by('name')
+        return Partner.objects.filter(character=self.request.session["character_id"]).select_related('card_theme').order_by('name')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -175,16 +175,16 @@ class BattleView(LoginRequiredMixin,UserPassesTestMixin,DetailView):
         context = super().get_context_data(**kwargs)
         battle = self.object
 
-        context['character'] = battle.battlecharacter_set.first()
-        context['enemy'] = battle.battleenemy_set.first()
+        context['character'] = battle.battlecharacter_set.select_related('character__card_theme').first()
+        context['enemy'] = battle.battleenemy_set.select_related('enemy__card_theme').first()
         context['logs'] = BattleLog.objects.filter(battle=battle).all()
 
         return context
 
     def post(self,request,*args,**kwargs):
         battle = self.get_object()
-        character = battle.battlecharacter_set.first()
-        enemy = battle.battleenemy_set.first()
+        character = battle.battlecharacter_set.select_related('character__card_theme').first()
+        enemy = battle.battleenemy_set.select_related('enemy__card_theme').first()
 
         turn = battle.turns
 
