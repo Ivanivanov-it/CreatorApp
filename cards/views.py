@@ -1,8 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
-from cards.forms import CardForm
+from cards.forms import CardForm, CardEditForm
 from cards.models import Card
 
 
@@ -30,4 +31,56 @@ class CardCreateView(LoginRequiredMixin,CreateView):
         form.instance.creator = self.request.user
         return super().form_valid(form)
 
+class CardDetailView(DetailView):
+    template_name = 'cards/card_page.html'
+    model = Card
+
+
+    # I should add managing card rights to the migration file for group ccreation on new project setup
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = f"{self.object.name} Card Details"
+        context['can_modify'] = (
+            self.request.user == self.object.creator or
+            self.request.user.groups.filter(name="Moderators").exists()
+        )
+
+        return context
+
+class EditCardView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
+    model = Card
+    form_class = CardEditForm
+    success_url = reverse_lazy('cards:cards_list')
+    template_name = 'cards/edit_card.html'
+    extra_context = {
+        'page_title': "Edit Card"
+    }
+
+    def test_func(self):
+        character = self.get_object()
+        return (
+            self.request.user == character.creator or
+            self.request.user.groups.filter(name="Moderators").exists()
+        )
+
+    def handle_no_permission(self):
+
+        return redirect('contacts:no_permission')
+
+class CardDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
+    model = Card
+    template_name = 'delete_confirm.html'
+    success_url = reverse_lazy('cards:cards_list')
+
+    def test_func(self):
+        card = self.get_object()
+        return (
+            self.request.user == card.creator or
+            self.request.user.groups.filter(name="Moderators").exists()
+        )
+
+    def handle_no_permission(self):
+
+        return redirect('contacts:no_permission')
 

@@ -85,16 +85,18 @@
         {% for card in cards %}
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card-game text-center">
-                <div class="card-preview" style="background-color: {{ card.background_color }}; border: 5px {{ card.border_style }} {{ card.border_color }}; box-shadow: 0 0 10px {{ card.accent_color }};">
-                     <div class="card-preview-inner" style="border: 3px {{ card.image_border_style }} {{ card.image_border_color }};">
-                         <span style="color: {{ card.accent_color }}; font-weight: bold;">T</span>
-                     </div>
-                </div>
+                <a href="{% url 'cards:card_detail' card.pk %}" class="text-decoration-none">
+                    <div class="card-preview" style="background-color: {{ card.background_color }}; border: 5px {{ card.border_style }} {{ card.border_color }}; box-shadow: 0 0 10px {{ card.accent_color }};">
+                         <div class="card-preview-inner" style="border: 3px {{ card.image_border_style }} {{ card.image_border_color }};">
+                             <span style="color: {{ card.accent_color }}; font-weight: bold;">T</span>
+                         </div>
+                    </div>
+                </a>
                 <div class="card-body">
                     <h5 class="card-title mb-2">
-                        <span class="card-title-link">
+                        <a href="{% url 'cards:card_detail' card.pk %}" class="card-title-link">
                             {{ card.name | capfirst }}
-                        </span>
+                        </a>
                     </h5>
                     <h6 class="card-subtitle mb-3 text-muted">Created by: {{ card.creator|default:"System" }}</h6>
                     <p class="card-text small">

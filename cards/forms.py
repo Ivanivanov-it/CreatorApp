@@ -49,10 +49,6 @@ class CardForm(forms.ModelForm):
             raise forms.ValidationError('Enter a valid hex accent color like #ffffff')
         return accent_color
 
-
-
-
-
     class Meta:
         model = Card
         exclude = ['is_default','creator']
@@ -99,6 +95,17 @@ class CardForm(forms.ModelForm):
         }
 
 
+class CardEditForm(CardForm):
+    creator_display = forms.CharField(disabled=True,required=False,label="Creator")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.instance and self.instance.pk:
+            self.fields['creator_display'].initial = self.instance.creator.username
+
+    class Meta(CardForm.Meta):
+        fields = "__all__"
 
 
 
