@@ -71,33 +71,47 @@
 
     <div class="row">
         {% for character in characters %}
-        <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card-game text-center">
-                {% if character.image_url %}
-                    <a href="{% url 'characters:character_detail' character.pk %}">
-                        <img src="{{ character.image_url.url }}" class="rounded-circle mx-auto d-block mb-3" alt="{{ character.name }}" style="width: 200px; height: 200px; object-fit: cover; border: 3px solid #3a3a5a;">
-                    </a>
-                {% else %}
-                    <a href="{% url 'characters:character_detail' character.pk %}">
-                        <img src="{% static 'images/hero.png' %}" class="rounded-circle mx-auto d-block mb-3" alt="{{ character.name }}" style="width: 200px; height: 200px; object-fit: cover; border: 3px solid #3a3a5a;">
-                    </a>
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title mb-2">
-                        <a href="{% url 'characters:character_detail' character.pk %}" class="card-title-link">
-                            {{ character.name | capfirst }}
-                        </a>
-                    </h5>
-                    <h6 class="card-subtitle mb-3 text-muted">{{ character.title | capfirst }}</h6>
-                    <p class="card-text small">{{ character.description|truncatewords:20 }}</p>
-                </div>
-            </div>
+<div class="col-lg-4 col-md-6 mb-4">
+    <div class="card-game text-center" {% if character.card_theme %}
+        style="
+            background-color: {{ character.card_theme.background_color }};
+            border: 3px {{ character.card_theme.border_style }} {{ character.card_theme.border_color }};
+            accent-color: {{ character.card_theme.accent_color }};
+        "
+    {% endif %}>
+        {% if character.image_url %}
+            <a href="{% url 'characters:character_detail' character.pk %}">
+                <img src="{{ character.image_url.url }}" class="rounded-circle mx-auto d-block mb-3" alt="{{ character.name }}"
+                    style="
+                        width: 200px; height: 200px; object-fit: cover;
+                        border: 3px {{ character.card_theme.image_border_style|default:'solid' }} {{ character.card_theme.image_border_color|default:'#3a3a5a' }};
+                    ">
+            </a>
+        {% else %}
+            <a href="{% url 'characters:character_detail' character.pk %}">
+                <img src="{% static 'images/hero.png' %}" class="rounded-circle mx-auto d-block mb-3" alt="{{ character.name }}"
+                    style="
+                        width: 200px; height: 200px; object-fit: cover;
+                        border: 3px {{ character.card_theme.image_border_style|default:'solid' }} {{ character.card_theme.image_border_color|default:'#3a3a5a' }};
+                    ">
+            </a>
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title mb-2" {% if character.card_theme %}style="color: {{ character.card_theme.accent_color }};"{% endif %}>
+                <a href="{% url 'characters:character_detail' character.pk %}" class="card-title-link">
+                    {{ character.name|capfirst }}
+                </a>
+            </h5>
+            <h6 class="card-subtitle mb-3 text-muted">{{ character.title|capfirst }}</h6>
+            <p class="card-text small">{{ character.description|truncatewords:20 }}</p>
         </div>
-        {% empty %}
-            <div class="col">
-                <p class="lead text-center">No characters found.</p>
-            </div>
-        {% endfor %}
+    </div>
+</div>
+{% empty %}
+    <div class="col">
+        <p class="lead text-center">No characters found.</p>
+    </div>
+{% endfor %}
     </div>
 
 

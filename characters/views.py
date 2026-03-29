@@ -31,7 +31,7 @@ class CharactersListView(ListView):
     ordering = ['name']
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().select_related('card_theme')
         self.search_form = CharacterSearchForm(self.request.GET or None)
 
         if 'query' in self.request.GET and self.search_form.is_valid():
