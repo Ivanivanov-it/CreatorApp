@@ -38,7 +38,7 @@ class CardDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = f"{self.object.name} Card Details"
+        context['page_title'] = f"{self.object.name}  Details"
         context['can_modify'] = (
             self.request.user == self.object.creator or
             self.request.user.groups.filter(name="Moderators").exists()

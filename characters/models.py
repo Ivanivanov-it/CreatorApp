@@ -32,8 +32,7 @@ class Character(TimeStampModel,CombatStatModel):
         if not self.slug:
             self.slug = slugify(f"{self.name}-{self.title}")
 
-        # if not self.image_url:
-        #     self.image_url = f"{settings.STATIC_URL}images/hero.png"
+
 
         super().save(*args, **kwargs)
 

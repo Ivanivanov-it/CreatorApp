@@ -16,3 +16,4 @@ class CreatorOrModeratorMixin(UserPassesTestMixin):
     def handle_no_permission(self):
 
         return redirect('no_permission')
+
