@@ -1,8 +1,6 @@
 import os
-
 from cloudinary.forms import CloudinaryFileField
 from django import forms
-
 from common.helper_funcs import validate_image_magic_bytes
 
 

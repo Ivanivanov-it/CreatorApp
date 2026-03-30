@@ -2,9 +2,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, CreateView, ListView
+from django.views.generic import  CreateView, ListView
 from rest_framework.generics import get_object_or_404
-
 from contacts.forms import ContactForm
 from contacts.models import Contact
 

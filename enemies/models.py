@@ -2,7 +2,6 @@ from cloudinary.models import CloudinaryField
 from django.conf import settings
 from django.db import models
 from django.utils.text import slugify
-
 from common.choices import CharacterType
 from common.models import TimeStampModel, CombatStatModel, Role
 

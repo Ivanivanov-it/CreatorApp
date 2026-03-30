@@ -1,5 +1,4 @@
 from django.urls import path
-
 from common.views import LandingPageView
 
 app_name = "common"

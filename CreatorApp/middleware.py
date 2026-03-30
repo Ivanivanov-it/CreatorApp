@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.deprecation import MiddlewareMixin
 
@@ -16,7 +15,8 @@ class MaintenanceMiddleware:
         '/media/',
         '/admin/',
         '/admin',
-        '/accounts/login/'
+        '/accounts/login/',
+        '/accounts/logout/'
     ]
 
     def __init__(self, get_response):

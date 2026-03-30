@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db import models
-
 from cards.choices import BorderStyleChoices
 from characters.models import Character
 from common.models import TimeStampModel

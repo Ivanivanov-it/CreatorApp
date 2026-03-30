@@ -1,5 +1,4 @@
 from django.urls import path
-
 from cards.views import CardListView, CardCreateView, CardDetailView, EditCardView, CardDeleteView
 
 app_name = "cards"

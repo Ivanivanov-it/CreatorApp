@@ -1,23 +1,12 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
-from django.views.generic import TemplateView
 from rest_framework.generics import ListAPIView
-
 from characters.forms import CharacterCreateForm, CharacterEditForm, CharacterSearchForm
 from characters.models import Character
 from characters.serializers import CharacterSerializer
 from common.mixins import CreatorOrModeratorMixin
-
-
-# Create your views here.
-
-
-
-
-
 
 class CharactersListView(ListView):
     model = Character

@@ -1,7 +1,5 @@
 import re
-
 from django import forms
-
 from cards.models import Card
 
 HEX_COLOR_REGEX = re.compile(r"^#([0-9A-Fa-f]{6})$")

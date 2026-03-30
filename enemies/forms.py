@@ -1,5 +1,4 @@
 from django import forms
-
 from cards.models import Card
 from common.models import Role
 from common.validators import ValidatedCloudinaryFileField

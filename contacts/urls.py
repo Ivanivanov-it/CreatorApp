@@ -1,5 +1,4 @@
 from django.urls import path
-
 from contacts.views import CreateMailView, ContactsListView, \
     FinishView
 
