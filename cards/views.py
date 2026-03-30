@@ -60,6 +60,6 @@ class EditCardView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
 
 class CardDeleteView(LoginRequiredMixin,CreatorOrModeratorMixin,DeleteView):
     model = Card
-    template_name = 'delete_confirm.html'
+    template_name = 'common/delete_confirm.html'
     success_url = reverse_lazy('cards:cards_list')
 

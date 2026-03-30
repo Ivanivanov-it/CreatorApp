@@ -20,7 +20,7 @@ class RegisterView(CreateView):
     form_class = RegisterForm
     model = UserModel
     template_name = 'accounts/register.html'
-    success_url = reverse_lazy('characters:home')
+    success_url = reverse_lazy('common:home')
 
     def form_valid(self,form):
         response = super().form_valid(form)
@@ -29,7 +29,7 @@ class RegisterView(CreateView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('characters:home')
+            return redirect('common:home')
 
         return super().dispatch(request, *args, **kwargs)
 

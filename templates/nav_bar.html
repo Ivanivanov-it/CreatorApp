@@ -1,51 +1,121 @@
+<style>
+    .navbar-game {
+        background-color: #1a1a2e;
+        border-bottom: 2px solid #3a3a5a;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+        padding: 1rem 0;
+    }
+    .navbar-game .navbar-brand {
+        color: #8be9fd !important;
+        font-size: 1.75rem;
+        text-shadow: 0 0 10px rgba(139, 233, 253, 0.4);
+        transition: all 0.3s ease;
+    }
+    .navbar-game .navbar-brand:hover {
+        text-shadow: 0 0 20px rgba(139, 233, 253, 0.8);
+        transform: scale(1.05);
+    }
+    .navbar-game .nav-link {
+        color: #e0e0e0 !important;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 0 0.5rem;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    .navbar-game .nav-link:hover {
+        color: #8be9fd !important;
+        transform: translateY(-2px);
+    }
+    .navbar-game .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 50%;
+        background-color: #8be9fd;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+    .navbar-game .nav-link:hover::after {
+        width: 100%;
+    }
+    .nav-battle {
+        background-color: #ff5555;
+        color: #fff !important;
+        border-radius: 4px;
+        padding: 0.5rem 1.25rem !important;
+        box-shadow: 0 0 10px rgba(255, 85, 85, 0.3);
+    }
+    .nav-battle:hover {
+        background-color: #ff7777;
+        box-shadow: 0 0 20px rgba(255, 85, 85, 0.6) !important;
+    }
+    .nav-battle::after { display: none !important; }
 
+    .btn-logout {
+        background: none;
+        border: none;
+        color: #ff5555 !important;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
+    }
+    .btn-logout:hover {
+        color: #ff7777 !important;
+        transform: translateY(-2px);
+    }
+</style>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+<nav class="navbar navbar-expand-lg navbar-dark navbar-game sticky-top">
     <div class="container">
-        <a class="navbar-brand text-light fw-bold" href="{% url 'characters:home' %}">CreatorApp</a>
+        <a class="navbar-brand fw-bold" href="{% url 'common:home' %}">CREATOR APP</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item">
-                    <a class="nav-link text-info" href="{% url 'characters:characters_list' %}">Characters</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-info" href="{% url 'partners:partners_list' %}">Partners</a>
+                    <a class="nav-link" href="{% url 'characters:characters_list' %}">Characters</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-info" href="{% url 'enemies:enemies_list' %}">Enemies</a>
+                    <a class="nav-link" href="{% url 'partners:partners_list' %}">Partners</a>
                 </li>
-            <li class="nav-item">
-                    <a class="nav-link text-info" href="{% url 'cards:cards_list' %}">Cards</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'enemies:enemies_list' %}">Enemies</a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cards:cards_list' %}">Cards</a>
+                </li>
 
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                    <a class="nav-link text-danger" href="{% url 'battle:character_selection' %}">Battle</a>
-                </li>
+                        <a class="nav-link nav-battle mx-2" href="{% url 'battle:character_selection' %}">Battle</a>
+                    </li>
                     <li class="nav-item">
-                    <a class="nav-link text-success" href="{% url 'account:profile' %}">Profile</a>
-                </li>
+                        <a class="nav-link" href="{% url 'account:profile' %}">Profile</a>
+                    </li>
 
                     {% load custom_tags %}
-
                     {% if request.user|user_in_group:"ContactManagers" %}
                     <li class="nav-item">
-                    <a class="nav-link text-success" href="{% url 'contacts:user-contacts' %}">Contacts</a>
-                </li>
-                        {% endif %}
+                        <a class="nav-link" href="{% url 'contacts:user-contacts' %}">Contacts</a>
+                    </li>
+                    {% endif %}
 
-                    <li class="nav-item">
+                    <li class="nav-item ms-lg-2">
                         <form method="post" action="{% url 'account:logout' %}" class="d-inline">
                             {% csrf_token %}
-                            <button type="submit" class="nav-link btn btn-link text-danger border-0" style="vertical-align: middle;">Logout</button>
+                            <button type="submit" class="btn-logout">Logout</button>
                         </form>
+                    </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link text-warning" href="{% url 'account:login' %}">Login</a>
+                        <a class="nav-link" href="{% url 'account:login' %}" style="color: #f1fa8c !important;">Login</a>
                     </li>
                 {% endif %}
             </ul>

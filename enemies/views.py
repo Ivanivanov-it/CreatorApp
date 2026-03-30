@@ -105,7 +105,7 @@ class EditEnemyView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
 
 class EnemyDeleteView(LoginRequiredMixin,CreatorOrModeratorMixin,DeleteView):
     model = Enemy
-    template_name = 'delete_confirm.html'
+    template_name = 'common/delete_confirm.html'
     success_url = reverse_lazy('enemies:enemies_list')
 
 class EnemyListApiView(ListAPIView):

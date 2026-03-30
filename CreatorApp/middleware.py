@@ -11,7 +11,7 @@ class MaintenanceMiddleware:
 
 
     EXEMPT_URLS = [
-        '/contact-us/maintenance/',
+        '/maintenance/',
         '/static/',
         '/media/',
         '/admin/',
@@ -28,7 +28,7 @@ class MaintenanceMiddleware:
             is_exempt = any(request.path.startswith(url) for url in self.EXEMPT_URLS)
 
             if not is_exempt and not request.user.is_staff:
-                return redirect('contacts:maintenance')
+                return redirect('maintenance')
 
         return self.get_response(request)
 

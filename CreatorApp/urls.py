@@ -14,20 +14,26 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf import settings
-from django.conf.urls.static import static
+
 from django.contrib import admin
 from django.urls import path, include
 
+from common.views import WipPage, AboutPageView, NoPermissionView, MaintenanceView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('characters.urls')),
+    path('', include('common.urls')),
+    path('characters/',include('characters.urls')),
     path('enemies/',include('enemies.urls')),
     path('partners/',include('partners.urls')),
     path('contact-us/',include('contacts.urls')),
     path('battle/',include('battle.urls')),
     path('accounts/', include('accounts.urls')),
     path('cards/',include('cards.urls')),
+    path('wip/',WipPage.as_view(),name='wip'),
+    path('about/',AboutPageView.as_view(),name='about'),
+    path('no-permission/',NoPermissionView.as_view(),name='no_permission'),
+    path('maintenance/', MaintenanceView.as_view(), name='maintenance'),
     path('api/',include('enemies.api_urls')),
     path('api/',include('characters.api_urls')),
     path('api/',include('partners.api_urls')),

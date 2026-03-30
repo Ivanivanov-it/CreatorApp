@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Bad Request - 400{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #1a1a2e;
+        color: #e0e0e0;
+    }
+    .text-warning-game {
+        color: #f1fa8c;
+    }
+</style>
+<div class="d-flex align-items-center justify-content-center text-center py-5" style="min-height: calc(100vh - 150px);">
+    <div class="container">
+        <h1 class="display-1 fw-bold text-warning-game">400</h1>
+        <p class="fs-3"> <span class="text-warning-game">Opps!</span> Bad Request.</p>
+        <p class="lead">
+            The server cannot or will not process the request due to something that is perceived to be a client error.
+        </p>
+        <a href="{% url 'common:home' %}" class="btn btn-game-primary btn-lg mt-3">Back to Base</a>
+    </div>
+</div>
+{% endblock %}

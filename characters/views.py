@@ -17,12 +17,7 @@ from common.mixins import CreatorOrModeratorMixin
 
 
 
-class LandingPageView(TemplateView):
-    template_name = 'characters/landing_page.html'
 
-    extra_context = {
-        'page_title': "Home"
-    }
 
 class CharactersListView(ListView):
     model = Character
@@ -100,7 +95,7 @@ class EditCharacterView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
 
 class CharacterDeleteView(LoginRequiredMixin,CreatorOrModeratorMixin,DeleteView):
     model = Character
-    template_name = 'delete_confirm.html'
+    template_name = 'common/delete_confirm.html'
     success_url = reverse_lazy('characters:characters_list')
 
 

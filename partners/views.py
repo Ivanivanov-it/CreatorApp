@@ -82,7 +82,7 @@ class EditPartnerView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
 
 class PartnerDeleteView(LoginRequiredMixin,CreatorOrModeratorMixin,DeleteView):
     model = Partner
-    template_name = 'delete_confirm.html'
+    template_name = 'common/delete_confirm.html'
     success_url = reverse_lazy('partners:partners_list')
 
 

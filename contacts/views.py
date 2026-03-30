@@ -15,7 +15,7 @@ from contacts.models import Contact
 
 class CreateMailView(CreateView):
     form_class = ContactForm
-    success_url = reverse_lazy('characters:home')
+    success_url = reverse_lazy('common:home')
     template_name = 'contacts/contact.html'
     extra_context = {
         'page_title': "Contact Us"
@@ -23,30 +23,7 @@ class CreateMailView(CreateView):
 
 
 
-class WipPage(TemplateView):
-    template_name = 'contacts/wip.html'
 
-    extra_context = {
-        "page_title": "WIP"
-    }
-
-class AboutPageView(TemplateView):
-    template_name = 'characters/about.html'
-    extra_context = {
-        'page_title': "About"
-    }
-
-class NoPermissionView(TemplateView):
-    template_name = 'no_permission.html'
-    extra_context = {
-        'page_title': "No Permission"
-    }
-
-class MaintenanceView(TemplateView):
-    template_name = 'maintenance.html'
-    extra_context = {
-        'page_title': "Maintenance"
-    }
 
 class ContactsListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
     model = Contact
@@ -65,7 +42,7 @@ class ContactsListView(LoginRequiredMixin,UserPassesTestMixin,ListView):
 
 
     def handle_no_permission(self):
-        return redirect('contacts:no_permission')
+        return redirect('no_permission')
 
 class FinishView(LoginRequiredMixin,UserPassesTestMixin,View):
 
@@ -74,7 +51,7 @@ class FinishView(LoginRequiredMixin,UserPassesTestMixin,View):
 
 
     def handle_no_permission(self):
-        return redirect('contacts:no_permission')
+        return redirect('no_permission')
 
     def post(self,request,pk):
         contact = get_object_or_404(Contact, pk=pk)
