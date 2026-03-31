@@ -62,12 +62,43 @@
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 1px;
-        padding: 0.5rem 1rem;
         transition: all 0.3s ease;
+        width: 100%;
+        text-align: left;
+        padding: 0.75rem 1.5rem;
     }
     .btn-logout:hover {
         color: #ff7777 !important;
-        transform: translateY(-2px);
+        background-color: rgba(255, 85, 85, 0.1);
+    }
+
+    /* Dropdown Styling */
+    .navbar-game .dropdown-menu {
+        background-color: #2a2a4a;
+        border: 2px solid #3a3a5a;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+        padding: 0;
+        margin-top: 10px;
+    }
+    .navbar-game .dropdown-item {
+        color: #e0e0e0 !important;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+    .navbar-game .dropdown-item:hover {
+        background-color: rgba(139, 233, 253, 0.1);
+        color: #8be9fd !important;
+        padding-left: 2rem;
+    }
+    .navbar-game .dropdown-divider {
+        border-top: 2px solid #3a3a5a;
+        margin: 0;
+    }
+    .navbar-game .dropdown-toggle::after {
+        color: #8be9fd;
     }
 </style>
 
@@ -99,25 +130,29 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'battle:leaderboard' %}">Leaderboard</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'achievements:achievements' %}">Achievements</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account:profile' %}">Profile</a>
-                    </li>
 
-                    {% load custom_tags %}
-                    {% if request.user|user_in_group:"ContactManagers" %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'contacts:user-contacts' %}">Contacts</a>
-                    </li>
-                    {% endif %}
-
-                    <li class="nav-item ms-lg-2">
-                        <form method="post" action="{% url 'account:logout' %}" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn-logout">Logout</button>
-                        </form>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                            <li><a class="dropdown-item" href="{% url 'account:profile' %}">My Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'achievements:achievements' %}">Achievements</a></li>
+                            
+                            {% load custom_tags %}
+                            {% if request.user|user_in_group:"ContactManagers" %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'contacts:user-contacts' %}">Contacts</a></li>
+                            {% endif %}
+                            
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" action="{% url 'account:logout' %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-logout">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
                     </li>
                 {% else %}
                     <li class="nav-item">
