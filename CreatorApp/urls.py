@@ -29,6 +29,7 @@ urlpatterns = [
     path('battle/',include('battle.urls')),
     path('accounts/', include('accounts.urls')),
     path('cards/',include('cards.urls')),
+    path('achievements/',include('achievements.urls')),
     path('wip/',WipPage.as_view(),name='wip'),
     path('about/',AboutPageView.as_view(),name='about'),
     path('no-permission/',NoPermissionView.as_view(),name='no_permission'),

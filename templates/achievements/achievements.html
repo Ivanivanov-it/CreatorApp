@@ -1,0 +1,164 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+
+
+body {
+        background-color: #1a1a2e;
+        color: #e0e0e0;
+    }
+
+    .achievement-card {
+        background-color: #2a2a4a;
+        border: 2px solid #4a4a6a;
+        border-radius: 12px;
+        padding: 20px;
+        height: 100%;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .achievement-earned {
+        border-color: #50fa7b;
+        box-shadow: 0 0 15px rgba(80, 250, 123, 0.2);
+    }
+
+    .achievement-earned:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 10px 30px rgba(80, 250, 123, 0.4);
+        border-color: #50fa7b;
+    }
+
+    .achievement-locked {
+        opacity: 0.6;
+        filter: grayscale(0.8);
+        border-style: dashed;
+        background-color: #1e1e3a;
+    }
+
+    .achievement-locked:hover {
+        opacity: 0.8;
+        filter: grayscale(0.4);
+        transform: translateY(-4px);
+    }
+
+    .achievement-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        display: block;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .achievement-earned .achievement-icon {
+        animation: pulse-icon 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-icon {
+        0% { transform: scale(1); filter: drop-shadow(0 0 0px #50fa7b); }
+        50% { transform: scale(1.1); filter: drop-shadow(0 0 8px #50fa7b); }
+        100% { transform: scale(1); filter: drop-shadow(0 0 0px #50fa7b); }
+    }
+
+    .achievement-name {
+        font-weight: 700;
+        font-size: 1.25rem;
+        margin-bottom: 8px;
+        color: #8be9fd;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .achievement-description {
+        font-size: 0.95rem;
+        color: #e0e0e0;
+        margin-bottom: 15px;
+        line-height: 1.4;
+    }
+
+    .achievement-date {
+        font-size: 0.8rem;
+        color: #50fa7b;
+        font-weight: 600;
+        background: rgba(80, 250, 123, 0.1);
+        padding: 4px 10px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+
+    .locked-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #ff5555;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .achievement-section-title {
+        border-left: 5px solid #bd93f9;
+        padding-left: 15px;
+        margin: 40px 0 25px;
+        color: #f8f8f2;
+        font-weight: 700;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h2 class="section-title">Hall of Achievements</h2>
+        <p class="lead text-info">Collect them all to become a Legend</p>
+    </div>
+
+    <!-- Earned Achievements -->
+    <h3 class="achievement-section-title">UNLOCKED ({{ user_achievements|length }})</h3>
+    <div class="row g-4">
+        {% for user_achievement in user_achievements %}
+            <div class="col-lg-4 col-md-6">
+                <div class="achievement-card achievement-earned">
+                    <span class="achievement-icon">{{ user_achievement.achievement.icon }}</span>
+                    <h4 class="achievement-name">{{ user_achievement.achievement.name }}</h4>
+                    <p class="achievement-description">{{ user_achievement.achievement.description }}</p>
+                    <div class="achievement-date">
+                        <i class="fas fa-calendar-check me-1"></i> Earned: {{ user_achievement.achieved|date:"M d, Y" }}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center py-4">
+                <p class="text-muted italic">No achievements unlocked yet. Go forth and battle!</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Locked Achievements -->
+    <h3 class="achievement-section-title" style="border-left-color: #6272a4; color: #6272a4;">LOCKED ({{ locked_achievements|length }})</h3>
+    <div class="row g-4 mb-5">
+        {% for achievement in locked_achievements %}
+            <div class="col-lg-3 col-md-4">
+                <div class="achievement-card achievement-locked">
+                    <span class="locked-badge"><i class="fas fa-lock me-1"></i> LOCKED</span>
+                    <span class="achievement-icon">❓</span>
+                    <h4 class="achievement-name" style="color: #6272a4;">???</h4>
+                    <p class="achievement-description">{{ achievement.description }}</p>
+                    <div class="text-muted" style="font-size: 0.8rem;">
+                        <i class="fas fa-bullseye me-1"></i> Goal: {{ achievement.threshold }} {{ achievement.get_type_display }}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            {% if user_achievements %}
+            <div class="col-12 text-center py-4">
+                <p class="text-success font-weight-bold">Congratulations! You have mastered everything!</p>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
