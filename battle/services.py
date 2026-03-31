@@ -1,4 +1,7 @@
+from asgiref.sync import async_to_sync
+
 from accounts.models import UserBattleStats
+from achievements.achievement_tracker import check_and_award_battle_achievements
 from battle.choices import BattleAction
 from battle.models import Battle, BattleCharacter, BattleEnemy
 from common.choices import BattleStatus
@@ -66,3 +69,5 @@ class BattleService:
 
         self.battle.status = BattleStatus.FINISHED
         self.battle.save(update_fields=["status"])
+
+        self.newly_earned = async_to_sync(check_and_award_battle_achievements)(user,stats,self.battle)

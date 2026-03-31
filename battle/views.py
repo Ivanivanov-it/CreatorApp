@@ -201,10 +201,14 @@ class BattleView(LoginRequiredMixin,UserPassesTestMixin,DetailView):
         character,enemy = self.get_combatants(battle)
         action = request.POST.get("action","attack")
 
-        BattleService(battle,character,enemy).process_turn(action,request.user)
+        service = BattleService(battle,character,enemy)
+        service.process_turn(action,request.user)
+
+        context = self.build_context(battle,character,enemy)
+        context['newly_earned'] = getattr(service,"newly_earned",[])
 
 
-        return render(request, self.template_name, context=self.build_context(battle,character,enemy))
+        return render(request, self.template_name, context=context)
 
 
 async def leaderboard_api(request):

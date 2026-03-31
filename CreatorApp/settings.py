@@ -39,8 +39,8 @@ PROJECT_APPS = [
     "contacts",
     "battle",
     "accounts",
-    'cards'
-
+    'cards',
+    'achievements'
 ]
 
 # Application definition
