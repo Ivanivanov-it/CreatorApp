@@ -12,7 +12,7 @@ from abc import abstractmethod
 
 class Battle(TimeStampModel):
 
-    status = models.CharField(max_length=20,choices=BattleStatus.choices,default=BattleStatus.active)
+    status = models.CharField(max_length=20,choices=BattleStatus.choices,default=BattleStatus.ACTIVE)
     turns = models.IntegerField(default=1)
     creator = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE,
@@ -70,12 +70,12 @@ class BattleParticipant(TimeStampModel):
     def take_damage(self, damage):
         pass
 
-
+    @abstractmethod
     def heal(self,amount):
-        self.current_hp += amount
-        self.save()
+        pass
 
-    def buff(self):
+    @abstractmethod
+    def buff(self,atk_multiplier,def_multiplier):
         pass
 
 
@@ -106,6 +106,41 @@ class BattleCharacter(BattleParticipant):
                 content=content
             )
 
+    def heal(self,amount,battle=None):
+        if self.current_hp + amount > self.max_hp:
+            self.current_hp = self.max_hp
+        else:
+            self.current_hp += amount
+
+        self.save()
+
+        if battle:
+            content = f"Turn {battle.turns}: {self.character.name} healed {amount} hp!"
+
+            BattleLog.objects.create(
+                battle=battle,
+                log_type=LogType.INFO,
+                content=content
+            )
+
+    def buff(self,atk_multiplier,def_multiplier,battle=None):
+        atk_buff = self.total_atk * atk_multiplier
+        def_buff = self.total_def * def_multiplier
+
+        self.buff_atk += atk_buff
+        self.buff_def += def_buff
+
+        self.save()
+
+        if battle:
+            content = f"Turn {battle.turns}: {self.character.name} buffed {atk_buff} atk and {def_buff} defence!"
+
+            BattleLog.objects.create(
+                battle=battle,
+                log_type=LogType.INFO,
+                content=content
+            )
+
 
 
 class BattleEnemy(BattleParticipant):
@@ -124,6 +159,36 @@ class BattleEnemy(BattleParticipant):
                 content=content
             )
 
+    def heal(self, amount, battle=None):
+        self.current_hp += amount
+        self.save()
+
+        if battle:
+            content = f"Turn {battle.turns}: {self.enemy.name} healed {amount} hp!"
+
+            BattleLog.objects.create(
+                battle=battle,
+                log_type=LogType.INFO,
+                content=content
+            )
+
+    def buff(self, atk_multiplier, def_multiplier, battle=None):
+        atk_buff = self.total_atk * atk_multiplier
+        def_buff = self.total_def * def_multiplier
+
+        self.buff_atk += atk_buff
+        self.buff_def += def_buff
+
+        self.save()
+
+        if battle:
+            content = f"Turn {battle.turns}: {self.enemy.name} buffed {atk_buff} atk and {def_buff} defence!"
+
+            BattleLog.objects.create(
+                battle=battle,
+                log_type=LogType.INFO,
+                content=content
+            )
 
 
 class BattleLog(TimeStampModel):

@@ -139,7 +139,13 @@
                 <button class="btn btn-game-primary" disabled>Attack</button>
                     <a href="{% url 'battle:character_selection' %}" class="btn btn-play-again-primary btn-lg mt-2">Play Again</a>
                     {% else %}
-                    <button class="btn btn-game-primary">Attack</button>
+                    <button type="submit" name="action" value="attack" class="btn btn-game-primary">Attack</button>
+                    {% if can_heal %}
+                        <button type="submit" name="action" value="heak" class="btn btn-game-primary">Heal</button>
+                        {% endif %}
+                    {% if can_buff %}
+                        <button type="submit" name="action" value="buff" class="btn btn-game-primary">Buff</button>
+                        {% endif %}
                 {% endif %}
             </form>
         </div>

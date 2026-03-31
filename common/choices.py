@@ -11,9 +11,9 @@ class CharacterType(models.TextChoices):
     OTHER = 'OTHER', 'OTHER'
 
 class BattleStatus(models.TextChoices):
-    active = 'Active', 'Active'
-    inactive = 'Inactive', 'Inactive'
-    finished = 'Finished', 'Finished'
+    ACTIVE = 'Active', 'Active'
+    INACTIVE = 'Inactive', 'Inactive'
+    FINISHED = 'Finished', 'Finished'
 
 class LogType(models.TextChoices):
     INFO = 'INFO', 'INFO'

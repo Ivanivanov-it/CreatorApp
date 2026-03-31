@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView
 
 from accounts.models import UserBattleStats
 from battle.models import Battle, BattleCharacter, BattleEnemy, BattleLog
+from battle.services import BattleService
 from battle.stat_calc_functions import calc_buff_atk, calc_buff_def, calc_buff_hp, calc_debuff_atk, calc_debuff_hp, \
     calc_debuff_def
 from characters.forms import CharacterSearchForm
@@ -170,58 +171,38 @@ class BattleView(LoginRequiredMixin,UserPassesTestMixin,DetailView):
 
         return redirect('no_permission')
 
+    def get_combatants(self,battle):
+        character = battle.battlecharacter_set.select_related("character__card_theme").first()
+        enemy = battle.battleenemy_set.select_related("enemy__card_theme").first()
+        return character, enemy
+
+    def build_context(self,battle,character,enemy):
+        return {
+            "battle": battle,
+            "character": character,
+            "enemy": enemy,
+            "logs": BattleLog.objects.filter(battle=battle),
+            "can_heal": BattleService(battle,character,enemy).can_heal(),
+            "can_buff": BattleService(battle,character,enemy).can_buff(),
+        }
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        battle = self.object
 
-        context['character'] = battle.battlecharacter_set.select_related('character__card_theme').first()
-        context['enemy'] = battle.battleenemy_set.select_related('enemy__card_theme').first()
-        context['logs'] = BattleLog.objects.filter(battle=battle).all()
+        character,enemy= self.get_combatants(self.object)
+        context.update(self.build_context(self.object,character,enemy))
 
         return context
 
     def post(self,request,*args,**kwargs):
         battle = self.get_object()
-        character = battle.battlecharacter_set.select_related('character__card_theme').first()
-        enemy = battle.battleenemy_set.select_related('enemy__card_theme').first()
+        character,enemy = self.get_combatants(battle)
+        action = request.POST.get("action","attack")
 
-        turn = battle.turns
+        BattleService(battle,character,enemy).process_turn(action,request.user)
 
-        if turn % 2 == 1:
-            enemy.take_damage(character.total_atk, battle=battle)
 
-        else:
-            character.take_damage(enemy.total_atk, battle=battle)
-
-        if not enemy.is_alive or not character.is_alive:
-
-            user_stats, _ = UserBattleStats.objects.get_or_create(user=request.user)
-
-            if character.is_alive:
-                user_stats.add_win()
-            else:
-                user_stats.add_loss()
-
-            battle.status = BattleStatus.finished
-            battle.save(update_fields=['status'])
-
-        if not battle.status == BattleStatus.finished:
-            turn += 1
-
-        battle.turns = turn
-        battle.save()
-
-        logs = BattleLog.objects.filter(battle=battle).all()
-
-        context = {
-            "battle": battle,
-            "character": character,
-            "enemy": enemy,
-            "logs": logs
-        }
-
-        return render(request, self.template_name, context=context)
+        return render(request, self.template_name, context=self.build_context(battle,character,enemy))
 
 
 
