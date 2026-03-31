@@ -4,13 +4,87 @@ from achievements.models import Achievement, UserAchievement
 from common.choices import AchievementType
 
 
-async def check_and_award_battle_achievements(user,stats,battle=None):
-    newly_earned = []
+async def check_condition(achievement,user,stats=None,battle=None,**kwargs):
+    checkers = {
+        AchievementType.FIRST_WIN: check_first_win,
+        AchievementType.WIN_STREAK: check_win_streak,
+        AchievementType.FIRST_LOSE: check_first_lose,
+        AchievementType.TOTAL_WINS: check_total_wins,
+        AchievementType.TOTAL_LOSES: check_total_loses,
+        AchievementType.TOTAL_BATTLES: check_total_battles,
+        AchievementType.PERFECT_VICTORY: check_perfect_victory,
+        AchievementType.FIRST_CHARACTER_CREATION: check_first_character,
+        AchievementType.FIRST_PARTNER_CREATION: check_first_partner,
+        AchievementType.FIRST_ENEMY_CREATION: check_first_enemy,
+        AchievementType.FIRST_CARD_CREATION: check_first_card,
+    }
+    checker = checkers.get(achievement.type)
+    if checker:
+        return await checker(achievement,user,stats=stats,battle=battle,**kwargs)
+    return False
 
-    get_achievements = sync_to_async(
-        lambda: list(Achievement.objects.all())
+async def check_first_win(achievement, user, stats=None, **kwargs):
+    return stats and stats.wins >= achievement.threshold
+
+async def check_first_lose(achievement, user, stats=None, **kwargs):
+    return stats and stats.losses >= achievement.threshold
+
+async def check_win_streak(achievement, user, stats=None, **kwargs):
+    return stats and stats.win_streak >= achievement.threshold
+
+async def check_total_wins(achievement, user, stats=None, **kwargs):
+    return stats and stats.wins >= achievement.threshold
+
+async def check_total_loses(achievement, user, stats=None, **kwargs):
+    return stats and stats.losses >= achievement.threshold
+
+async def check_total_battles(achievement, user, stats=None, **kwargs):
+    return stats and (stats.wins + stats.losses) >= achievement.threshold
+
+async def check_perfect_victory(achievement, user, battle=None, **kwargs):
+    if not battle:
+        return False
+    from battle.models import BattleLog
+    get_logs = sync_to_async(
+        lambda: BattleLog.objects.filter(
+            battle=battle,
+            content__icontains='Turn 2'
+        ).exists()
     )
+    took_damage = await get_logs()
+    return not took_damage
 
+async def check_first_character(achievement, user, **kwargs):
+    from characters.models import Character
+    get_count = sync_to_async(
+        lambda: Character.objects.filter(creator=user).count()
+    )
+    return await get_count() >= achievement.threshold
+
+async def check_first_enemy(achievement, user, **kwargs):
+    from enemies.models import Enemy
+    get_count = sync_to_async(
+        lambda: Enemy.objects.filter(creator=user).count()
+    )
+    return await get_count() >= achievement.threshold
+
+async def check_first_card(achievement, user, **kwargs):
+    from cards.models import Card
+    get_count = sync_to_async(
+        lambda: Card.objects.filter(creator=user).count()
+    )
+    return await get_count() >= achievement.threshold
+
+async def check_first_partner(achievement, user, **kwargs):
+    from partners.models import Partner
+    get_count = sync_to_async(
+        lambda: Partner.objects.filter(creator=user).count()
+    )
+    return await get_count() >= achievement.threshold
+
+
+async def check_and_award_battle_achievements(user,**kwargs):
+    get_achievements = sync_to_async(lambda: list(Achievement.objects.all()))
     get_existing = sync_to_async(
         lambda: set(
             UserAchievement.objects.filter(user=user)
@@ -18,57 +92,22 @@ async def check_and_award_battle_achievements(user,stats,battle=None):
         )
     )
 
-    all_achievements = await get_achievements()
-    already_earned = await get_existing()
-    total_battles = stats.wins + stats.losses
+    all_achievements, already_earned = await get_achievements(), await get_existing()
+    newly_earned = []
 
     for achievement in all_achievements:
         if achievement.id in already_earned:
             continue
 
-        earned = False
-
-        if achievement.type == AchievementType.FIRST_WIN:
-            earned = stats.wins >= achievement.threshold
-        elif achievement.type == AchievementType.FIRST_LOSE:
-            earned = stats.losses >= achievement.threshold
-        elif achievement.type == AchievementType.TOTAL_WINS:
-            earned = stats.wins >= achievement.threshold
-        elif achievement.type == AchievementType.TOTAL_LOSES:
-            earned = stats.losses >= achievement.threshold
-        elif achievement.type == AchievementType.TOTAL_BATTLES:
-            earned = total_battles >= achievement.threshold
-        elif achievement.type == AchievementType.WIN_STREAK:
-            earned = stats.win_streak >= achievement.threshold
-        elif achievement.type == AchievementType.PERFECT_VICTORY and battle:
-            earned = await check_perfect_victory(battle)
+        earned = await check_condition(achievement, user, **kwargs)
 
         if earned:
-            award = sync_to_async(UserAchievement.objects.create)
-            await award(user=user,achievement=achievement)
+            create = sync_to_async(UserAchievement.objects.create)
+            await create(user=user, achievement=achievement)
             newly_earned.append(achievement)
+
     return newly_earned
 
-#This is cooked I need to think of a better logic for this later.
 
-async def check_perfect_victory(battle):
-    from battle.models import BattleLog
-
-    get_damage_logs = sync_to_async(
-        lambda: BattleLog.objects.filter(battle=battle,
-                                         content__icontains="Turn 2").exists()
-    )
-    took_damage = await get_damage_logs()
-    return not took_damage
-
-# async def check_perfect_lose(battle):
-#     from battle.models import BattleLog
-#
-#     get_damage_logs = sync_to_async(
-#         lambda: BattleLog.objects.filter(battle=battle,
-#                                          content__icontains="Turn 2").exists()
-#     )
-#     took_damage = await get_damage_logs()
-#     return not took_damage
 
 

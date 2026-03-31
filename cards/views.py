@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
+from achievements.mixins import AchievementMixin
 from cards.forms import CardForm, CardEditForm
 from cards.models import Card
 from common.mixins import CreatorOrModeratorMixin
@@ -19,7 +20,7 @@ class CardListView(ListView):
         'page_title': 'Cards',
     }
 
-class CardCreateView(LoginRequiredMixin,CreateView):
+class CardCreateView(LoginRequiredMixin,AchievementMixin,CreateView):
     template_name = 'cards/create_card.html'
     form_class = CardForm
     success_url = reverse_lazy('cards:cards_list')

@@ -21,3 +21,7 @@ def hp_percent(obj):
 @register.filter
 def user_in_group(user,group_name):
     return user.groups.filter(name=group_name).exists()
+
+@register.filter
+def split(value,delimiter):
+    return value.split(delimiter)

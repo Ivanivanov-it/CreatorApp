@@ -3,6 +3,8 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
 from rest_framework.generics import ListAPIView
+
+from achievements.mixins import AchievementMixin
 from characters.forms import CharacterCreateForm, CharacterEditForm, CharacterSearchForm
 from characters.models import Character
 from characters.serializers import CharacterSerializer
@@ -48,7 +50,7 @@ class CharacterDetailView(DetailView):
         return context
 
 
-class CreateCharacterView(LoginRequiredMixin,CreateView):
+class CreateCharacterView(LoginRequiredMixin,AchievementMixin,CreateView):
     template_name = 'characters/create_character.html'
     form_class = CharacterCreateForm
     success_url = reverse_lazy('characters:characters_list')

@@ -5,6 +5,8 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
 from rest_framework.generics import ListAPIView
+
+from achievements.mixins import AchievementMixin
 from common.mixins import CreatorOrModeratorMixin
 from enemies.forms import EnemySearchForm, EnemyEditForm, EnemyCreateForm
 from enemies.models import Enemy
@@ -66,7 +68,7 @@ class EnemyDetailView(DetailView):
         return context
 
 
-class CreateEnemyView(LoginRequiredMixin,CreateView):
+class CreateEnemyView(LoginRequiredMixin,AchievementMixin,CreateView):
     form_class = EnemyCreateForm
     success_url = reverse_lazy('enemies:enemies_list')
     template_name = 'enemies/create_enemy.html'

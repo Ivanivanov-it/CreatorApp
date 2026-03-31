@@ -3,6 +3,8 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
 from rest_framework.generics import ListAPIView
+
+from achievements.mixins import AchievementMixin
 from common.mixins import CreatorOrModeratorMixin
 from partners.forms import PartnerCreateForm, PartnerEditForm, PartnerSearchForm
 from partners.models import Partner
@@ -48,7 +50,7 @@ class PartnerDetailView(DetailView):
         return context
 
 
-class PartnerCreateView(LoginRequiredMixin,CreateView):
+class PartnerCreateView(LoginRequiredMixin,AchievementMixin,CreateView):
     form_class = PartnerCreateForm
     template_name = 'partners/create_partner.html'
     success_url = reverse_lazy('partners:partners_list')

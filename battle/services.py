@@ -70,4 +70,4 @@ class BattleService:
         self.battle.status = BattleStatus.FINISHED
         self.battle.save(update_fields=["status"])
 
-        self.newly_earned = async_to_sync(check_and_award_battle_achievements)(user,stats,self.battle)
+        self.newly_earned = async_to_sync(check_and_award_battle_achievements)(user,stats=stats,battle=self.battle)
