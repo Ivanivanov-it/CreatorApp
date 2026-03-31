@@ -47,6 +47,36 @@
         transform: translateY(-2px) scale(1.05);
     }
 
+    .btn-game-heal {
+        background-color: #50fa7b;
+        border-color: #50fa7b;
+        color: #1a1a2e;
+        font-weight: bold;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(80, 250, 123, 0.4);
+    }
+    .btn-game-heal:hover {
+        background-color: #3dfa6d;
+        box-shadow: 0 0 15px rgba(80, 250, 123, 0.7);
+        transform: translateY(-2px);
+    }
+
+    .btn-game-buff {
+        background-color: #f1fa8c;
+        border-color: #f1fa8c;
+        color: #1a1a2e;
+        font-weight: bold;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(241, 250, 140, 0.4);
+    }
+    .btn-game-buff:hover {
+        background-color: #effa6e;
+        box-shadow: 0 0 15px rgba(241, 250, 140, 0.7);
+        transform: translateY(-2px);
+    }
+
     .btn-play-again-primary {
         background-color: #8be9fd;
         border-color: #8be9fd;
@@ -211,7 +241,7 @@
                             border: 3px {{ character.character.card_theme.image_border_style|default:'solid' }} {{ character.character.card_theme.image_border_color|default:'#8be9fd' }};
                         ">
                 {% else %}
-                    <img src="{% static 'images/hero.png' %}" class="img-fluid rounded-circle mb-3" alt="Hero"
+                    <img src="{% static 'images/CharacterIcon.png' %}" class="img-fluid rounded-circle mb-3" alt="Hero"
                         style="
                             width: 180px; height: 180px; object-fit: cover;
                             border: 3px {{ character.character.card_theme.image_border_style|default:'solid' }} {{ character.character.card_theme.image_border_color|default:'#8be9fd' }};
@@ -223,28 +253,35 @@
                         <p class="mb-1"><span class="stat-label" {% if character.character.card_theme %}style="color: {{ character.character.card_theme.accent_color }};"{% endif %}>ATK:</span> <span class="stat-value">{{ character.total_atk }}</span> <span class="stat-modifier">({{ character.atk_modifier }})</span></p>
                         <p class="mb-0"><span class="stat-label" {% if character.character.card_theme %}style="color: {{ character.character.card_theme.accent_color }};"{% endif %}>DEF:</span> <span class="stat-value">{{ character.total_def }}</span> <span class="stat-modifier">({{ character.def_modifier }})</span></p>
                     </div>
+
+                    {% if battle.status != "Finished" %}
+                    <div class="mt-4 d-flex justify-content-center gap-2">
+                        {% if can_heal %}
+                            <button type="submit" form="battle-form" name="action" value="heal" class="btn btn-game-heal px-4">Heal</button>
+                        {% endif %}
+                        {% if can_buff %}
+                            <button type="submit" form="battle-form" name="action" value="buff" class="btn btn-game-buff px-4">Buff</button>
+                        {% endif %}
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
 
         <!-- Middle Action -->
-        <div class="col-lg-2 col-md-2 mb-4 text-center">
+        <div class="col-lg-2 col-md-2 mb-4 text-center d-flex flex-column align-items-center justify-content-center">
             <div class="vs-text mb-4">VS</div>
-            <form id="battle-form" action="{% url 'battle:battle_view' battle.pk %}" method="post">
+            <form id="battle-form" action="{% url 'battle:battle_view' battle.pk %}" method="post" class="w-100">
                 {% csrf_token %}
                 {% if battle.status == "Finished" %}
-    <button class="btn btn-game-primary" disabled>Attack</button>
-    <a href="{% url 'battle:character_selection' %}" class="btn btn-play-again-primary btn-lg mt-2">Play Again</a>
-{% else %}
-    <button type="submit" name="action" value="attack" class="btn btn-game-primary" id="attack-btn">Attack</button>
-    <button type="submit" name="action" value="attack" id="enemy-attack-btn" style="position:absolute; opacity:0; pointer-events:none;">enemy</button>
-    {% if can_heal %}
-        <button type="submit" name="action" value="heal" class="btn btn-game-primary">Heal</button>
-    {% endif %}
-    {% if can_buff %}
-        <button type="submit" name="action" value="buff" class="btn btn-game-primary">Buff</button>
-    {% endif %}
-{% endif %}
+                    <div class="d-grid gap-3">
+                        <a href="{% url 'battle:character_selection' %}" class="btn btn-play-again-primary btn-lg">Play Again</a>
+                        <a href="{% url 'battle:leaderboard' %}" class="btn btn-game-secondary btn-lg">Leaderboard</a>
+                    </div>
+                {% else %}
+                    <button type="submit" name="action" value="attack" class="btn btn-game-primary w-100" id="attack-btn">Attack</button>
+                    <button type="submit" name="action" value="attack" id="enemy-attack-btn" style="position:absolute; opacity:0; pointer-events:none;">enemy</button>
+                {% endif %}
             </form>
         </div>
 
@@ -266,7 +303,7 @@
                             border: 3px {{ enemy.enemy.card_theme.image_border_style|default:'solid' }} {{ enemy.enemy.card_theme.image_border_color|default:'#ff5555' }};
                         ">
                 {% else %}
-                    <img src="{% static 'images/enemy.png' %}" class="img-fluid rounded-circle mb-3" alt="Enemy"
+                    <img src="{% static 'images/EnemyIcon.png' %}" class="img-fluid rounded-circle mb-3" alt="Enemy"
                         style="
                             width: 180px; height: 180px; object-fit: cover;
                             border: 3px {{ enemy.enemy.card_theme.image_border_style|default:'solid' }} {{ enemy.enemy.card_theme.image_border_color|default:'#ff5555' }};

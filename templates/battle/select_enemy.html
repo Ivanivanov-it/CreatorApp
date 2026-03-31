@@ -73,7 +73,7 @@
                         </a>
                     {% else %}
                         <a href="{% url 'enemies:enemy_detail' e.pk %}" target="_blank">
-                        <img src="{% static 'images/enemy.png' %}" class="card-img-top mx-auto d-block mb-3" alt="{{ e.name }}"
+                        <img src="{% static 'images/EnemyIcon.png' %}" class="card-img-top mx-auto d-block mb-3" alt="{{ e.name }}"
                             style="
                                 width: 150px; height: 150px; object-fit: cover; border-radius: 50%;
                                 border: 3px {{ e.card_theme.image_border_style|default:'solid' }} {{ e.card_theme.image_border_color|default:'#3a3a5a' }};

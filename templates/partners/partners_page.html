@@ -86,7 +86,7 @@
                     </a>
                 {% else %}
                     <a href="{% url 'partners:partner_detail' partner.pk %}">
-                        <img src="{% static 'images/partner.png' %}" class="rounded-circle mx-auto d-block mb-3" alt="{{ partner.name }}"
+                        <img src="{% static 'images/PartnerIcon.png' %}" class="rounded-circle mx-auto d-block mb-3" alt="{{ partner.name }}"
                             style="
                                 width: 200px; height: 200px; object-fit: cover;
                                 border: 3px {{ partner.card_theme.image_border_style|default:'solid' }} {{ partner.card_theme.image_border_color|default:'#3a3a5a' }};

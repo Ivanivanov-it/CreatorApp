@@ -1,7 +1,9 @@
+from asgiref.sync import sync_to_async
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, TemplateView
 
 from accounts.models import UserBattleStats
 from battle.models import Battle, BattleCharacter, BattleEnemy, BattleLog
@@ -205,7 +207,33 @@ class BattleView(LoginRequiredMixin,UserPassesTestMixin,DetailView):
         return render(request, self.template_name, context=self.build_context(battle,character,enemy))
 
 
+async def leaderboard_api(request):
+    get_stats = sync_to_async(
+        lambda: list(
+            UserBattleStats.objects.select_related('user')
+            .order_by('-wins','losses')[:10]
+        )
+    )
 
+    stats = await get_stats()
+
+    data = [
+        {
+            'username': stat.user.username,
+            'wins': stat.wins,
+            'losses': stat.losses,
+            'winrate': stat.get_user_winrate()
+        }
+        for stat in stats
+    ]
+
+    return JsonResponse({'leaderboard': data})
+
+class LeaderboardView(LoginRequiredMixin,TemplateView):
+    template_name = "battle/leaderboard.html"
+    extra_context = {
+        'page_title': 'Leaderboard',
+    }
 
 
 

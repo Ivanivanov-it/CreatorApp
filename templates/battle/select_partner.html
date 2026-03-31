@@ -73,7 +73,7 @@
                         </a>
                     {% else %}
                          <a href="{% url 'partners:partner_detail' p.pk %}" target="_blank">
-                        <img src="{% static 'images/partner.png' %}" class="card-img-top mx-auto d-block mb-3" alt="{{ p.name }}"
+                        <img src="{% static 'images/PartnerIcon.png' %}" class="card-img-top mx-auto d-block mb-3" alt="{{ p.name }}"
                             style="
                                 width: 150px; height: 150px; object-fit: cover; border-radius: 50%;
                                 border: 3px {{ p.card_theme.image_border_style|default:'solid' }} {{ p.card_theme.image_border_color|default:'#3a3a5a' }};

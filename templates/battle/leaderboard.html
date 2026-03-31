@@ -1,0 +1,147 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+
+body {
+        background-color: #1a1a2e; /* Dark background for game feel */
+        color: #e0e0e0; /* Light text for contrast */
+    }
+
+    .leaderboard-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 30px;
+        background: #2a2a4a;
+        border: 2px solid #4a4a6a;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .leaderboard-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+        color: #e0e0e0;
+    }
+
+    .leaderboard-table th {
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #8be9fd;
+        border-bottom: 2px solid #4a4a6a;
+        padding: 15px;
+        font-weight: 700;
+    }
+
+    .leaderboard-table td {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 15px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+    .leaderboard-table tr:hover td {
+        background: rgba(139, 233, 253, 0.1);
+        transform: scale(1.02);
+        color: #fff;
+    }
+
+    .leaderboard-table td:first-child {
+        border-radius: 10px 0 0 10px;
+        font-weight: bold;
+    }
+
+    .leaderboard-table td:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+
+    .rank-1 { color: #f1fa8c; text-shadow: 0 0 10px rgba(241, 250, 140, 0.5); font-size: 1.4rem; }
+    .rank-2 { color: #bd93f9; text-shadow: 0 0 10px rgba(189, 147, 249, 0.5); font-size: 1.3rem; }
+    .rank-3 { color: #ff79c6; text-shadow: 0 0 10px rgba(255, 121, 198, 0.5); font-size: 1.2rem; }
+
+    .loader {
+        border: 4px solid #4a4a6a;
+        border-top: 4px solid #8be9fd;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+<div class="container mt-5">
+    <h2 class="section-title text-center mb-4">Hall of Fame</h2>
+
+    <div class="leaderboard-container">
+        <div id="leaderboard-loading" class="text-center">
+            <div class="loader"></div>
+            <p class="text-info mt-3">Fetching Champions...</p>
+        </div>
+
+        <div id="leaderboard-container" style="display:none;">
+            <table class="leaderboard-table text-center">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Warrior</th>
+                        <th>Victories</th>
+                        <th>Defeats</th>
+                        <th>Prowess</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body"></tbody>
+            </table>
+        </div>
+
+        <div id="leaderboard-error" class="text-center text-danger" style="display:none;">
+            <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+            <p>The scrolls could not be read. Try again later.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+async function loadLeaderboard() {
+    try {
+        const response = await fetch("{% url 'leaderboard_api' %}");
+
+        if (!response.ok) throw new Error('Request failed');
+
+        const data   = await response.json();
+        const tbody  = document.getElementById('leaderboard-body');
+        const medals = ['🥇', '🥈', '🥉'];
+
+        tbody.innerHTML = data.leaderboard.map((player, index) => {
+            const rankClass = index < 3 ? `rank-${index + 1}` : '';
+            return `
+                <tr>
+                    <td class="${rankClass}">${medals[index] ?? index + 1}</td>
+                    <td class="fw-bold">${player.username}</td>
+                    <td style="color: #50fa7b; font-weight: bold;">${player.wins}</td>
+                    <td style="color: #ff5555;">${player.losses}</td>
+                    <td style="color: #f1fa8c;">${player.winrate}%</td>
+                </tr>
+            `;
+        }).join('');
+
+        document.getElementById('leaderboard-loading').style.display   = 'none';
+        document.getElementById('leaderboard-container').style.display = 'block';
+
+    } catch (err) {
+        document.getElementById('leaderboard-loading').style.display = 'none';
+        document.getElementById('leaderboard-error').style.display   = 'block';
+    }
+}
+
+loadLeaderboard();
+</script>
+{% endblock %}

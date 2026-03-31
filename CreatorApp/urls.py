@@ -37,5 +37,6 @@ urlpatterns = [
     path('api/',include('characters.api_urls')),
     path('api/',include('partners.api_urls')),
     path('api/',include('accounts.api_urls')),
+    path('api/', include('battle.api_urls'))
 
 ]

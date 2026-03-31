@@ -89,7 +89,7 @@
             </a>
         {% else %}
             <a href="{% url 'characters:character_detail' character.pk %}">
-                <img src="{% static 'images/hero.png' %}" class="rounded-circle mx-auto d-block mb-3" alt="{{ character.name }}"
+                <img src="{% static 'images/CharacterIcon.png' %}" class="rounded-circle mx-auto d-block mb-3" alt="{{ character.name }}"
                     style="
                         width: 200px; height: 200px; object-fit: cover;
                         border: 3px {{ character.card_theme.image_border_style|default:'solid' }} {{ character.card_theme.image_border_color|default:'#3a3a5a' }};

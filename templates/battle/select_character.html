@@ -73,7 +73,7 @@
                         </a>
                     {% else %}
                         <a href="{% url 'characters:character_detail' c.id %}" target="_blank">
-                            <img src="{% static 'images/hero.png' %}"  class="card-img-top mx-auto d-block mb-3" alt="{{ c.name }}"
+                            <img src="{% static 'images/CharacterIcon.png' %}"  class="card-img-top mx-auto d-block mb-3" alt="{{ c.name }}"
                                 style="
                                     width: 200px; height: 200px; object-fit: cover; border-radius: 50%;
                                     border: 3px {{ c.card_theme.image_border_style|default:'solid' }} {{ c.card_theme.image_border_color|default:'#3a3a5a' }};
