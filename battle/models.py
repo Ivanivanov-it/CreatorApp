@@ -124,8 +124,8 @@ class BattleCharacter(BattleParticipant):
             )
 
     def buff(self,atk_multiplier,def_multiplier,battle=None):
-        atk_buff = self.total_atk * atk_multiplier
-        def_buff = self.total_def * def_multiplier
+        atk_buff = round(self.total_atk * atk_multiplier)
+        def_buff = round(self.total_def * def_multiplier)
 
         self.buff_atk += atk_buff
         self.buff_def += def_buff
@@ -173,8 +173,8 @@ class BattleEnemy(BattleParticipant):
             )
 
     def buff(self, atk_multiplier, def_multiplier, battle=None):
-        atk_buff = self.total_atk * atk_multiplier
-        def_buff = self.total_def * def_multiplier
+        atk_buff = round(self.total_atk * atk_multiplier)
+        def_buff = round(self.total_def * def_multiplier)
 
         self.buff_atk += atk_buff
         self.buff_def += def_buff

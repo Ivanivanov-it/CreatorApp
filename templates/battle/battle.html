@@ -84,12 +84,109 @@
         color: #bd93f9;
         text-shadow: 0 0 10px rgba(189, 147, 249, 0.6);
     }
+
+    @keyframes floatUp {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-80px) scale(1.3); }
+}
+
+/* ── Character card shake (takes damage) ── */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(-8px); }
+    40%       { transform: translateX(8px); }
+    60%       { transform: translateX(-5px); }
+    80%       { transform: translateX(5px); }
+}
+
+/* ── Enemy card shake ── */
+@keyframes shakeEnemy {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(8px); }
+    40%       { transform: translateX(-8px); }
+    60%       { transform: translateX(5px); }
+    80%       { transform: translateX(-5px); }
+}
+
+/* ── Character card pulse green (heal) ── */
+@keyframes healPulse {
+    0%   { box-shadow: 0 0 0px rgba(80, 250, 123, 0); }
+    40%  { box-shadow: 0 0 30px rgba(80, 250, 123, 0.9); }
+    100% { box-shadow: 0 0 0px rgba(80, 250, 123, 0); }
+}
+
+/* ── Character card flash gold (buff) ── */
+@keyframes buffFlash {
+    0%   { box-shadow: 0 0 0px rgba(241, 250, 140, 0); }
+    30%  { box-shadow: 0 0 40px rgba(241, 250, 140, 1); }
+    60%  { box-shadow: 0 0 20px rgba(241, 250, 140, 0.5); }
+    100% { box-shadow: 0 0 0px rgba(241, 250, 140, 0); }
+}
+
+/* ── Attack sword flash on enemy ── */
+@keyframes swordSlash {
+    0%   { opacity: 0; transform: rotate(-45deg) scale(0.5); }
+    30%  { opacity: 1; transform: rotate(0deg) scale(1.2); }
+    100% { opacity: 0; transform: rotate(20deg) scale(0.8); }
+}
+
+/* ── Buff stars orbit ── */
+@keyframes orbitStar {
+    0%   { transform: rotate(0deg)   translateX(60px) rotate(0deg);   opacity: 1; }
+    100% { transform: rotate(360deg) translateX(60px) rotate(-360deg); opacity: 0; }
+}
+
+.anim-shake       { animation: shake      0.4s ease; }
+.anim-shake-enemy { animation: shakeEnemy 0.4s ease; }
+.anim-heal-pulse  { animation: healPulse  0.7s ease; }
+.anim-buff-flash  { animation: buffFlash  0.8s ease; }
+
+/* Floating label */
+.float-label {
+    position: absolute;
+    font-size: 1.8rem;
+    font-weight: 900;
+    pointer-events: none;
+    animation: floatUp 0.9s ease forwards;
+    z-index: 999;
+    text-shadow: 0 0 8px currentColor;
+}
+
+/* Sword slash overlay */
+.slash-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 10;
+    font-size: 4rem;
+    animation: swordSlash 0.5s ease forwards;
+}
+
+/* Buff star */
+.buff-star {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 12px; height: 12px;
+    margin: -6px 0 0 -6px;
+    background: #f1fa8c;
+    clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+    animation: orbitStar 0.8s ease forwards;
+    pointer-events: none;
+    z-index: 10;
+}
+
+
+
+
 </style>
 
 <div class="container mt-5">
     <div class="text-center mb-5">
         <h2 class="section-title">Battle #{{ battle.id }}</h2>
-        <p class="lead">Turn <span class="badge bg-primary">{{ battle.turns }}</span></p>
+        <p class="lead">Turn <span class="badge bg-primary" id="turn-badge" data-turn="{{ battle.turns }}">{{ battle.turns }}</span></p>
         {% if battle.status == "Finished" %}
         <h2 class="section-title">Game Over!</h2>
         {% endif %}
@@ -133,20 +230,21 @@
         <!-- Middle Action -->
         <div class="col-lg-2 col-md-2 mb-4 text-center">
             <div class="vs-text mb-4">VS</div>
-            <form action="{% url 'battle:battle_view' battle.pk %}" method="post">
+            <form id="battle-form" action="{% url 'battle:battle_view' battle.pk %}" method="post">
                 {% csrf_token %}
                 {% if battle.status == "Finished" %}
-                <button class="btn btn-game-primary" disabled>Attack</button>
-                    <a href="{% url 'battle:character_selection' %}" class="btn btn-play-again-primary btn-lg mt-2">Play Again</a>
-                    {% else %}
-                    <button type="submit" name="action" value="attack" class="btn btn-game-primary">Attack</button>
-                    {% if can_heal %}
-                        <button type="submit" name="action" value="heak" class="btn btn-game-primary">Heal</button>
-                        {% endif %}
-                    {% if can_buff %}
-                        <button type="submit" name="action" value="buff" class="btn btn-game-primary">Buff</button>
-                        {% endif %}
-                {% endif %}
+    <button class="btn btn-game-primary" disabled>Attack</button>
+    <a href="{% url 'battle:character_selection' %}" class="btn btn-play-again-primary btn-lg mt-2">Play Again</a>
+{% else %}
+    <button type="submit" name="action" value="attack" class="btn btn-game-primary" id="attack-btn">Attack</button>
+    <button type="submit" name="action" value="attack" id="enemy-attack-btn" style="position:absolute; opacity:0; pointer-events:none;">enemy</button>
+    {% if can_heal %}
+        <button type="submit" name="action" value="heal" class="btn btn-game-primary">Heal</button>
+    {% endif %}
+    {% if can_buff %}
+        <button type="submit" name="action" value="buff" class="btn btn-game-primary">Buff</button>
+    {% endif %}
+{% endif %}
             </form>
         </div>
 
@@ -204,4 +302,104 @@
     </div>
     {% endif %}
 </div>
+
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const characterCard = document.querySelector('.col-lg-4:first-of-type .card-game');
+    const enemyCard     = document.querySelector('.col-lg-4:last-of-type .card-game');
+    const turnBadge     = document.getElementById('turn-badge');
+    const form          = document.getElementById('battle-form');
+    const actionButtons = document.querySelectorAll('button[name="action"]');
+
+    [characterCard, enemyCard].forEach(c => { if (c) c.style.position = 'relative'; });
+
+    // ── Check on page load if it's the enemy's turn ──
+    const turn        = parseInt(turnBadge.dataset.turn);
+    const isPlayerTurn = turn % 2 === 1;
+    const isFinished  = "{{ battle.status }}" === "Finished";
+
+     if (!isFinished && !isPlayerTurn) {
+        actionButtons.forEach(btn => btn.disabled = true);
+
+        setTimeout(() => {
+            triggerAnim(characterCard, 'anim-shake');
+            spawnSlash(characterCard);
+            spawnFloatLabel(characterCard, '💀 HIT!', '#ff5555');
+        }, 1000);
+
+        setTimeout(() => {
+            const actionInput = document.createElement('input');
+            actionInput.type  = 'hidden';
+            actionInput.name  = 'action';
+            actionInput.value = 'attack';
+            form.appendChild(actionInput);
+            HTMLFormElement.prototype.submit.call(form);
+        }, 1600);
+    }
+
+    // ── Helper functions (unchanged) ──
+    function spawnFloatLabel(card, text, color) {
+        const el = document.createElement('div');
+        el.className   = 'float-label';
+        el.textContent = text;
+        el.style.color = color;
+        el.style.left  = (30 + Math.random() * 40) + '%';
+        el.style.top   = '20%';
+        card.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+    }
+
+    function spawnSlash(card) {
+        const el = document.createElement('div');
+        el.className   = 'slash-overlay';
+        el.textContent = '⚔';
+        card.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+    }
+
+    function spawnBuffStars(card) {
+        for (let i = 0; i < 6; i++) {
+            const star = document.createElement('div');
+            star.className            = 'buff-star';
+            star.style.animationDelay    = (i * 0.12) + 's';
+            star.style.animationDuration = (0.8 + Math.random() * 0.3) + 's';
+            star.style.top  = (20 + Math.random() * 60) + '%';
+            star.style.left = (20 + Math.random() * 60) + '%';
+            card.appendChild(star);
+            star.addEventListener('animationend', () => star.remove());
+        }
+    }
+
+    function triggerAnim(el, cls) {
+        el.classList.remove(cls);
+        void el.offsetWidth;
+        el.classList.add(cls);
+        el.addEventListener('animationend', () => el.classList.remove(cls), { once: true });
+    }
+
+    // ── Player button clicks ──
+    actionButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const action = btn.value;
+
+            if (action === 'attack') {
+                triggerAnim(enemyCard, 'anim-shake-enemy');
+                spawnSlash(enemyCard);
+                spawnFloatLabel(enemyCard, '⚔ ATK!', '#ff5555');
+            }
+            if (action === 'heal') {
+                triggerAnim(characterCard, 'anim-heal-pulse');
+                spawnFloatLabel(characterCard, '+ Heal', '#50fa7b');
+            }
+            if (action === 'buff') {
+                triggerAnim(characterCard, 'anim-buff-flash');
+                spawnBuffStars(characterCard);
+                spawnFloatLabel(characterCard, '★ Buff!', '#f1fa8c');
+            }
+        });
+    });
+});
+
+</script>
 {% endblock %}

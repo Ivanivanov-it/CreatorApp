@@ -4,7 +4,7 @@ from battle.models import Battle, BattleCharacter, BattleEnemy
 from common.choices import BattleStatus
 
 HEAL_INTERVAL = 3
-BUFF_INTERVAL = 4
+BUFF_INTERVAL = 5
 
 class BattleService:
 
@@ -37,10 +37,6 @@ class BattleService:
         self.battle.save()
 
 
-
-
-
-
     def is_player_turn(self) -> bool:
         return self.battle.turns % 2 == 1
 
@@ -59,11 +55,11 @@ class BattleService:
         self.character.take_damage(self.enemy.total_atk,battle=self.battle)
 
     def check_battle_end(self,user) -> None:
-        if self.enemy.is_alive and self.character.is_alive():
+        if self.enemy.is_alive and self.character.is_alive:
             return
 
         stats, _ = UserBattleStats.objects.get_or_create(user=user)
-        if self.character.is_alive():
+        if self.character.is_alive:
             stats.add_win()
         else:
             stats.add_loss()
