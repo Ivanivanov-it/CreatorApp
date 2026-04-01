@@ -1,8 +1,15 @@
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
 
+# common/signals.py
 def create_groups_and_permissions(sender, **kwargs):
     from django.contrib.auth.models import Group, Permission
+    from django.contrib.contenttypes.models import ContentType
+    from django.apps import apps as django_apps
+
+    from django.contrib.auth.management import create_permissions
+    for app_config in django_apps.get_app_configs():
+        create_permissions(app_config, verbosity=0)
 
 
     moderators, _ = Group.objects.get_or_create(name='Moderators')
