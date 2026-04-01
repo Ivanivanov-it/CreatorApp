@@ -1,3 +1,5 @@
+from django.core.exceptions import SuspiciousOperation
+from django.shortcuts import render
 from django.views.generic import TemplateView
 
 
@@ -32,3 +34,9 @@ class MaintenanceView(TemplateView):
     extra_context = {
         'page_title': "Maintenance"
     }
+
+def test_500(request):
+    raise Exception('Testing 500 error')
+
+def test_400(request):
+    return render(request, "400.html", status=400)
