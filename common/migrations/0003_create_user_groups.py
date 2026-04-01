@@ -4,34 +4,36 @@ from django.db import migrations
 
 
 def create_groups(apps, schema_editor):
-    Group = apps.get_model('auth', 'Group')
-    Permission = apps.get_model('auth', 'Permission')
-
-    moderators, _ = Group.objects.get_or_create(name='Moderators')
-    moderators_permissions = Permission.objects.filter(codename__in=[
-        'add_character','change_character','delete_character','view_character','add_partner','change_partner','delete_partner',
-        'view_partner','add_enemy','change_enemy','delete_enemy','view_enemy','add_card','change_card','delete_card','view_card'
-    ])
-
-    moderators.permissions.set(moderators_permissions)
-
-    battle_manager, _ = Group.objects.get_or_create(name='BattleManager')
-    battle_manager_permissions = Permission.objects.filter(codename__in=[
-        'add_battle','change_battle','delete_battle','view_battle','add_battlelog','change_battlelog',
-        'delete_battlelog','view_battlelog'
-    ])
-
-    battle_manager.permissions.set(battle_manager_permissions)
-
-    contact_manager, _ = Group.objects.get_or_create(name='ContactManagers')
-    contact_manager_permissions = Permission.objects.filter(codename__in=[
-        'add_contact','change_contact','delete_contact','view_contact',
-    ])
-    contact_manager.permissions.set(contact_manager_permissions)
+    # Group = apps.get_model('auth', 'Group')
+    # Permission = apps.get_model('auth', 'Permission')
+    #
+    # moderators, _ = Group.objects.get_or_create(name='Moderators')
+    # moderators_permissions = Permission.objects.filter(codename__in=[
+    #     'add_character','change_character','delete_character','view_character','add_partner','change_partner','delete_partner',
+    #     'view_partner','add_enemy','change_enemy','delete_enemy','view_enemy','add_card','change_card','delete_card','view_card'
+    # ])
+    #
+    # moderators.permissions.set(moderators_permissions)
+    #
+    # battle_manager, _ = Group.objects.get_or_create(name='BattleManager')
+    # battle_manager_permissions = Permission.objects.filter(codename__in=[
+    #     'add_battle','change_battle','delete_battle','view_battle','add_battlelog','change_battlelog',
+    #     'delete_battlelog','view_battlelog'
+    # ])
+    #
+    # battle_manager.permissions.set(battle_manager_permissions)
+    #
+    # contact_manager, _ = Group.objects.get_or_create(name='ContactManagers')
+    # contact_manager_permissions = Permission.objects.filter(codename__in=[
+    #     'add_contact','change_contact','delete_contact','view_contact',
+    # ])
+    # contact_manager.permissions.set(contact_manager_permissions)
+    pass
 
 def delete_groups(apps, schema_editor):
-    Group = apps.get_model('auth', 'Group')
-    Group.objects.filter(name__in=["Moderators","BattleManager"]).delete()
+    # Group = apps.get_model('auth', 'Group')
+    # Group.objects.filter(name__in=["Moderators","BattleManager"]).delete()
+    pass
 
 
 
