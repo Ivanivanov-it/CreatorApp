@@ -12,3 +12,7 @@ venv/
 # IDE
 .idea/
 .vscode/
+
+staticfiles/
+media/
+node_modules/
