@@ -1,0 +1,15 @@
+Battle #{{ battle.id }} Report - {{ result }}!
+
+{{ character.character.name }} vs {{ enemy.enemy.name }}
+
+Result:          {{ result }}
+Turns played:    {{ battle.turns }}
+Your HP left:    {{ character.current_hp }}/{{ character.max_hp }}
+Enemy HP left:   {{ enemy.current_hp }}/{{ enemy.max_hp }}
+
+--- Battle Log ---
+{% for log in logs %}
+- {{ log.content }}
+{% endfor %}
+
+Good luck in your next battle, {{ user.username }}!

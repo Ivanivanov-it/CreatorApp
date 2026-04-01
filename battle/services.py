@@ -1,9 +1,12 @@
+import threading
+
 from asgiref.sync import async_to_sync
 
 from accounts.models import UserBattleStats
 from achievements.achievement_tracker import check_and_award_battle_achievements
 from battle.choices import BattleAction
 from battle.models import Battle, BattleCharacter, BattleEnemy
+from battle.tasks import send_battle_report
 from common.choices import BattleStatus
 
 HEAL_INTERVAL = 3
@@ -71,3 +74,12 @@ class BattleService:
         self.battle.save(update_fields=["status"])
 
         self.newly_earned = async_to_sync(check_and_award_battle_achievements)(user,stats=stats,battle=self.battle)
+
+        def queue_email():
+            try:
+                from .tasks import send_battle_report
+                send_battle_report.delay(self.battle.id, user.id)
+            except Exception:
+                pass
+
+        threading.Thread(target=queue_email, daemon=True).start()

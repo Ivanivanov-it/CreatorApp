@@ -1,0 +1,55 @@
+<html>
+<head>
+    <style>
+        body        { font-family: Arial, sans-serif; background:#1a1a2e; color:#e0e0e0; padding:2rem; }
+        .container  { max-width:600px; margin:0 auto; background:#2a2a4a; border-radius:8px; padding:2rem; }
+        .title      { color:#8be9fd; font-size:1.8rem; text-align:center; margin-bottom:0.5rem; }
+        .result     { text-align:center; font-size:2rem; font-weight:bold; margin:1rem 0; }
+        .victory    { color:#50fa7b; }
+        .defeat     { color:#ff5555; }
+        .stats      { display:flex; justify-content:space-around; margin:1.5rem 0; gap:1rem; }
+        .stat-box   { text-align:center; background:#1a1a2e; padding:1rem; border-radius:8px; flex:1; }
+        .stat-label { color:#8be9fd; font-size:0.85rem; margin-bottom:0.25rem; }
+        .stat-value { color:#f1fa8c; font-size:1.4rem; font-weight:bold; }
+        .log-item   { padding:0.5rem; border-bottom:1px solid #3a3a5a; font-size:0.9rem; }
+        .footer     { text-align:center; margin-top:2rem; color:#6272a4; font-size:0.85rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">⚔ Battle #{{ battle.id }} Report</div>
+
+        <div class="result {% if result == 'Victory' %}victory{% else %}defeat{% endif %}">
+            {% if result == 'Victory' %}🏆 Victory!{% else %}💀 Defeat{% endif %}
+        </div>
+
+        <p style="text-align:center; color:#bd93f9;">
+            {{ character.character.name }} vs {{ enemy.enemy.name }}
+        </p>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-label">Turns</div>
+                <div class="stat-value">{{ battle.turns }}</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Your HP Left</div>
+                <div class="stat-value">{{ character.current_hp }}/{{ character.max_hp }}</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Enemy HP Left</div>
+                <div class="stat-value">{{ enemy.current_hp }}/{{ enemy.max_hp }}</div>
+            </div>
+        </div>
+
+        <h4 style="color:#8be9fd; margin-bottom:0.75rem;">Battle Log</h4>
+        {% for log in logs %}
+            <div class="log-item">{{ log.content }}</div>
+        {% endfor %}
+
+        <div class="footer">
+            Good luck in your next battle, {{ user.username }}!
+        </div>
+    </div>
+</body>
+</html>
