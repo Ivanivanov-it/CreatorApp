@@ -11,7 +11,6 @@ ACHIEVEMENTS = [
     { 'name': 'Champion',        'description': 'Win 5 battles total',            'type': 'total_wins',       'threshold': 5, 'icon': '👑'  },
     { 'name': 'Battle Hardened', 'description': 'Play 2 battles',                 'type': 'total_battles',    'threshold': 2, 'icon': '🛡️'  },
     { 'name': 'Untouchable',     'description': 'Win a battle with full hp',  'type': 'perfect_victory', 'threshold': 1,  'icon': '✨'  },
-{ 'name': 'Battle Demon',     'description': 'Win 3 battles with full hp',  'type': 'perfect_victory', 'threshold': 3,  'icon': '✨'  },
 { 'name': 'Newbie',     'description': 'Lose a battle to an enemy with full hp',  'type': 'perfect_lose', 'threshold': 1,  'icon': '✨'  },
 { 'name': 'Total Loser',     'description': 'Lose a battle to an enemy with full hp 3 times',  'type': 'perfect_lose', 'threshold': 3,  'icon': '✨'  },
 { 'name': 'You tried',     'description': 'Lose your first battle',  'type': 'first_lose', 'threshold': 1,  'icon': '💀'  },
@@ -21,6 +20,7 @@ ACHIEVEMENTS = [
 { 'name': 'Partner Creator',     'description': 'Create your first partner',  'type': 'first_partner_creation', 'threshold': 1,  'icon': '🔥'  },
 { 'name': 'Enemy Creator',     'description': 'Create your first enemy',  'type': 'first_enemy_creation', 'threshold': 1,  'icon': '🔥'  },
 { 'name': 'Card Creator',     'description': 'Create your first card',  'type': 'first_card_creation', 'threshold': 1,  'icon': '🔥'  },
+# { 'name': 'Battle Demon',     'description': 'Win 3 battles with full hp',  'type': 'perfect_victory', 'threshold': 3,  'icon': '✨'  },
 
 ]
 
