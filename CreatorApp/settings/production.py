@@ -11,7 +11,7 @@ CSRF_TRUSTED_ORIGINS = [host for host in (os.getenv('CSRF_TRUSTED_ORIGINS') or "
 
 
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
-CELERY_RESULT_BACKEND = 'django-db'
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 
 
 EMAIL_BACKEND = 'CreatorApp.azure_email_backend.AzureCommunicationEmailBackend'
