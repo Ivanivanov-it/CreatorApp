@@ -1,11 +1,17 @@
 # A Django app for a turn-based battle game where users create their own characters and enemies.
 
+
+# Find the project here:
+
+[CreatorApp](https://creatorapp-cagtbxfsemaca3bd.spaincentral-01.azurewebsites.net/ "Try the app here") 
+
+
 # Why This Project Exists
 
 ```
 This project was built to demostrate my experience with Django and PostgreSQL , 
 speciffically database design and relationships,implementing simple CRUD operations, 
-implementing forms , data validation , Django class and function based views , 
+implementing forms , data validation , Django class  based views , 
 templates with dynamic data rendering.
 ```
 

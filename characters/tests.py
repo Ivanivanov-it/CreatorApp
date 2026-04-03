@@ -298,3 +298,35 @@ class CharacterFormTest(TestCase):
 
         self.assertFalse(form.is_valid())
         self.assertIn('Image must not exceed 2MB.', form.errors['image_url'])
+
+    def test_form_invalid_when_no_name(self):
+        form = CharacterForm(data={
+            'name': '',
+            'title': 'Ivanov',
+            'type': CharacterType.OTHER,
+            'description': "123",
+            'roles': self.role,
+            'creator': self.TestUser,
+            'attack': 3,
+            'defense': 3,
+            'hp': 3
+        })
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("Please enter the name of your character.",form.errors['name'])
+
+    def test_form_invalid_when_title_and_name_are_same(self):
+        form = CharacterForm(data={
+            'name': 'Ivanov',
+            'title': 'Ivanov',
+            'type': CharacterType.OTHER,
+            'description': "123",
+            'roles': self.role,
+            'creator': self.TestUser,
+            'attack': 3,
+            'defense': 3,
+            'hp': 3
+        })
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("Character name and title cannot be the same",form.errors['__all__'])
