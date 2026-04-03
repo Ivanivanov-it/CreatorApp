@@ -1,137 +1,140 @@
-# A Django app for a turn-based battle game where users create their own characters and enemies.
+# CreatorApp 🎮
 
+CreatorApp is a feature-rich Django-based turn-based battle game where users can unleash their creativity by designing unique characters, partners, and enemies. Strategize your builds, climb the leaderboard, and engage in epic 2v1 battles!
 
-# Find the project here:
+[**🚀 Try the Live App on Azure**](https://creatorapp-cagtbxfsemaca3bd.spaincentral-01.azurewebsites.net/)
 
-[CreatorApp](https://creatorapp-cagtbxfsemaca3bd.spaincentral-01.azurewebsites.net/ "Try the app here") 
+---
 
+## 🌟 Key Features
 
-# Why This Project Exists
+- **Strategic Turn-Based Combat**: Engage in battles with attacks, heals, and buffs.
+- **Full CRUD Management**: Create and customize characters, partners, enemies, and cards.
+- **Deep Customization**: Select roles, types, and stats that dynamically impact combat performance.
+- **Advanced Battle Mechanics**: 2-vs-1 combat (Character + Partner vs. Enemy) with real-time battle logs.
+- **Asynchronous Achievements**: Earn rewards automatically as you meet specific milestones.
+- **Social & Competition**: Global leaderboard, user profiles, and inquiry management for admins.
+- **Automated Notifications**: Receive detailed battle results via email upon victory.
 
+---
+
+## 📂 Structure Overview
+
+```text
+CreatorApp/
+├── accounts/           # User authentication, profiles, and battle stats.
+├── achievements/       # Async tracking and awarding of user achievements.
+├── battle/             # Core combat logic, stat calculation, and battle sessions.
+├── cards/              # Cosmetic and functional theme management for creations.
+├── characters/         # Character creation and management.
+├── common/             # Shared models, mixins, validators, and core site pages.
+├── contacts/           # User inquiry system and contact management.
+├── CreatorApp/         # Project configuration (settings, middleware, celery).
+├── enemies/            # Enemy creation and management.
+├── partners/           # Partner creation and management.
+├── media/              # Local media storage (Cloudinary used in production).
+├── static/             # CSS, JavaScript, and global images.
+├── templates/          # Global and app-specific HTML templates.
+└── manage.py           # Django management script.
 ```
-This project was built to demostrate my experience with Django and PostgreSQL , 
-speciffically database design and relationships,implementing simple CRUD operations, 
-implementing forms , data validation , Django class  based views , 
-templates with dynamic data rendering.
-```
 
-# Features
+---
 
-- Turn based combat with attacks , heals and buffs
-![Battle Screenshot](static/images/Battle.PNG)
-- CRUD operations on all characters,partners , enemies and cards
-![Create Screenshot](static/images/Create.PNG)
-- Stat, role and type selection on creation that involves strategy to make your characters the strongest
-- 2 vs 1 battle between Character and their Partner against strong Enemy with battle logs
-- Contact form, about , wip , maintenance, leaderboard, profile , achievements , contacts , custom error and custom profile picture , username , full name , email and password change pages
-- AI generated frontend design with the help of Gemini CLI
-![Achievements Screenshot](static/images/Achievements.PNG)
+## 🛠️ Tech Stack & Dependencies
 
+### Core Frameworks
+- **Python 3.x**
+- **Django 6.0**: The primary web framework.
+- **Django REST Framework**: For API capabilities.
 
-# App responsibilities
+### Infrastructure & Storage
+- **PostgreSQL**: Production-grade relational database.
+- **Cloudinary**: Cloud-based image and media management.
+- **WhiteNoise**: Efficient static file serving.
 
-- common - stores in one place models,choice fields and custom tags that are used in all other apps. Contains the home,wip,about,maintenance,delete confirm and no permission pages.
-- characters - handles everything about character creation,edit and deletion and contains the landing page.
-- partners - handles everything about partner creation,edit and deletion.
-- enemies - handles everything about enemy creation,edit and deletion.
-- contacts - handles the display of a contact form page. Users in group ContactManagers can access special page to resolver inquiries.
-- battle - handles the process of selecting characters,partners and enemies to fight each other. Then handles the creation of the battle and stores the character and enemy adjusted stats into a temporary model only for the current fight.Handles the fight logic.
-- cards - handles everything about creation , edit and deletion of cards that users can apply on their creations for a fresh look.
-- accounts - handles everything about account creation ,authentication and authorization.
-- achievements - uses async functions to find if users met achievement conditions and awards them.
+### Asynchronous Processing
+- **Celery**: Distributed task queue for background jobs (emails, achievements).
+- **Redis**: High-performance message broker and cache.
 
-![Profile Screenshot](static/images/Profile.PNG)
+### Cloud Services (Production)
+- **Azure App Service**: Web hosting.
+- **Azure Database for PostgreSQL**: Managed database.
+- **Azure Cache for Redis**: Managed Redis instance.
+- **Azure Communication Services**: Reliable email delivery.
 
-# Project Notes
+---
 
-- Battle is turn based and you are always first. You always have the option to attack and every few turns to  buff or heal yourself. Enemies can only attack.
-- The defense stat is how much you get healed for instead of being used to reduce damage.
-- Different Types and Roles buff your character stats when entering combat which allows them to reach higher than the set amount on creation.
-- Enemy weakness reduces the enemy stats depending on the character they fight.
-- Partners only function currently is to add their stats to their character partner on game start.
-- There is leaderboard that shows top 10 users and their winrate.
-- On a battle win you receive an Email with battle results if you added your Email on account creation. It uses Celery and Redis for that task and only works on the deployed version of the project.
-![Email Screenshot](static/images/Email.PNG)
+## 🚀 Local Setup
 
-# Tech Stack
+Follow these steps to get the project running on your local machine:
 
-- Backend: Python , Django , Django REST Framework
-- Database: PostgreSQL
-- Task Queue: Celery + Redis
-- Message Broker: Redis
-- Deployment: Azure App Service / Azure Database / Azure Email Communication Service
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/Ivanivanov-it/CreatorApp.git
+   cd CreatorApp
+   ```
 
-# Installation 
+2. **Create and Activate a Virtual Environment**
+   ```bash
+   python -m venv .venv
+   # Windows:
+   .venv\Scripts\activate
+   # Linux/Mac:
+   source .venv/bin/activate
+   ```
 
-- ! Important note: The project uses different settings file  locally and in production. Both can be found in CreatorApp/settings
+3. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-1. Clone the repository
+4. **Environment Configuration**
+   Create a `.env` file in the root directory (refer to `.env.example`):
+   ```ini
+   SECRET_KEY=your_secret_key
+   DJANGO_SETTINGS_MODULE=CreatorApp.settings.local
+   DEBUG=True
+   ALLOWED_HOSTS=localhost,127.0.0.1
+   DB_NAME=your_db_name
+   DB_USER=your_db_user
+   DB_PASSWORD=your_db_password
+   DB_HOST=127.0.0.1
+   DB_PORT=5432
+   ```
+
+5. **Initialize Database**
+   ```bash
+   python manage.py migrate
+   ```
+
+6. **Run the Development Server**
+   ```bash
+   python manage.py runserver
+   ```
+
+---
+
+## ☁️ Deployment
+
+The application is architected for **Azure Cloud Services**, ensuring scalability and reliability:
+
+- **Web Hosting**: Deployed on **Azure App Service** (Linux) using Gunicorn.
+- **Database**: Utilizes **Azure Database for PostgreSQL (Flexible Server)**.
+- **Caching & Tasks**: **Azure Cache for Redis** serves as both the Celery broker and the Django cache backend.
+- **Email Service**: Integrated with **Azure Communication Services (Email)** via a custom backend for transactional emails.
+- **Security**: Configured with HSTS, SSL redirection, and secure cookie policies in `production.py`.
+
+---
+
+## 🧪 Testing
+
+To run the automated test suite:
 
 ```bash
-
-git clone https://github.com/Ivanivanov-it/CreatorApp.git
-cd CreatorApp
-```
-
-2. Create virtual environment
-
-```bash
-
-python -m venv venv
-source venv/bin/activate # Linux/Mac
-venv\Scripts\activate # Windows
-```
-
-3. Install dependencies
-
-```bash
-
-pip install -r requirements.txt
-```
-
-4. Configure environment variables
-
-The cloudinary credentials are not hidden on purpose for the sake of the exam.
-
-Create .env file in the project root or use the provided .env.example:
-
-```
-SECRET_KEY=generate_your_own_key
-DJANGO_SETTINGS_MODULE=CreatorApp.settings.local
-DEBUG="True"
-ALLOWED_HOSTS=localhost,127.0.0.1
-DB_PORT=5432
-DB_NAME=your_db
-DB_USER=your_user
-DB_PASSWORD=your_password
-DB_HOST=127.0.0.1
-MAINTENANCE="False"
-
-```
-
-Use this command to generate your own secret key:
-
-```bash
-
-python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
-```
-
-5. Run migrations
-
-```bash
-
-python manage.py migrate
-```
-
-6 Start server
-
-```bash
-
-python manage.py runserver
-```
-
-7. To run tests 
-```bash
-export DJANGO_SETTINGS_MODULE=CreatorApp.settings.local
+# Set environment for local testing
+set DJANGO_SETTINGS_MODULE=CreatorApp.settings.local
 python manage.py test
 ```
+
+---
+*Built with passion and powered by Django.*
