@@ -1,10 +1,8 @@
-from django.db.models.signals import post_migrate
-from django.dispatch import receiver
 
-# common/signals.py
+
+
 def create_groups_and_permissions(sender, **kwargs):
     from django.contrib.auth.models import Group, Permission
-    from django.contrib.contenttypes.models import ContentType
     from django.apps import apps as django_apps
 
     from django.contrib.auth.management import create_permissions
@@ -35,3 +33,8 @@ def create_groups_and_permissions(sender, **kwargs):
         'add_contact', 'change_contact', 'delete_contact', 'view_contact',
     ])
     contact_manager.permissions.set(contact_manager_permissions)
+
+
+def run_collectstatic(sender,**kwargs):
+    from django.core.management import call_command
+    call_command('collectstatic', '--noinput',verbosity=0)
