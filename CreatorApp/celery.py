@@ -1,7 +1,7 @@
 import os
 from celery import Celery
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'CreatorApp.settings.local')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'CreatorApp.settings.production')
 
 app = Celery('CreatorApp')
 app.config_from_object('django.conf:settings', namespace='CELERY')
