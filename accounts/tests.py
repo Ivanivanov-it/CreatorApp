@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 
+@override_settings(SECURE_SSL_REDIRECT=False)
 class AuthTest(TestCase):
     def setUp(self):
         UserModel = get_user_model()

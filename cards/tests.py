@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from cards.choices import BorderStyleChoices
@@ -10,7 +10,7 @@ from cards.models import Card
 
 
 
-
+@override_settings(SECURE_SSL_REDIRECT=False)
 class CardModelTest(TestCase):
     def setUp(self):
         UserModel = get_user_model()
@@ -43,6 +43,7 @@ class CardModelTest(TestCase):
         with self.assertRaises(ValidationError):
             TestCard.full_clean()
 
+@override_settings(SECURE_SSL_REDIRECT=False)
 class CardViewTest(TestCase):
     def setUp(self):
         UserModel = get_user_model()

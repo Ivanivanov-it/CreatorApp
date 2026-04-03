@@ -57,6 +57,8 @@ templates with dynamic data rendering.
 
 # Installation 
 
+- ! Important note: The project uses different settings file  locally and in production. Both can be found in CreatorApp/settings
+
 1. Clone the repository
 
 ```bash

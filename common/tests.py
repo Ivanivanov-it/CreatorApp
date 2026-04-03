@@ -1,10 +1,10 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 
 # Create your tests here.
 
-
+@override_settings(SECURE_SSL_REDIRECT=False)
 class HomePageTest(TestCase):
     def test_home_page_returns_200(self):
         response = self.client.get(reverse('common:home'))

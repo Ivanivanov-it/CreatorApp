@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from characters.forms import CharacterForm
 from common.choices import CharacterType
@@ -14,6 +14,8 @@ PNG_HEADER  = b'\x89PNG\r\n\x1a\n' + b'\x00' * 100
 WEBP_HEADER = b'RIFF' + b'\x00' * 4 + b'WEBP' + b'\x00' * 100
 FAKE_BYTES  = b'this is not an image at all'
 
+
+@override_settings(SECURE_SSL_REDIRECT=False)
 class CharacterFormTest(TestCase):
 
     def setUp(self):
