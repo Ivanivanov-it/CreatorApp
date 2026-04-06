@@ -126,6 +126,36 @@ The application is architected for **Azure Cloud Services**, ensuring scalabilit
 
 ---
 
+## 🔐 Access Control & Administration
+
+### Administrator Credentials (Testing)
+For testing the live application, you can use the following administrator account:
+*   **Username:** `admin`
+*   **Password:** `admin`
+
+### Security Overview
+The application implements strict protection at the **view level**. Access to specific pages and actions is restricted based on user groups and ownership. Even if a user knows the URL to a restricted page, the system will prevent access unless they belong to the required group or have the necessary permissions.
+
+### User Roles & Permissions
+Permissions are managed through three primary groups:
+
+#### 1. Moderators
+Moderators have elevated administrative rights over game content:
+*   **Full CRUD Access:** They can view, create, edit, and delete characters, partners, enemies, and cards belonging to **all users**.
+*   **Normal User Comparison:** Standard users can view and create content, but they are restricted to editing or deleting **only their own** creations.
+
+#### 2. BattleManager
+This group oversees the combat aspects of the application:
+*   **Universal Access:** Users in this group can access the URLs of **all battles** and view the detailed results and logs for any match in the system.
+*   **Normal User Restriction:** Users outside of this group are strictly limited to accessing only their own battle results.
+
+#### 3. ContactManagers
+This group handles user communication and support:
+*   **Inquiry Management:** Members gain access to the dedicated **"Contacts"** page. Here, they can review all messages sent via the contact-us form and resolve user inquiries.
+*   **Normal User Restriction:** This page is completely hidden and inaccessible to standard users.
+
+---
+
 ## 🧪 Testing
 
 To run the automated test suite:
