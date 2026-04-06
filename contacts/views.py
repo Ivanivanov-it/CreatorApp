@@ -20,7 +20,7 @@ class CreateMailView(SuccessMessageMixin,CreateView):
     extra_context = {
         'page_title': "Contact Us"
     }
-    # success_message = "Your message has been sent."
+    success_message = "Your message has been sent."
 
 
 

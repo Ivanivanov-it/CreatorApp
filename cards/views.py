@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
@@ -20,13 +21,14 @@ class CardListView(ListView):
         'page_title': 'Cards',
     }
 
-class CardCreateView(LoginRequiredMixin,AchievementMixin,CreateView):
+class CardCreateView(LoginRequiredMixin,SuccessMessageMixin,AchievementMixin,CreateView):
     template_name = 'cards/create_card.html'
     form_class = CardForm
     success_url = reverse_lazy('cards:cards_list')
     extra_context = {
         'page_title': 'Create Card',
     }
+    success_message = "Successfully created a new card!"
 
     def form_valid(self,form):
         form.instance.creator = self.request.user
@@ -47,7 +49,7 @@ class CardDetailView(DetailView):
 
         return context
 
-class EditCardView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
+class EditCardView(LoginRequiredMixin,SuccessMessageMixin,CreatorOrModeratorMixin,UpdateView):
     model = Card
     form_class = CardEditForm
     success_url = reverse_lazy('cards:cards_list')
@@ -55,11 +57,13 @@ class EditCardView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
     extra_context = {
         'page_title': "Edit Card"
     }
+    success_message = "Successfully edited a card!"
 
 
 
-class CardDeleteView(LoginRequiredMixin,CreatorOrModeratorMixin,DeleteView):
+class CardDeleteView(LoginRequiredMixin,SuccessMessageMixin,CreatorOrModeratorMixin,DeleteView):
     model = Card
     template_name = 'common/delete_confirm.html'
     success_url = reverse_lazy('cards:cards_list')
+    success_message = "Successfully deleted a card!"
 

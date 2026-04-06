@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
@@ -50,13 +51,14 @@ class PartnerDetailView(DetailView):
         return context
 
 
-class PartnerCreateView(LoginRequiredMixin,AchievementMixin,CreateView):
+class PartnerCreateView(LoginRequiredMixin,SuccessMessageMixin,AchievementMixin,CreateView):
     form_class = PartnerCreateForm
     template_name = 'partners/create_partner.html'
     success_url = reverse_lazy('partners:partners_list')
     extra_context = {
         'page_title': "Create Partner",
     }
+    success_message = "Successfully created a new Partner!"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -67,7 +69,7 @@ class PartnerCreateView(LoginRequiredMixin,AchievementMixin,CreateView):
         form.instance.creator = self.request.user
         return super().form_valid(form)
 
-class EditPartnerView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
+class EditPartnerView(LoginRequiredMixin,SuccessMessageMixin,CreatorOrModeratorMixin,UpdateView):
     model = Partner
     form_class = PartnerEditForm
     template_name = 'partners/edit_partner.html'
@@ -75,17 +77,18 @@ class EditPartnerView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
     extra_context = {
         'page_title': "Edit Partner",
     }
+    success_message = "Successfully edited a Partner!"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
 
-class PartnerDeleteView(LoginRequiredMixin,CreatorOrModeratorMixin,DeleteView):
+class PartnerDeleteView(LoginRequiredMixin,SuccessMessageMixin,CreatorOrModeratorMixin,DeleteView):
     model = Partner
     template_name = 'common/delete_confirm.html'
     success_url = reverse_lazy('partners:partners_list')
-
+    success_message = "Successfully deleted a Partner!"
 
 class PartnerListApiView(ListAPIView):
     serializer_class = PartnerSerializer

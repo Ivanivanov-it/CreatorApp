@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404
@@ -68,13 +69,14 @@ class EnemyDetailView(DetailView):
         return context
 
 
-class CreateEnemyView(LoginRequiredMixin,AchievementMixin,CreateView):
+class CreateEnemyView(LoginRequiredMixin,SuccessMessageMixin,AchievementMixin,CreateView):
     form_class = EnemyCreateForm
     success_url = reverse_lazy('enemies:enemies_list')
     template_name = 'enemies/create_enemy.html'
     extra_context = {
         'page_title': "Create Enemy"
     }
+    success_message = "Successfully created an Enemy!"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -87,7 +89,7 @@ class CreateEnemyView(LoginRequiredMixin,AchievementMixin,CreateView):
 
 
 
-class EditEnemyView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
+class EditEnemyView(LoginRequiredMixin,SuccessMessageMixin,CreatorOrModeratorMixin,UpdateView):
     model = Enemy
     form_class = EnemyEditForm
     success_url = reverse_lazy('enemies:enemies_list')
@@ -95,6 +97,7 @@ class EditEnemyView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
     extra_context = {
         'page_title': "Edit Enemy"
     }
+    success_message = "Successfully edited an Enemy!"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -104,10 +107,11 @@ class EditEnemyView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
 
 
 
-class EnemyDeleteView(LoginRequiredMixin,CreatorOrModeratorMixin,DeleteView):
+class EnemyDeleteView(LoginRequiredMixin,SuccessMessageMixin,CreatorOrModeratorMixin,DeleteView):
     model = Enemy
     template_name = 'common/delete_confirm.html'
     success_url = reverse_lazy('enemies:enemies_list')
+    success_message = "Successfully deleted an Enemy!"
 
 class EnemyListApiView(ListAPIView):
     serializer_class = EnemySerializer

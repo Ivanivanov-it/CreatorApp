@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView, DetailView, CreateView, UpdateView
@@ -50,13 +51,14 @@ class CharacterDetailView(DetailView):
         return context
 
 
-class CreateCharacterView(LoginRequiredMixin,AchievementMixin,CreateView):
+class CreateCharacterView(LoginRequiredMixin,SuccessMessageMixin,AchievementMixin,CreateView):
     template_name = 'characters/create_character.html'
     form_class = CharacterCreateForm
     success_url = reverse_lazy('characters:characters_list')
     extra_context = {
         'page_title': "Create Character"
     }
+    success_message = "Successfully created a new character!"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -67,7 +69,7 @@ class CreateCharacterView(LoginRequiredMixin,AchievementMixin,CreateView):
         form.instance.creator = self.request.user
         return super().form_valid(form)
 
-class EditCharacterView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
+class EditCharacterView(LoginRequiredMixin,SuccessMessageMixin,CreatorOrModeratorMixin,UpdateView):
     model = Character
     form_class = CharacterEditForm
     success_url = reverse_lazy('characters:characters_list')
@@ -75,6 +77,7 @@ class EditCharacterView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
     extra_context = {
         'page_title': "Edit Character"
     }
+    success_message = "Successfully edited a character!"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -84,10 +87,11 @@ class EditCharacterView(LoginRequiredMixin,CreatorOrModeratorMixin,UpdateView):
 
 
 
-class CharacterDeleteView(LoginRequiredMixin,CreatorOrModeratorMixin,DeleteView):
+class CharacterDeleteView(LoginRequiredMixin,SuccessMessageMixin,CreatorOrModeratorMixin,DeleteView):
     model = Character
     template_name = 'common/delete_confirm.html'
     success_url = reverse_lazy('characters:characters_list')
+    success_message = "Successfully deleted a character!"
 
 
 
