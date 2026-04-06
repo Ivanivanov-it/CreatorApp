@@ -14,6 +14,15 @@
         margin-bottom: 1rem;
         text-shadow: 0 0 10px rgba(139, 233, 253, 0.6);
     }
+    @media (max-width: 768px) {
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+        }
+        .card-game {
+            padding: 1.5rem !important;
+        }
+    }
     .card-game {
         background-color: #2a2a4a;
         border: 1px solid #3a3a5a;
@@ -33,6 +42,11 @@
         transition: all 0.3s ease;
         text-decoration: none;
         display: inline-block;
+    }
+    @media (max-width: 576px) {
+        .btn-game-primary, .btn-game-danger {
+            margin-bottom: 0.5rem;
+        }
     }
     .btn-game-primary:hover, .btn-game-danger:hover {
         transform: translateY(-2px);
@@ -63,40 +77,56 @@
     .partner-link:hover {
         color: #e0e0e0;
     }
+    .detail-img {
+        width: 250px;
+        height: 250px;
+        object-fit: cover;
+        border: 4px solid #4db8ff;
+    }
+    @media (max-width: 576px) {
+        .detail-img {
+            width: 200px;
+            height: 200px;
+        }
+    }
 </style>
 
-<div class="container my-5">
+<div class="container my-5 px-3">
     <div class="card-game">
         <div class="row">
-            <div class="col-md-4 text-center">
+            <div class="col-md-4 text-center mb-4 mb-md-0">
                 {% if partner.image_url %}
-                <img src="{{ partner.image_url.url }}" alt="{{ partner.name }}" class="img-fluid rounded-circle mb-3" style="border: 4px solid #4db8ff; width: 250px; height: 250px; object-fit: cover;">
+                <img src="{{ partner.image_url.url }}" alt="{{ partner.name }}" class="img-fluid rounded-circle detail-img">
                 {% else %}
-                <img src="{% static 'images/PartnerIcon.png' %}" alt="{{ partner.name }}" class="img-fluid rounded-circle mb-3" style="border: 4px solid #4db8ff; width: 250px; height: 250px; object-fit: cover;">
+                <img src="{% static 'images/PartnerIcon.png' %}" alt="{{ partner.name }}" class="img-fluid rounded-circle detail-img">
                 {% endif %}
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8 text-center text-md-start">
                 <h1 class="section-title mb-2">{{ partner.name }}</h1>
                 <h2 class="h4 text-muted mb-4">{{ partner.title }}</h2>
 
                 <p class="lead">{{ partner.description }}</p>
 
-                {% show_stats partner %}
+                <div class="mb-3">
+                    {% show_stats partner %}
+                </div>
 
                 <div class="mb-3">
                     <span class="fw-bold me-2">Partner of:</span>
                     {% for char in partner.character.all %}
-                    <a href="{% url 'characters:character_detail' char.pk %}" class="partner-link">{{ char.name }} | </a>
+                    <a href="{% url 'characters:character_detail' char.pk %}" class="partner-link">{{ char.name }}{% if not forloop.last %} | {% endif %}</a>
                     {% endfor %}
                 </div>
 
-                {% show_roles partner %}
+                <div class="mb-3">
+                    {% show_roles partner %}
+                </div>
 
-                <p class="card-text"><small class="text-white-50">Created at: {{ partner.created_at }}</small></p>
+                <p class="card-text mt-4"><small class="text-white-50">Created at: {{ partner.created_at }}</small></p>
 
                 {% if can_modify %}
-                <div class="mt-4">
-                    <a href="{% url 'partners:edit_partner' partner.pk %}" class="btn-game-primary me-2">Edit</a>
+                <div class="mt-4 d-flex flex-column flex-sm-row justify-content-center justify-content-md-start">
+                    <a href="{% url 'partners:edit_partner' partner.pk %}" class="btn-game-primary me-sm-2">Edit</a>
                     <a href="{% url 'partners:delete_partner' partner.pk %}" class="btn-game-danger">Delete</a>
                 </div>
                 {% endif %}

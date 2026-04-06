@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
@@ -12,13 +13,14 @@ from contacts.models import Contact
 
 
 
-class CreateMailView(CreateView):
+class CreateMailView(SuccessMessageMixin,CreateView):
     form_class = ContactForm
     success_url = reverse_lazy('common:home')
     template_name = 'contacts/contact.html'
     extra_context = {
         'page_title': "Contact Us"
     }
+    # success_message = "Your message has been sent."
 
 
 

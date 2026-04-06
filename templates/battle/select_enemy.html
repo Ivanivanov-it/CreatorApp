@@ -13,6 +13,11 @@
         margin-bottom: 1rem;
         text-shadow: 0 0 10px rgba(139, 233, 253, 0.6);
     }
+    @media (max-width: 768px) {
+        .section-title {
+            font-size: 2rem;
+        }
+    }
     .card-game {
         background-color: #2a2a4a; /* Slightly lighter dark for cards */
         border: 1px solid #3a3a5a;
@@ -36,6 +41,7 @@
         text-transform: uppercase;
         border-radius: 0.3rem;
         transition: all 0.3s ease;
+        max-width: 100%;
     }
     .btn-game-primary:hover {
         background-color: #67d0ed;
@@ -44,18 +50,34 @@
         box-shadow: 0 0 15px rgba(139, 233, 253, 0.8);
         transform: translateY(-2px);
     }
+    .select-img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #3a3a5a;
+    }
+    @media (max-width: 576px) {
+        .select-img {
+            width: 120px;
+            height: 120px;
+        }
+        .card-game {
+            padding: 1rem;
+        }
+    }
 </style>
 
-<div class="container mt-5">
+<div class="container mt-5 px-3">
     <h2 class="section-title text-center mb-5">Select Your Enemy</h2>
 
     {% include 'common/search.html' %}
 
     <form method="post" class="text-center">
         {% csrf_token %}
-        <div class="row justify-content-center">
+        <div class="row justify-content-center px-2">
             {% for e in enemies %}
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
                 <div class="card-game" {% if e.card_theme %}
                     style="
                         background-color: {{ e.card_theme.background_color }};
@@ -65,17 +87,15 @@
                 {% endif %}>
                     {% if e.image_url %}
                         <a href="{% url 'enemies:enemy_detail' e.pk %}" target="_blank">
-                        <img src="{{ e.image_url.url }}" class="card-img-top mx-auto d-block mb-3" alt="{{ e.name }}"
+                        <img src="{{ e.image_url.url }}" class="card-img-top mx-auto d-block mb-3 select-img" alt="{{ e.name }}"
                             style="
-                                width: 150px; height: 150px; object-fit: cover; border-radius: 50%;
                                 border: 3px {{ e.card_theme.image_border_style|default:'solid' }} {{ e.card_theme.image_border_color|default:'#3a3a5a' }};
                             ">
                         </a>
                     {% else %}
                         <a href="{% url 'enemies:enemy_detail' e.pk %}" target="_blank">
-                        <img src="{% static 'images/EnemyIcon.png' %}" class="card-img-top mx-auto d-block mb-3" alt="{{ e.name }}"
+                        <img src="{% static 'images/EnemyIcon.png' %}" class="card-img-top mx-auto d-block mb-3 select-img" alt="{{ e.name }}"
                             style="
-                                width: 150px; height: 150px; object-fit: cover; border-radius: 50%;
                                 border: 3px {{ e.card_theme.image_border_style|default:'solid' }} {{ e.card_theme.image_border_color|default:'#3a3a5a' }};
                             ">
                         </a>
@@ -101,7 +121,7 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="mt-5">
+        <div class="mt-5 d-flex flex-column flex-sm-row justify-content-center gap-3 px-3">
             <a href="{% url 'battle:partner_selection' %}" class="btn btn-game-primary btn-lg">Go back</a>
             <button type="submit" class="btn btn-game-primary btn-lg">Start</button>
         </div>

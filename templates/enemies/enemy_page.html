@@ -14,6 +14,15 @@
         margin-bottom: 1rem;
         text-shadow: 0 0 10px rgba(139, 233, 253, 0.6);
     }
+    @media (max-width: 768px) {
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+        }
+        .card-game {
+            padding: 1.5rem !important;
+        }
+    }
     .card-game {
         background-color: #2a2a4a;
         border: 1px solid #3a3a5a;
@@ -33,6 +42,11 @@
         transition: all 0.3s ease;
         text-decoration: none;
         display: inline-block;
+    }
+    @media (max-width: 576px) {
+        .btn-game-primary, .btn-game-danger {
+            margin-bottom: 0.5rem;
+        }
     }
     .btn-game-primary:hover, .btn-game-danger:hover {
         transform: translateY(-2px);
@@ -56,43 +70,58 @@
     .stat-badge-hp { background-color: #51cf66; }  /* Vibrant Green */
     .stat-badge-type { background-color: #9775fa; } /* Distinct Purple */
     .stat-badge-weakness { background-color: #ffcc00; } /* Cautionary Yellow */
+
+    .detail-img {
+        width: 250px;
+        height: 250px;
+        object-fit: cover;
+        border: 4px solid #ff5555;
+    }
+    @media (max-width: 576px) {
+        .detail-img {
+            width: 200px;
+            height: 200px;
+        }
+    }
 </style>
 
-<div class="container my-5">
+<div class="container my-5 px-3">
     <div class="card-game">
         <div class="row">
-            <div class="col-md-4 text-center">
+            <div class="col-md-4 text-center mb-4 mb-md-0">
                 {% if enemy.image_url %}
-                <img src="{{ enemy.image_url.url }}" alt="{{ enemy.name }}" class="img-fluid rounded-circle mb-3" style="border: 4px solid #ff5555; width: 250px; height: 250px; object-fit: cover;">
+                <img src="{{ enemy.image_url.url }}" alt="{{ enemy.name }}" class="img-fluid rounded-circle detail-img">
                 {% else %}
-                <img src="{% static 'images/EnemyIcon.png' %}" alt="{{ enemy.name }}" class="img-fluid rounded-circle mb-3" style="border: 4px solid #ff5555; width: 250px; height: 250px; object-fit: cover;">
+                <img src="{% static 'images/EnemyIcon.png' %}" alt="{{ enemy.name }}" class="img-fluid rounded-circle detail-img">
                 {% endif %}
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8 text-center text-md-start">
                 <h1 class="section-title mb-2">{{ enemy.name }}</h1>
                 <h2 class="h4 text-muted mb-4">{{ enemy.title }}</h2>
 
                 <p class="lead">{{ enemy.description }}</p>
 
-                <div class="d-flex align-items-center mb-3">
+                <div class="d-flex align-items-center justify-content-center justify-content-md-start mb-3">
                     <span class="fw-bold me-3">Type:</span>
                     <span class="stat-badge stat-badge-type">{{ enemy.type }}</span>
                 </div>
 
-                {% show_stats enemy %}
+                <div class="mb-3">
+                    {% show_stats enemy %}
+                </div>
 
                 <div class="mb-4">
-                    <span class="fw-bold me-2">Weakness:</span>
+                    <span class="fw-bold me-2 d-block d-md-inline mb-2 mb-md-0">Weakness:</span>
                     {% for weakness in enemy.weakness.all %}
-                    <span class="stat-badge stat-badge-weakness me-1">{{ weakness.role | lower | capfirst }}</span>
+                    <span class="stat-badge stat-badge-weakness me-1 mb-1 d-inline-block">{{ weakness.role | lower | capfirst }}</span>
                     {% endfor %}
                 </div>
 
-                <p class="card-text"><small class="text-white-50">Created at: {{ enemy.created_at }}</small></p>
+                <p class="card-text mt-4"><small class="text-white-50">Created at: {{ enemy.created_at }}</small></p>
 
             {% if can_modify %}
-                <div class="mt-4">
-                    <a href="{% url 'enemies:edit_enemy' enemy.pk %}" class="btn-game-primary me-2">Edit</a>
+                <div class="mt-4 d-flex flex-column flex-sm-row justify-content-center justify-content-md-start">
+                    <a href="{% url 'enemies:edit_enemy' enemy.pk %}" class="btn-game-primary me-sm-2">Edit</a>
                     <a href="{% url 'enemies:delete_enemy' enemy.pk %}" class="btn-game-danger">Delete</a>
                 </div>
             {% endif %}

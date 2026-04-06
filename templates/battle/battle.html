@@ -14,6 +14,11 @@
         margin-bottom: 1rem;
         text-shadow: 0 0 10px rgba(139, 233, 253, 0.6);
     }
+    @media (max-width: 768px) {
+        .section-title {
+            font-size: 1.8rem;
+        }
+    }
     .card-game {
         background-color: #2a2a4a; /* Slightly lighter dark for cards */
         border: 1px solid #3a3a5a;
@@ -22,6 +27,12 @@
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         height: 100%;
+        position: relative;
+    }
+    @media (max-width: 576px) {
+        .card-game {
+            padding: 1rem;
+        }
     }
     .card-game:hover {
         transform: translateY(-5px);
@@ -38,6 +49,12 @@
         border-radius: 0.3rem;
         transition: all 0.3s ease;
         box-shadow: 0 0 15px rgba(255, 77, 77, 0.4);
+    }
+    @media (max-width: 768px) {
+        .btn-game-primary {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.2rem;
+        }
     }
     .btn-game-primary:hover {
         background-color: #ff1a1a;
@@ -113,6 +130,24 @@
         font-style: italic;
         color: #bd93f9;
         text-shadow: 0 0 10px rgba(189, 147, 249, 0.6);
+    }
+    @media (max-width: 768px) {
+        .vs-text {
+            font-size: 2rem;
+            margin: 1rem 0 !important;
+        }
+    }
+
+    .battle-img {
+        width: 180px;
+        height: 180px;
+        object-fit: cover;
+    }
+    @media (max-width: 576px) {
+        .battle-img {
+            width: 130px;
+            height: 130px;
+        }
     }
 
     @keyframes floatUp {
@@ -213,7 +248,7 @@
 
 </style>
 
-<div class="container mt-5">
+<div class="container mt-5 px-3">
     <div class="text-center mb-5">
         <h2 class="section-title">Battle #{{ battle.id }}</h2>
         <p class="lead">Turn <span class="badge bg-primary" id="turn-badge" data-turn="{{ battle.turns }}">{{ battle.turns }}</span></p>
@@ -222,9 +257,9 @@
         {% endif %}
     </div>
 
-    <div class="row justify-content-center align-items-center">
+    <div class="row justify-content-center align-items-center px-2">
         <!-- Character Card -->
-        <div class="col-lg-4 col-md-5 mb-4">
+        <div class="col-lg-4 col-md-5 col-12 mb-4">
             <div class="card-game text-center" {% if character.character.card_theme %}
                 style="
                     background-color: {{ character.character.card_theme.background_color }};
@@ -235,15 +270,13 @@
                 <h4 class="mb-3" {% if character.character.card_theme %}style="color: {{ character.character.card_theme.accent_color }};"{% else %}style="color: #0dcaf0;"{% endif %}>{{ character.character.name | capfirst }}</h4>
                 <h3>{{ character | hp_percent }}%</h3>
                 {% if character.character.image_url %}
-                    <img src="{{ character.character.image_url.url }}" class="img-fluid rounded-circle mb-3" alt="{{ character.character.name }}"
+                    <img src="{{ character.character.image_url.url }}" class="img-fluid rounded-circle mb-3 battle-img" alt="{{ character.character.name }}"
                         style="
-                            width: 180px; height: 180px; object-fit: cover;
                             border: 3px {{ character.character.card_theme.image_border_style|default:'solid' }} {{ character.character.card_theme.image_border_color|default:'#8be9fd' }};
                         ">
                 {% else %}
-                    <img src="{% static 'images/CharacterIcon.png' %}" class="img-fluid rounded-circle mb-3" alt="Hero"
+                    <img src="{% static 'images/CharacterIcon.png' %}" class="img-fluid rounded-circle mb-3 battle-img" alt="Hero"
                         style="
-                            width: 180px; height: 180px; object-fit: cover;
                             border: 3px {{ character.character.card_theme.image_border_style|default:'solid' }} {{ character.character.card_theme.image_border_color|default:'#8be9fd' }};
                         ">
                 {% endif %}
@@ -269,9 +302,9 @@
         </div>
 
         <!-- Middle Action -->
-        <div class="col-lg-2 col-md-2 mb-4 text-center d-flex flex-column align-items-center justify-content-center">
+        <div class="col-lg-2 col-md-2 col-12 mb-4 text-center d-flex flex-column align-items-center justify-content-center">
             <div class="vs-text mb-4">VS</div>
-            <form id="battle-form" action="{% url 'battle:battle_view' battle.pk %}" method="post" class="w-100">
+            <form id="battle-form" action="{% url 'battle:battle_view' battle.pk %}" method="post" class="w-100 px-3">
                 {% csrf_token %}
                 {% if battle.status == "Finished" %}
                     <div class="d-grid gap-3">
@@ -279,14 +312,14 @@
                         <a href="{% url 'battle:leaderboard' %}" class="btn btn-game-secondary btn-lg">Leaderboard</a>
                     </div>
                 {% else %}
-                    <button type="submit" name="action" value="attack" class="btn btn-game-primary w-100" id="attack-btn">Attack</button>
+                    <button type="submit" name="action" value="attack" class="btn btn-game-primary" id="attack-btn">Attack</button>
                     <button type="submit" name="action" value="attack" id="enemy-attack-btn" style="position:absolute; opacity:0; pointer-events:none;">enemy</button>
                 {% endif %}
             </form>
         </div>
 
         <!-- Enemy Card -->
-        <div class="col-lg-4 col-md-5 mb-4">
+        <div class="col-lg-4 col-md-5 col-12 mb-4">
             <div class="card-game text-center" {% if enemy.enemy.card_theme %}
                 style="
                     background-color: {{ enemy.enemy.card_theme.background_color }};
@@ -297,15 +330,13 @@
                 <h4 class="mb-3" {% if enemy.enemy.card_theme %}style="color: {{ enemy.enemy.card_theme.accent_color }};"{% else %}style="color: #ffc107;"{% endif %}>{{ enemy.enemy.name | capfirst }}</h4>
                 <h3>{{ enemy | hp_percent  }}%</h3>
                 {% if enemy.enemy.image_url.url  %}
-                    <img src="{{ enemy.enemy.image_url.url }}" class="img-fluid rounded-circle mb-3" alt="{{ enemy.enemy.name }}"
+                    <img src="{{ enemy.enemy.image_url.url }}" class="img-fluid rounded-circle mb-3 battle-img" alt="{{ enemy.enemy.name }}"
                         style="
-                            width: 180px; height: 180px; object-fit: cover;
                             border: 3px {{ enemy.enemy.card_theme.image_border_style|default:'solid' }} {{ enemy.enemy.card_theme.image_border_color|default:'#ff5555' }};
                         ">
                 {% else %}
-                    <img src="{% static 'images/EnemyIcon.png' %}" class="img-fluid rounded-circle mb-3" alt="Enemy"
+                    <img src="{% static 'images/EnemyIcon.png' %}" class="img-fluid rounded-circle mb-3 battle-img" alt="Enemy"
                         style="
-                            width: 180px; height: 180px; object-fit: cover;
                             border: 3px {{ enemy.enemy.card_theme.image_border_style|default:'solid' }} {{ enemy.enemy.card_theme.image_border_color|default:'#ff5555' }};
                         ">
                 {% endif %}
