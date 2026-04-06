@@ -93,13 +93,14 @@ Follow these steps to get the project running on your local machine:
    ```ini
    SECRET_KEY=your_secret_key
    DJANGO_SETTINGS_MODULE=CreatorApp.settings.local
-   DEBUG=True
+   DEBUG="True"
    ALLOWED_HOSTS=localhost,127.0.0.1
+   DB_PORT=5432
    DB_NAME=your_db_name
    DB_USER=your_db_user
    DB_PASSWORD=your_db_password
    DB_HOST=127.0.0.1
-   DB_PORT=5432
+   MAINTENANCE="False"
    ```
 
 5. **Initialize Database**
